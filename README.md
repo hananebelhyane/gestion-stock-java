@@ -1,5 +1,5 @@
 # gestion-stock-java
-# Projet Gestion de Stock (Java + Spring Boot)
+# Projet Gestion de Stock 
 
 ##  Objectif
 Application pour digitaliser et optimiser la gestion d’inventaire d’une entreprise :
