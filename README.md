@@ -9,3 +9,5 @@ Application pour digitaliser et optimiser la gestion d’inventaire d’une entr
 - Génération des documents commerciaux (bons de livraison, bons de sortie)
 - Réduction des erreurs et optimisation des stocks
 
+## Salutation 
+merhba bikum kamliin
