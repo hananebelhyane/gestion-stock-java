@@ -29,35 +29,10 @@ Chaque composant sera **dockerisé** afin de faciliter le déploiement, la porta
 
 | Composant        | Technologie utilisée         |
 |------------------|------------------------------|
-| Frontend         | Angular 10+                  |
+| Frontend         | Javafx                       |
 | Backend          | Spring Boot                  |
-| Base de Données  | MySQL / PostgreSQL           |
-| Conteneurisation | Docker, Docker Compose       |
-| Cloud            | AWS (EC2, S3, RDS, ECS, etc.)|
-| IaC              | Terraform                    |
-
----
-
-## 🐳 Dockerisation
-L’environnement de développement sera totalement conteneurisé à l’aide de **Docker** :
-- Un conteneur pour la **Base de Données**
-- Un conteneur pour l’**Application Backend**
-- Un conteneur pour l’**Application Frontend**
-
-L’orchestration se fera via un fichier **docker-compose.yml**.
-
----
-
-## ☁️ Déploiement Cloud (AWS)
-Le déploiement s’effectuera sur **Amazon Web Services (AWS)** :
-- Gestion via **AWS Console Management**
-- Automatisation du déploiement grâce à **Terraform** (Infrastructure as Code)
-
-Terraform permettra de :
-- Créer les ressources AWS nécessaires (EC2, S3, RDS, etc.)
-- Gérer la configuration et la mise à jour de l’infrastructure
-- Assurer la reproductibilité de l’environnement cloud
-
+| Base de Données  | MySQL                        |
+                  
 ---
 
 ## 📅 Étapes principales
@@ -68,11 +43,7 @@ Terraform permettra de :
    - API REST avec Spring Boot
 3. **Développement du Frontend**
    - Interface Angular consommant l’API
-4. **Mise en place de Docker**
-   - Conteneurisation de chaque module
-5. **Déploiement sur AWS**
-   - Infrastructure et automatisation via Terraform
----
+   ---------------------------------------
 
 ## 📄 Licence
 Projet académique – usage pédagogique et expérimental.
