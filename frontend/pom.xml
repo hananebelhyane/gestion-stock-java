@@ -18,6 +18,14 @@
     <maven.compiler.target>11</maven.compiler.target>
   </properties>
 
+  <!-- Ajoutez cette section repositories -->
+  <repositories>
+    <repository>
+      <id>Gluon</id>
+      <url>https://nexus.gluonhq.com/nexus/content/repositories/releases</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -66,6 +74,12 @@
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-media</artifactId>
         <version>25.0.1</version>
+    </dependency>
+    <!-- Ajoutez cette dépendance Gluon Charm -->
+    <dependency>
+        <groupId>com.gluonhq</groupId>
+        <artifactId>charm-glisten</artifactId>
+        <version>6.2.0</version>
     </dependency>
   </dependencies> 
 
@@ -119,7 +133,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
         <configuration>
-          <mainClass>gestiondestock.App</mainClass>
+          <mainClass>gestiondestock.Welcome</mainClass>
         </configuration>
       </plugin>
     </plugins>

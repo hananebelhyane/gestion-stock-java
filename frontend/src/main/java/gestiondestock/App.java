@@ -33,8 +33,8 @@ public class App extends Application
         
 
         Text text=new Text();
-        text.setText("Welcome to the Gestion App");
-        text.setX(150);
+        text.setText("Welcome to the Commande Gestion App");
+        text.setX(5);
         text.setY(70);
         root.getChildren().add(text);
         text.setFont(Font.font("Arial",FontWeight.BOLD,50));
