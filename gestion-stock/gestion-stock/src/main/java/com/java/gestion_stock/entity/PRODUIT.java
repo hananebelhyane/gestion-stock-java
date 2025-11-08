@@ -1,40 +1,33 @@
 package com.java.gestion_stock.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-import java.math.BigDecimal;
+import lombok.Setter;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 import java.util.UUID;
 
 @Entity
-@Table
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class PRODUIT {
-
+public class Produit {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID produitId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-    @Column(nullable = false)
     private String nom;
-
     private String description;
+    private Double prixUnitaire;
+    private String urlImage;
 
     @ManyToOne
     @JoinColumn(name = "categorie_id")
-    private CATEGORIE categorie;
-
-    private BigDecimal prixUnitaire;
-    private String urlImage;
-
-    private Integer seuilAlerte = 5;
-    private Integer seuilMax;
+    private Categorie categorie;
 
     @ManyToOne
     @JoinColumn(name = "fournisseur_id")
-    private FOURNISSEUR fournisseur;
+    private Fournisseur fournisseur;
 }

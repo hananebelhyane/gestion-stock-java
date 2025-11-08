@@ -74,10 +74,13 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-    <groupId>org.projectlombok</groupId>
-    <artifactId>lombok</artifactId>
-    <version>1.18.34</version>
-    <scope>provided</scope>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>42.7.3</version>
 </dependency>
 
 	</dependencies>

@@ -14,15 +14,22 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Facture {
+public class AlerteStock {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "commande_id")
-    private CommandeClient commande;
+    @JoinColumn(name = "produit_id", nullable = true)
+    private Produit produit;
 
-    private LocalDateTime dateFacture = LocalDateTime.now();
-    private Double montantTotal;
+    private LocalDateTime dateAlerte = LocalDateTime.now();
+    private String message;
+
+    @Enumerated(EnumType.STRING)
+    private StatutAlerte statut = StatutAlerte.NON_LU;
+
+    public enum StatutAlerte {
+        NON_LU, TRAITE
+    }
 }

@@ -14,16 +14,23 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Magasinier {
+public class CommandeClient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private String nom;
-    private String prenom;
-    private String username;
-    private String telephone;
-    private String motDePasse;
-    private UUID deletedBy;
-    private LocalDateTime deletedAt;
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    private LocalDateTime dateCommande = LocalDateTime.now();
+
+    @Enumerated(EnumType.STRING)
+    private StatutCommande statut = StatutCommande.EN_ATTENTE;
+
+    private Integer seuilMax;
+
+    public enum StatutCommande {
+        EN_ATTENTE, CONFIRMEE, ANNULEE
+    }
 }

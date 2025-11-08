@@ -1,27 +1,27 @@
 package com.java.gestion_stock.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "COMMANDE_FOURNISSEUR")
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class COMMANDE_FOURNISSEUR {
-
+public class CommandeFournisseur {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID commandeId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "produit_id")
-    private PRODUIT produit;
+    private Produit produit;
 
     private LocalDateTime commandeDate = LocalDateTime.now();
 

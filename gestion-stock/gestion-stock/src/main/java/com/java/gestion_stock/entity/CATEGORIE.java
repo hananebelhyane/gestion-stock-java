@@ -1,27 +1,22 @@
 package com.java.gestion_stock.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-import java.util.List;
+import lombok.Setter;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.util.UUID;
 
 @Entity
-@Table(name = "CATEGORIE")
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class CATEGORIE {
-
+public class Categorie {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID categorieId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     private String nom;
     private String description;
-
-    @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
-    private List<PRODUIT> produits;
 }
