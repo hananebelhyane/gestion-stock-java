@@ -45,7 +45,7 @@ CREATE TABLE FOURNISSEUR (
     deletedAt DATETIME NULL
 );
 CREATE TABLE CATEGORIE(
-    categorie_id INT AUTOINCREMENT PRIMARY KEY,
+    categorie_id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100),
     description varchar(100)
 );

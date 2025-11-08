@@ -1,7 +1,0 @@
-## backend :
-mvn clean install
-mvn spring-boot:run
-
-## frontend :
-mvn clean
-mvn javafx:run
