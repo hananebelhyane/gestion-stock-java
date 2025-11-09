@@ -14,7 +14,6 @@ public class Admin{
     private String email;
     private String username;
     private String telephone;
-    @Column(name = "mot_de_passe")
     private String motDePasse;
 
     public Admin(Long admin_id, String nom, String prenom, String email, String username, String telephone, String motDePasse) {

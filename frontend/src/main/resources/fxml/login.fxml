@@ -7,12 +7,13 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gestiondestock.controller.LoginController">
    <children>
       <Button fx:id="loginButton" layoutX="381.0" layoutY="201.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="34.0" prefWidth="79.0" text="Login" />
       <TextField fx:id="userlastname" layoutX="159.0" layoutY="120.0" promptText="entrer votre prenom" />
-      <TextField fx:id="userfirstname" layoutX="159.0" layoutY="89.0" promptText="entrer votre nom " />
+      <TextField fx:id="userfirstname" layoutX="234.0" layoutY="89.0" promptText="entrer votre nom " />
       <Label layoutX="113.0" layoutY="93.0" text="Nom :" />
       <Label layoutX="105.0" layoutY="124.0" prefHeight="17.0" prefWidth="60.0" text="Prenom :" />
       <Label layoutX="105.0" layoutY="165.0" prefHeight="17.0" prefWidth="60.0" text="Email :" />
@@ -42,5 +43,6 @@
           </Menu>
         </menus>
       </MenuBar>
+      <Text layoutX="480.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="l2ostooora" wrappingWidth="94.13671875" />
    </children>
 </AnchorPane>
