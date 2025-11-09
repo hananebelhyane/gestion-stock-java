@@ -111,7 +111,7 @@ CREATE TABLE COMMANDE_CLIENT (
     id BINARY(16) PRIMARY KEY,
     client_id BINARY(16) NOT NULL,
     date_commande DATETIME DEFAULT CURRENT_TIMESTAMP,
-    statut ENUM('EN_ATTENTE', 'CONFIRMEE', 'ANNULEE') DEFAULT 'EN_ATTENTE',
+    statut ENUM('en_attente', 'confirmee', 'annulee') DEFAULT 'EN_ATTENTE',
     seuil_max INT,
     FOREIGN KEY (client_id) REFERENCES CLIENT(id) ON DELETE CASCADE
 );
