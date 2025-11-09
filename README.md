@@ -18,6 +18,10 @@ cd frontend
 mvn javafx:run
 ```
 
+## Github:
+# Passer sur la branche main
+git checkout main
+
 
 ### Prérequis
 
