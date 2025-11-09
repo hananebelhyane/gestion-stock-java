@@ -27,11 +27,11 @@ public class CommandeClient {
     private LocalDateTime dateCommande = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    private StatutCommande statut = StatutCommande.EN_ATTENTE;
+    private StatutCommande statut = StatutCommande.en_attente;
 
     private Integer seuilMax;
 
     public enum StatutCommande {
-        EN_ATTENTE, CONFIRMEE, ANNULEE
+        en_attente, confirmee, annulee
     }
 }
