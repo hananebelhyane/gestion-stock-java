@@ -38,7 +38,7 @@ public class LoginController {
     private Button loginButton;
 
     @FXML
-    private void handleLogin(ActionEvent event) {
+    public void handleLogin(ActionEvent event) {
         String nom = userfirstname.getText();
         String prenom = userlastname.getText();
         String email = useremail.getText();
