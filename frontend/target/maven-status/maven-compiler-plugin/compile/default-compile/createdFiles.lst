@@ -1,4 +1,4 @@
-gestiondestock\app\Welcome.class
-gestiondestock\controller\LoginController.class
-gestiondestock\controller\ViewController.class
-gestiondestock\model\Admin.class
+gestiondestock/controller/LoginController.class
+gestiondestock/controller/ViewController.class
+gestiondestock/model/Admin.class
+gestiondestock/app/Welcome.class

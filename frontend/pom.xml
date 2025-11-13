@@ -14,18 +14,12 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>25</maven.compiler.source>
-    <maven.compiler.target>25</maven.compiler.target>
-    <maven.compiler.release>25</maven.compiler.release>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.release>17</maven.compiler.release>
   </properties>
 
-  <!-- Ajoutez cette section repositories -->
-  <repositories>
-    <repository>
-      <id>Gluon</id>
-      <url>https://nexus.gluonhq.com/nexus/content/repositories/releases</url>
-    </repository>
-  </repositories>
+
 
   <dependencies>
     <dependency>
@@ -38,49 +32,43 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>25.0.1</version>
+      <version>17.0.2</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-graphics</artifactId>
-        <version>25.0.1</version>
+        <version>17.0.2</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-base</artifactId>
-        <version>25.0.1</version>
+        <version>17.0.2</version>
     </dependency>
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-fxml</artifactId>
-        <version>25.0.1</version>
+        <version>17.0.2</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-swing</artifactId>
-        <version>25.0.1</version>
+        <version>17.0.2</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-web -->
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-web</artifactId>
-        <version>25.0.1</version>
+        <version>17.0.2</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-media -->
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-media</artifactId>
-        <version>25.0.1</version>
-    </dependency>
-    <!-- Ajoutez cette dépendance Gluon Charm -->
-    <dependency>
-        <groupId>com.gluonhq</groupId>
-        <artifactId>charm-glisten</artifactId>
-        <version>6.2.0</version>
+        <version>17.0.2</version>
     </dependency>
     <!-- Pour faire des requêtes HTTP (convertir java en json) -->
     <dependency>
