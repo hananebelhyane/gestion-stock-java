@@ -1,48 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gestiondestock.controller.LoginController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gestiondestock.controller.LoginController">
    <children>
-      <Button fx:id="loginButton" layoutX="381.0" layoutY="201.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="34.0" prefWidth="79.0" text="Login" />
-      <TextField fx:id="userlastname" layoutX="159.0" layoutY="120.0" promptText="entrer votre prenom" />
-      <TextField fx:id="userfirstname" layoutX="234.0" layoutY="89.0" promptText="entrer votre nom " />
-      <Label layoutX="113.0" layoutY="93.0" text="Nom :" />
-      <Label layoutX="105.0" layoutY="124.0" prefHeight="17.0" prefWidth="60.0" text="Prenom :" />
-      <Label layoutX="105.0" layoutY="165.0" prefHeight="17.0" prefWidth="60.0" text="Email :" />
-      <TextField fx:id="useremail" layoutX="159.0" layoutY="161.0" promptText="entrer votre email" />
-      <Label layoutX="86.0" layoutY="210.0" prefHeight="17.0" prefWidth="79.0" text="UserName :" />
-      <TextField fx:id="userusername" layoutX="172.0" layoutY="206.0" promptText="entrer votre UserName" />
-      <Label layoutX="74.0" layoutY="256.0" prefHeight="17.0" prefWidth="79.0" text="Telephone :" />
-      <Label layoutX="66.0" layoutY="294.0" prefHeight="17.0" prefWidth="79.0" text="Mot de passe:" />
-      <TextField fx:id="usertelephone" layoutX="172.0" layoutY="252.0" promptText="entrer votre Telephone" />
-      <TextField fx:id="usermdp" layoutX="172.0" layoutY="290.0" promptText="entrer votre mot de passe" />
-      <MenuBar layoutY="2.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <Text layoutX="480.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="l2ostooora" wrappingWidth="94.13671875" />
+      <!-- Logo Image -->
+      <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/gestin-stock.png" />
+         </image>
+      </ImageView>
+      
+      <!-- Welcome Back Text -->
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome Back" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="32.0" />
+         </font>
+      </Text>
+      
+      <!-- Subtitle -->
+      <Label text="Sign in to continue" textAlignment="CENTER">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      
+      <!-- Google OAuth Button -->
+      <HBox alignment="CENTER" prefHeight="50.0" spacing="10.0">
+         <children>
+            <Button fx:id="googleLoginButton" mnemonicParsing="false" onAction="#handleGoogleLogin" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: white; -fx-border-color: #dadce0; -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;" text="Continue with Google" textAlignment="CENTER">
+               <graphic>
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/google-logo.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="Continue with Google">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
    </children>
-</AnchorPane>
+   <padding>
+      <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+   </padding>
+</VBox>

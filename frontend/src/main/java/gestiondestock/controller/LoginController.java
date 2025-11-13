@@ -38,6 +38,43 @@ public class LoginController {
     private Button loginButton;
 
     @FXML
+    private Button googleLoginButton;
+
+    @FXML
+    public void handleGoogleLogin(ActionEvent event) {
+        // Handle Google OAuth login
+        System.out.println("Google OAuth login initiated");
+        
+        // For now, simulate a successful login with demo user
+        // In a real implementation, this would integrate with Google OAuth 2.0
+        try {
+            String prenom = "Demo";
+            String nom = "User";
+            
+            // Close the login window
+            Stage currentStage = (Stage) googleLoginButton.getScene().getWindow();
+            currentStage.close();
+            
+            // Open view.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view.fxml"));
+            Parent root = loader.load();
+            
+            ViewController controller = loader.getController();
+            controller.setAdminData(prenom, nom);
+            
+            Stage mainStage = new Stage();
+            Scene scene = new Scene(root);
+            mainStage.setTitle("Gestion de Commande - " + prenom + " " + nom);
+            mainStage.setScene(scene);
+            mainStage.show();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Erreur lors de la connexion Google: " + e.getMessage());
+        }
+    }
+
+    @FXML
     public void handleLogin(ActionEvent event) {
         String nom = userfirstname.getText();
         String prenom = userlastname.getText();
