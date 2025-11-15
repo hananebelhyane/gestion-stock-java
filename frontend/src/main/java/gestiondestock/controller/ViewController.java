@@ -1,14 +1,17 @@
 package gestiondestock.controller;
 
+import gestiondestock.model.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 public class ViewController {
+    @FXML private Label WelcomeLabel;
 
     @FXML
-    private Label WelcomeLabel;
-
-    public void setAdminData(String firstname, String lastname) {
-        WelcomeLabel.setText("Vous êtes : " + firstname + " " + lastname + ", Welcome to your app");
+    public void initialize() {
+        var s = Session.get();
+        if (s.getUsername() != null && s.getRole() != null) {
+            WelcomeLabel.setText("Vous êtes: \"" + s.getUsername() + "\" (" + s.getRole() + ") , welcome");
+        }
     }
 }

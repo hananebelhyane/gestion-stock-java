@@ -1,0 +1,108 @@
+
+/* App base */
+.root {
+    -fx-font-size: 14px;
+    -fx-background-color: #EAEEF4;
+}
+
+/* Card (shadcn-like) */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-padding: 24px;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 24, 0.25, 0, 8);
+}
+
+.login-card {
+    max-width: 920px; /* fallback */
+    -fx-max-width: 920px;
+}
+
+.card-section {
+    -fx-alignment: center;
+}
+
+/* Headings & text */
+.heading {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+/* Increase specificity to win over theme defaults */
+Label.heading {
+    font-size: 32px; /* fallback */
+    -fx-font-size: 32px;
+    font-weight: bold; /* fallback */
+    -fx-font-weight: bold;
+}
+
+.muted { -fx-text-fill: #6b7280; }
+
+.center {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    text-align: center; /* fallback */
+}
+
+.small { -fx-font-size: 12px; }
+
+.label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6b7280;
+}
+
+.caption.muted { -fx-text-fill: #6b7280; }
+
+/* Inputs */
+.text-field, .password-field {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 8px;
+    -fx-padding: 10px 12px 10px 12px;
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #2563eb;
+    -fx-background-color: white;
+}
+
+/* Buttons */
+.btn {
+    -fx-background-radius: 8px;
+    -fx-padding: 10px 14px 10px 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.btn-primary { -fx-background-color: #2563eb; -fx-text-fill: white; }
+
+.btn-primary:hover { -fx-background-color: #1d4ed8; }
+
+/* Outline button */
+.btn-outline {
+    -fx-background-color: transparent;
+    -fx-text-fill: #111827;
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1px;
+}
+
+.btn-outline:hover { -fx-background-color: #f3f4f6; }
+
+/* Right image pane styling */
+.image-pane {
+    -fx-min-height: 360px;
+    -fx-background-color: #f3f4f6;
+    -fx-background-radius: 0 12px 12px 0;
+}
+
+.image-placeholder {
+    -fx-background-color: linear-gradient(to bottom right, rgba(2,132,199,0.25), rgba(14,165,233,0.15));
+    -fx-background-radius: 0 12px 12px 0;
+    -fx-min-width: 100%;
+    -fx-min-height: 100%;
+}

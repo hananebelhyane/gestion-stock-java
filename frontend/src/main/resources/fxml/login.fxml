@@ -1,48 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gestiondestock.controller.LoginController">
-   <children>
-      <Button fx:id="loginButton" layoutX="381.0" layoutY="201.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="34.0" prefWidth="79.0" text="Login" />
-      <TextField fx:id="userlastname" layoutX="159.0" layoutY="120.0" promptText="entrer votre prenom" />
-      <TextField fx:id="userfirstname" layoutX="234.0" layoutY="89.0" promptText="entrer votre nom " />
-      <Label layoutX="113.0" layoutY="93.0" text="Nom :" />
-      <Label layoutX="105.0" layoutY="124.0" prefHeight="17.0" prefWidth="60.0" text="Prenom :" />
-      <Label layoutX="105.0" layoutY="165.0" prefHeight="17.0" prefWidth="60.0" text="Email :" />
-      <TextField fx:id="useremail" layoutX="159.0" layoutY="161.0" promptText="entrer votre email" />
-      <Label layoutX="86.0" layoutY="210.0" prefHeight="17.0" prefWidth="79.0" text="UserName :" />
-      <TextField fx:id="userusername" layoutX="172.0" layoutY="206.0" promptText="entrer votre UserName" />
-      <Label layoutX="74.0" layoutY="256.0" prefHeight="17.0" prefWidth="79.0" text="Telephone :" />
-      <Label layoutX="66.0" layoutY="294.0" prefHeight="17.0" prefWidth="79.0" text="Mot de passe:" />
-      <TextField fx:id="usertelephone" layoutX="172.0" layoutY="252.0" promptText="entrer votre Telephone" />
-      <TextField fx:id="usermdp" layoutX="172.0" layoutY="290.0" promptText="entrer votre mot de passe" />
-      <MenuBar layoutY="2.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <Text layoutX="480.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="l2ostooora" wrappingWidth="94.13671875" />
-   </children>
-</AnchorPane>
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gestiondestock.controller.LoginController">
+  <children>
+    <VBox spacing="12" alignment="CENTER">
+      <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+      <Label text="Sign in" style="-fx-font-size: 24; -fx-font-weight: bold;" />
+      <GridPane hgap="8" vgap="8">
+        <columnConstraints>
+          <ColumnConstraints minWidth="100"/>
+          <ColumnConstraints minWidth="200"/>
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="30"/>
+          <RowConstraints minHeight="30"/>
+        </rowConstraints>
+        <Label text="Username" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <TextField fx:id="userusername" promptText="johndoe" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+        <Label text="Password" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <PasswordField fx:id="usermdp" promptText="••••••••" onAction="#handleLogin" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+      </GridPane>
+      <Button fx:id="loginButton" text="Login" onAction="#handleLogin" />
+    </VBox>
+  </children>
+</StackPane>

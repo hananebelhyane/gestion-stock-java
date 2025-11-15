@@ -1,0 +1,66 @@
+/* Root background similar to test.fxml */
+.root {
+  -fx-background-color: #EAEEF4;
+}
+
+/* Top bar */
+.topbar {
+  -fx-background-color: #EAEEF4;
+  -fx-spacing: 8;
+}
+.search {
+  -fx-background-radius: 20;
+  -fx-padding: 6 12 6 12;
+}
+.icon-btn {
+  -fx-background-color: transparent;
+  -fx-font-size: 16px;
+}
+.welcome {
+  -fx-text-fill: #666;
+}
+.crumb { -fx-text-fill: #7a7a7a; }
+.crumb-sep { -fx-text-fill: #aaaaaa; }
+.crumb-active { -fx-text-fill: #222; -fx-font-weight: bold; }
+
+/* Sidebar similar to the dark panel */
+.sidebar {
+  -fx-background-color: #353A56;
+  -fx-border-width: 2;
+  -fx-border-radius: 20;
+  -fx-background-radius: 20;
+  -fx-border-color: #353A56;
+}
+.section {
+  -fx-text-fill: #cfd3e1;
+  -fx-font-weight: bold;
+}
+.side-button {
+  -fx-background-color: #353A56;
+  -fx-text-fill: #c6b6b6;
+  -fx-background-radius: 50;
+  -fx-border-radius: 50;
+  -fx-padding: 8 14 8 14;
+}
+.side-button.active {
+  -fx-background-color: #141313;
+  -fx-text-fill: white;
+}
+.side-button.ghost {
+  -fx-background-color: transparent;
+  -fx-text-fill: #d0d3df;
+}
+.side-link { -fx-text-fill: #c6b6b6; }
+.profile-name { -fx-text-fill: #f0f2f8; }
+.profile-email { -fx-text-fill: #a9b0c9; }
+
+/* Cards */
+.card {
+  -fx-background-color: white;
+  -fx-background-radius: 16;
+  -fx-border-radius: 16;
+  -fx-padding: 12;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 12, 0.2, 0, 2);
+}
+.card.small { min-height: 120; }
+.card.large { min-height: 320; }
