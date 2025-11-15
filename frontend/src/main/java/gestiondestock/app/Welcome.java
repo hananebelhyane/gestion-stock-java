@@ -24,6 +24,5 @@ public class Welcome extends Application {
             throw new RuntimeException("Failed to load login.fxml", e);
         }
 
-        // Removed startup notification per request
     }
 }
