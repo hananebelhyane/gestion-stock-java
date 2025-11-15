@@ -6,24 +6,35 @@
 
 <StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gestiondestock.controller.LoginController">
   <children>
-    <VBox spacing="12" alignment="CENTER">
-      <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
-      <Label text="Sign in" style="-fx-font-size: 24; -fx-font-weight: bold;" />
-      <GridPane hgap="8" vgap="8">
-        <columnConstraints>
-          <ColumnConstraints minWidth="100"/>
-          <ColumnConstraints minWidth="200"/>
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="30"/>
-          <RowConstraints minHeight="30"/>
-        </rowConstraints>
-        <Label text="Username" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-        <TextField fx:id="userusername" promptText="johndoe" GridPane.rowIndex="0" GridPane.columnIndex="1" />
-        <Label text="Password" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-        <PasswordField fx:id="usermdp" promptText="••••••••" onAction="#handleLogin" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-      </GridPane>
-      <Button fx:id="loginButton" text="Login" onAction="#handleLogin" />
+    <VBox spacing="16" alignment="CENTER">
+      <padding><Insets top="48" right="24" bottom="48" left="24"/></padding>
+      <!-- Card wrapper -->
+      <VBox spacing="16" alignment="CENTER_LEFT" maxWidth="420" styleClass="login-card">
+        <Label text="Sign in" styleClass="title" />
+        <Label text="Please enter your credentials to continue" styleClass="subtitle" />
+        <GridPane hgap="10" vgap="10">
+          <columnConstraints>
+            <ColumnConstraints minWidth="110"/>
+            <ColumnConstraints minWidth="250" hgrow="ALWAYS"/>
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints minHeight="36"/>
+            <RowConstraints minHeight="36"/>
+          </rowConstraints>
+          <Label text="Username" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="label" />
+          <TextField fx:id="userusername" promptText="johndoe" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+          <Label text="Password" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="label" />
+          <PasswordField fx:id="usermdp" promptText="••••••••" onAction="#handleLogin" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        </GridPane>
+        <!-- Inline validation error -->
+        <Label fx:id="errorLabel" styleClass="error" />
+        <HBox spacing="10" alignment="CENTER_RIGHT" VBox.vgrow="NEVER" maxWidth="Infinity">
+          <Hyperlink text="Create account" onAction="#goToSignup" />
+          <Pane HBox.hgrow="ALWAYS" />
+          <Button fx:id="loginButton" text="Login" onAction="#handleLogin" styleClass="primary-btn" />
+        </HBox>
+        <Label text="By continuing you agree to the terms." styleClass="footer" />
+      </VBox>
     </VBox>
   </children>
 </StackPane>

@@ -1,0 +1,71 @@
+/* Simple, modern styling for the login view */
+
+/* App background */
+.root {
+  -fx-background-color: linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
+}
+
+/* Centered card */
+.login-card {
+  -fx-background-color: white;
+  -fx-background-radius: 14;
+  -fx-border-radius: 14;
+  -fx-padding: 24;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 18, 0.2, 0, 4);
+}
+
+.title {
+  -fx-font-size: 24;
+  -fx-font-weight: bold;
+  -fx-text-fill: #111827;
+}
+.subtitle {
+  -fx-font-size: 13;
+  -fx-text-fill: #6b7280;
+}
+
+.label {
+  -fx-font-size: 12;
+  -fx-text-fill: #4b5563;
+}
+
+.text-field, .password-field {
+  -fx-background-color: #ffffff;
+  -fx-background-radius: 8;
+  -fx-border-color: #d1d5db;
+  -fx-border-radius: 8;
+  -fx-padding: 10 12 10 12;
+}
+.text-field:focused, .password-field:focused {
+  -fx-border-color: #2563eb;
+  -fx-background-color: #ffffff;
+}
+
+.primary-btn {
+  -fx-background-color: #2563eb;
+  -fx-text-fill: white;
+  -fx-background-radius: 8;
+  -fx-padding: 10 16 10 16;
+  -fx-font-weight: bold;
+}
+.primary-btn:hover { -fx-background-color: #1d4ed8; }
+
+.footer {
+  -fx-text-fill: #6b7280;
+  -fx-font-size: 12;
+}
+
+/* Error text */
+.error {
+  -fx-text-fill: #b91c1c;
+}
+
+/* Field toast (popup below input) */
+.field-toast {
+  -fx-background-color: rgba(185, 28, 28, 0.95);
+  -fx-text-fill: white;
+  -fx-padding: 6 10 6 10;
+  -fx-background-radius: 8;
+  -fx-font-size: 12;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 12, 0.2, 0, 2);
+}

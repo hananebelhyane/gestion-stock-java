@@ -13,13 +13,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import gestiondestock.ui.FieldToast;
 
 public class LoginController {
 
     @FXML private TextField userusername;
     @FXML private PasswordField usermdp;
     @FXML private Button loginButton;
+    @FXML private Label errorLabel;
 
     private final AuthService authService = new AuthService();
 
@@ -33,10 +36,12 @@ public class LoginController {
         String username = userusername.getText() == null ? "" : userusername.getText().trim();
         String password = usermdp.getText() == null ? "" : usermdp.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Missing info", "Please fill in username and password.");
-            return;
-        }
+        // Client-side validation
+        if (username.isEmpty()) { FieldToast.show(userusername, "Username is required"); return; }
+        if (username.length() < 3) { FieldToast.show(userusername, "Username must be at least 3 characters"); return; }
+        if (password.isEmpty()) { FieldToast.show(usermdp, "Password is required"); return; }
+        if (password.length() < 8) { FieldToast.show(usermdp, "Password must be at least 8 characters"); return; }
+        clearError();
 
         loginButton.setDisable(true);
         new Thread(() -> {
@@ -48,7 +53,7 @@ public class LoginController {
                 Platform.runLater(this::switchToView);
             } catch (Exception ex) {
                 Platform.runLater(() -> {
-                    showAlert(Alert.AlertType.ERROR, "Login failed", ex.getMessage());
+                    FieldToast.show(usermdp, ex.getMessage());
                     loginButton.setDisable(false);
                 });
             }
@@ -71,5 +76,24 @@ public class LoginController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.show();
+    }
+
+    private void setError(String msg) { if (errorLabel != null) errorLabel.setText(msg); }
+    private void clearError() { if (errorLabel != null) errorLabel.setText(""); }
+
+    @FXML
+    public void goToSignup(javafx.event.ActionEvent e) {
+        try {
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/signup.fxml"));
+            Scene scene = new Scene(root);
+            var css = getClass().getResource("/styles/login.css");
+            if (css != null) {
+                scene.getStylesheets().add(css.toExternalForm());
+            }
+            stage.setScene(scene);
+        } catch (Exception ex) {
+            showAlert(Alert.AlertType.ERROR, "Navigation error", ex.getMessage());
+        }
     }
 }

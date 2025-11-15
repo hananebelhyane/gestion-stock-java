@@ -17,6 +17,10 @@ public class Welcome extends Application {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
             Scene scene = new Scene(root, 900, 600);
+            var css = getClass().getResource("/styles/login.css");
+            if (css != null) {
+                scene.getStylesheets().add(css.toExternalForm());
+            }
             primaryStage.setTitle("Login");
             primaryStage.setScene(scene);
             primaryStage.show();

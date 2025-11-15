@@ -39,6 +39,23 @@ public class AuthService {
         }
     }
 
+    public void register(String username, String password, String email) throws Exception {
+        String json = "{\"username\":\"" + escape(username) + "\",\"motDePasse\":\"" + escape(password) + "\"}";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + "/api/clients/register"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json, StandardCharsets.UTF_8))
+                .build();
+        HttpResponse<String> resp = http.send(request, HttpResponse.BodyHandlers.ofString());
+        if (resp.statusCode() == 200 || resp.statusCode() == 201) {
+            return; // success
+        } else if (resp.statusCode() == 409) {
+            throw new RuntimeException("Username already exists");
+        } else {
+            throw new RuntimeException("Register failed: HTTP " + resp.statusCode());
+        }
+    }
+
     private static String escape(String s) {
         return s.replace("\\", "\\\\").replace("\"", "\\\"");
     }
