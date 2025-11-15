@@ -2,7 +2,6 @@ package gestiondestock.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +11,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import com.google.gson.Gson;
-import gestiondestock.model.Admin;
+import javafx.scene.Node;
+import java.io.IOException;
 
 public class LoginController {
 
@@ -35,10 +35,8 @@ public class LoginController {
     private TextField usermdp;
 
     @FXML
-    private Button loginButton;
-
-    @FXML
     public void handleLogin(ActionEvent event) {
+        // récupérer données (adapter aux noms de vos fields)
         String nom = userfirstname.getText();
         String prenom = userlastname.getText();
         String email = useremail.getText();
@@ -46,65 +44,52 @@ public class LoginController {
         String telephone = usertelephone.getText();
         String mdp = usermdp.getText();
 
-        // Vérification
         if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty()
                 || username.isEmpty() || telephone.isEmpty() || mdp.isEmpty()) {
             System.out.println("Veuillez remplir tous les champs !");
             return;
         }
 
-        // Créer l'objet Admin
-        Admin admin = new Admin(nom, prenom, email, username, telephone, mdp);
-
-        // Envoyer au backend
         try {
-            // Convertir en JSON
+            // 1) Appel backend
             Gson gson = new Gson();
-            String jsonData = gson.toJson(admin);
+            String jsonData = gson.toJson(new gestiondestock.model.Admin(nom, prenom, email, username, telephone, mdp));
 
-            // Créer la connexion HTTP
             URL url = new URL("http://localhost:8082/api/admins/register");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
             conn.setDoOutput(true);
-
-            // Envoyer les données
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = jsonData.getBytes("utf-8");
                 os.write(input, 0, input.length);
             }
 
-            // Lire la réponse
             int responseCode = conn.getResponseCode();
-            System.out.println("Response Code: " + responseCode);
+            conn.disconnect();
 
-            if (responseCode == 200) {
-                System.out.println("Admin enregistré avec succès !");
-
-                // Fermer la fenêtre de login
-                Stage currentStage = (Stage) loginButton.getScene().getWindow();
-                currentStage.close();
-
-                // Ouvrir view.fxml
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view.fxml"));
-                Parent root = loader.load();
-
-                ViewController controller = loader.getController();
-                controller.setAdminData(prenom, nom);
-
-                Stage mainStage = new Stage();
-                Scene scene = new Scene(root);
-                mainStage.setTitle("Gestion de Commande - " + prenom + " " + nom);
-                mainStage.setScene(scene);
-                mainStage.show();
-            } else {
-                System.out.println("Erreur lors de l'enregistrement !");
+            if (responseCode != 200 && responseCode != 201) {
+                System.out.println("Erreur lors de l'enregistrement ! Code: " + responseCode);
+                return;
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Erreur de connexion au serveur : " + e.getMessage());
+            // 2) Charger view.fxml avant de fermer le login (évite fermeture si load échoue)
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view.fxml"));
+            Parent root = loader.load();
+            gestiondestock.controller.ViewController controller = loader.getController();
+            controller.setAdminData(prenom, nom); // transmettez les infos si besoin
+
+            Stage mainStage = new Stage();
+            mainStage.setTitle("Gestion - " + prenom + " " + nom);
+            mainStage.setScene(new Scene(root));
+            mainStage.show();
+
+            // 3) Fermer la fenêtre de login seulement si tout a réussi
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            System.err.println("Erreur de connexion ou de chargement de la vue : " + e.getMessage());
         }
     }
 }

@@ -1,4 +1,6 @@
+gestiondestock\model\CommandeClient$Client.class
 gestiondestock\app\Welcome.class
+gestiondestock\model\CommandeClient.class
 gestiondestock\controller\LoginController.class
 gestiondestock\controller\ViewController.class
 gestiondestock\model\Admin.class
