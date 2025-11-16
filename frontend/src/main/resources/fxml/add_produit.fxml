@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<VBox xmlns="http://javafx.com/javafx/8" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="gestiondestock.controller.AddProduitController"
+      alignment="TOP_LEFT"
+      spacing="20"
+      style="-fx-background-color: white; -fx-padding: 20;">
+  <padding>
+    <Insets top="20" right="20" bottom="20" left="20"/>
+  </padding>
+  <!-- Titre -->
+  <VBox spacing="2">
+    <Label text="Ajouter un Produit" styleClass="page-title"/>
+    <Label text="Remplissez les informations du nouveau produit" styleClass="subtitle"/>
+  </VBox>
+  <!-- CARD DU FORMULAIRE -->
+  <VBox spacing="20" styleClass="card" prefWidth="600">
+    <!-- Grille des champs du formulaire -->
+    <GridPane hgap="15" vgap="15">
+      <padding>
+        <Insets top="10" bottom="10" left="10" right="10"/>
+      </padding>
+      <!-- Ligne 1: Nom -->
+      <Label text="Nom du produit *" 
+                               styleClass="form-label"
+                               GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+      <TextField fx:id="nomField" 
+                                   promptText="Saisir le nom du produit"
+                                   styleClass="form-input"
+                                   GridPane.rowIndex="0" GridPane.columnIndex="1"
+                                   GridPane.hgrow="ALWAYS"/>
+      <!-- Ligne 2: Prix -->
+      <Label text="Prix (DH) *" 
+                               styleClass="form-label"
+                               GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+      <TextField fx:id="prixField" 
+                                   promptText="0.00"
+                                   styleClass="form-input"
+                                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+      <!-- Ligne 3: Catégorie -->
+      <Label text="Catégorie *" 
+                               styleClass="form-label"
+                               GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+      <ComboBox fx:id="categorieCombo" 
+                                  promptText="Sélectionner une catégorie"
+                                  styleClass="form-combo"
+                                  GridPane.rowIndex="2" GridPane.columnIndex="1"
+                                  GridPane.hgrow="ALWAYS"/>
+      <!-- Ligne 4: Fournisseur -->
+      <Label text="Fournisseur *" 
+                               styleClass="form-label"
+                               GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+      <ComboBox fx:id="fournisseurCombo" 
+                                  promptText="Sélectionner un fournisseur"
+                                  styleClass="form-combo"
+                                  GridPane.rowIndex="3" GridPane.columnIndex="1"
+                                  GridPane.hgrow="ALWAYS"/>
+      <!-- Ligne 5: Description -->
+      <Label text="Description" 
+                               styleClass="form-label"
+                               GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+      <TextArea fx:id="descriptionArea" 
+                                  promptText="Description du produit..."
+                                  styleClass="form-textarea"
+                                  GridPane.rowIndex="4" GridPane.columnIndex="1"
+                                  prefRowCount="3"/>
+    </GridPane>
+    <!-- Boutons d'action -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+      <Button text="Annuler" 
+                                onAction="#handleCancel"
+                                styleClass="btn-secondary"/>
+      <Button text="Ajouter le Produit" 
+                                onAction="#handleAddProduit"
+                                styleClass="btn-primary"/>
+    </HBox>
+  </VBox>
+</VBox>

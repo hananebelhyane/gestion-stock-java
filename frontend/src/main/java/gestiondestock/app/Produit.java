@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Welcome extends Application {
+public class Produit extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -17,7 +17,7 @@ public class Welcome extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/produit.fxml"));
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Gestion de Stock - Produits");
+        primaryStage.setTitle("Gestion de Produits");
         primaryStage.show();
     }
 }

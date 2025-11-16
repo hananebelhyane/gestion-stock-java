@@ -8,9 +8,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
 import com.google.gson.Gson;
 import gestiondestock.model.Admin;
 
@@ -63,8 +64,8 @@ public class LoginController {
             String jsonData = gson.toJson(admin);
 
             // Créer la connexion HTTP
-            URL url = new URL("http://localhost:8082/api/admins/register");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            URI uri = URI.create("http://localhost:8082/api/admins/register");
+            HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
@@ -102,9 +103,12 @@ public class LoginController {
                 System.out.println("Erreur lors de l'enregistrement !");
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
             System.out.println("Erreur de connexion au serveur : " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("URL invalide : " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Erreur inattendue : " + e.getMessage());
         }
     }
 }
