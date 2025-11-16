@@ -1,15 +1,4 @@
-gestiondestock\model\Categorie.class
-gestiondestock\service\HttpClientService.class
-gestiondestock\service\StockService$1.class
-gestiondestock\controller\LoginController.class
-gestiondestock\app\Main.class
-gestiondestock\controller\EditStockController.class
-gestiondestock\controller\StockController$2.class
-gestiondestock\model\Stock.class
-gestiondestock\service\StockService.class
 gestiondestock\app\Welcome.class
-gestiondestock\controller\StockController$1.class
-gestiondestock\controller\StockController.class
+gestiondestock\controller\LoginController.class
 gestiondestock\controller\ViewController.class
 gestiondestock\model\Admin.class
-gestiondestock\model\Produit.class
