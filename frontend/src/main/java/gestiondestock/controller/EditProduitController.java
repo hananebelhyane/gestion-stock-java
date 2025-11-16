@@ -3,15 +3,12 @@ package gestiondestock.controller;
 import gestiondestock.model.Produit;
 import gestiondestock.model.Categorie;
 import gestiondestock.model.Fournisseur;
+import gestiondestock.service.ProduitService;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class EditProduitController implements Initializable {
+public class EditProduitController {
 
     @FXML private TextField nomField;
     @FXML private TextField prixField;
@@ -21,32 +18,15 @@ public class EditProduitController implements Initializable {
 
     private ProduitController produitController;
     private Produit produit;
+    private final ProduitService produitService = new ProduitService();
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        setupComboBoxes();
-        setupValidation();
-    }
+    @FXML
+    private void initialize() {
+        categorieCombo.getItems().addAll("Électronique", "Informatique", "Mobilier", "Bureautique", "Alimentaire", "Vêtements", "Autre");
+        fournisseurCombo.getItems().addAll("TechCorp", "PhoneDistri", "OfficePlus", "SoundTech","FurnitureCo", "GeneralSupplies", "Autre");
 
-    private void setupComboBoxes() {
-        // Peupler les combobox avec des données
-        categorieCombo.getItems().addAll(
-            "Électronique", "Informatique", "Mobilier", "Bureautique", 
-            "Alimentaire", "Vêtements", "Autre"
-        );
-        
-        fournisseurCombo.getItems().addAll(
-            "TechCorp", "PhoneDistri", "OfficePlus", "SoundTech",
-            "FurnitureCo", "GeneralSupplies", "Autre"
-        );
-    }
-
-    private void setupValidation() {
-        // Validation numérique pour le prix
-        prixField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*(\\.\\d*)?")) {
-                prixField.setText(oldValue);
-            }
+        prixField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*(\\.\\d*)?")) prixField.setText(oldValue);
         });
     }
 
@@ -56,140 +36,89 @@ public class EditProduitController implements Initializable {
     }
 
     private void populateForm() {
-        if (produit != null) {
-            nomField.setText(produit.getNom());
-            descriptionArea.setText(produit.getDescription());
-            prixField.setText(String.valueOf(produit.getPrixUnitaire()));
-            
-            if (produit.getCategorie() != null) {
-                categorieCombo.setValue(produit.getCategorie().getNom());
-            }
-            if (produit.getFournisseur() != null) {
-                fournisseurCombo.setValue(produit.getFournisseur().getNom());
-            }
-        }
+        if (produit == null) return;
+        nomField.setText(produit.getNom());
+        prixField.setText(String.valueOf(produit.getPrixUnitaire()));
+        descriptionArea.setText(produit.getDescription());
+        if (produit.getCategorie() != null) categorieCombo.setValue(produit.getCategorie().getNom());
+        if (produit.getFournisseur() != null) fournisseurCombo.setValue(produit.getFournisseur().getNom());
     }
 
     @FXML
     private void handleUpdateProduit() {
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
-        try {
-            updateProduitFromForm();
-            
-            // Dans une vraie application, vous appelleriez ProduitDAO.update(produit)
-            // Pour l'instant, on rafraîchit juste la table
-            if (produitController != null) {
-                produitController.refreshTable();
+        produit.setNom(nomField.getText().trim());
+        produit.setDescription(descriptionArea.getText().trim());
+        produit.setPrixUnitaire(Double.parseDouble(prixField.getText()));
+        produit.setCategorie(new Categorie(categorieCombo.getValue(), ""));
+        produit.setFournisseur(new Fournisseur(fournisseurCombo.getValue(), "", "", ""));
+
+        javafx.concurrent.Task<Produit> task = new javafx.concurrent.Task<>() {
+            @Override
+            protected Produit call() throws Exception {
+                return produitService.updateProduit(produit);
             }
-            
+        };
+
+        task.setOnSucceeded(evt -> {
+            if (produitController != null) produitController.refreshTable();
             showAlert("Succès", "Produit modifié avec succès!", Alert.AlertType.INFORMATION);
             closeWindow();
-            
-        } catch (Exception e) {
-            showAlert("Erreur", "Erreur lors de la modification: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
+        });
+
+        task.setOnFailed(evt -> showAlert("Erreur", "Erreur lors de la modification: " + task.getException().getMessage(), Alert.AlertType.ERROR));
+
+        new Thread(task).start();
     }
 
     @FXML
     private void handleDelete() {
         if (produit == null) return;
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation de suppression");
-        alert.setHeaderText("Supprimer le produit");
-        alert.setContentText("Êtes-vous sûr de vouloir supprimer le produit \"" + produit.getNom() + "\" ?");
-        
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Supprimer le produit \"" + produit.getNom() + "\" ?", ButtonType.OK, ButtonType.CANCEL);
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                try {
-                    // Supprimer le produit de la liste
-                    // Dans une vraie application: ProduitDAO.delete(produit.getId());
-                    if (produitController != null) {
-                        produitController.refreshTable();
+                javafx.concurrent.Task<Void> task = new javafx.concurrent.Task<>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        produitService.deleteProduit(produit.getId());
+                        return null;
                     }
+                };
+                task.setOnSucceeded(ev -> {
+                    if (produitController != null) produitController.refreshTable();
                     showAlert("Succès", "Produit supprimé avec succès!", Alert.AlertType.INFORMATION);
                     closeWindow();
-                } catch (Exception e) {
-                    showAlert("Erreur", "Erreur lors de la suppression: " + e.getMessage(), Alert.AlertType.ERROR);
-                }
+                });
+                task.setOnFailed(ev -> showAlert("Erreur", "Erreur lors de la suppression: " + task.getException().getMessage(), Alert.AlertType.ERROR));
+                new Thread(task).start();
             }
         });
     }
 
     @FXML
-    private void handleCancel() {
-        closeWindow();
-    }
-
-    private void updateProduitFromForm() {
-        produit.setNom(nomField.getText().trim());
-        produit.setDescription(descriptionArea.getText().trim());
-        try {
-            produit.setPrixUnitaire(Double.valueOf(prixField.getText()));
-        } catch (NumberFormatException e) {
-            showAlert("Erreur", "Format de prix invalide", Alert.AlertType.ERROR);
-        }
-        
-        Categorie newCategorie = new Categorie(categorieCombo.getValue(), "");
-        Fournisseur newFournisseur = new Fournisseur(fournisseurCombo.getValue(), "", "", "");
-        
-        produit.setCategorie(newCategorie);
-        produit.setFournisseur(newFournisseur);
-    }
+    private void handleCancel() { closeWindow(); }
 
     private boolean validateForm() {
         StringBuilder errors = new StringBuilder();
-        
-        if (nomField.getText() == null || nomField.getText().trim().isEmpty()) {
-            errors.append("- Le nom est obligatoire\n");
+        if (nomField.getText().isBlank()) errors.append("- Le nom est obligatoire\n");
+        if (prixField.getText().isBlank()) errors.append("- Le prix est obligatoire\n");
+        else {
+            try { if (Double.parseDouble(prixField.getText()) <= 0) errors.append("- Le prix doit être > 0\n"); }
+            catch (NumberFormatException e) { errors.append("- Prix invalide\n"); }
         }
-        
-        if (prixField.getText() == null || prixField.getText().trim().isEmpty()) {
-            errors.append("- Le prix est obligatoire\n");
-        } else {
-            try {
-                double prix = Double.parseDouble(prixField.getText());
-                if (prix <= 0) {
-                    errors.append("- Le prix doit être supérieur à 0\n");
-                }
-            } catch (NumberFormatException e) {
-                errors.append("- Le prix doit être un nombre valide\n");
-            }
-        }
-        
-        if (categorieCombo.getValue() == null) {
-            errors.append("- La catégorie est obligatoire\n");
-        }
-        
-        if (fournisseurCombo.getValue() == null) {
-            errors.append("- Le fournisseur est obligatoire\n");
-        }
-        
-        if (errors.length() > 0) {
-            showAlert("Erreur de validation", "Veuillez corriger les erreurs suivantes:\n" + errors, Alert.AlertType.ERROR);
-            return false;
-        }
-        
+        if (categorieCombo.getValue() == null) errors.append("- La catégorie est obligatoire\n");
+        if (fournisseurCombo.getValue() == null) errors.append("- Le fournisseur est obligatoire\n");
+        if (errors.length() > 0) { showAlert("Erreur de validation", errors.toString(), Alert.AlertType.ERROR); return false; }
         return true;
     }
 
-    public void setProduitController(ProduitController controller) {
-        this.produitController = controller;
-    }
+    public void setProduitController(ProduitController controller) { this.produitController = controller; }
 
-    private void closeWindow() {
-        Stage stage = (Stage) nomField.getScene().getWindow();
-        stage.close();
-    }
+    private void closeWindow() { ((Stage) nomField.getScene().getWindow()).close(); }
 
     private void showAlert(String title, String message, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        Alert alert = new Alert(type); alert.setTitle(title); alert.setHeaderText(null); alert.setContentText(message); alert.showAndWait();
     }
 }

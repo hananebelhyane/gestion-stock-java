@@ -1,9 +1,9 @@
 package gestiondestock.controller;
 
-import gestiondestock.dao.ProduitDAO;
 import gestiondestock.model.Produit;
 import gestiondestock.model.Categorie;
 import gestiondestock.model.Fournisseur;
+import gestiondestock.service.ProduitService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -34,104 +34,90 @@ public class ProduitController implements Initializable {
     @FXML private TableColumn<Produit, String> colCategorie;
     @FXML private TableColumn<Produit, String> colFournisseur;
     @FXML private TableColumn<Produit, Void> colActions;
+    @FXML private Button addButton;
+    @FXML private Button exportButton;
 
     private final ObservableList<Produit> produitsList = FXCollections.observableArrayList();
     private FilteredList<Produit> filteredData;
+    private final ProduitService produitService = new ProduitService();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupTableColumns();
+        setupActionsColumn();
         loadProduits();
         setupSearchFilter();
-        setupActionsColumn();
+        setupButtonsStyle();
     }
 
     private void setupTableColumns() {
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colPrix.setCellValueFactory(new PropertyValueFactory<>("prixUnitaire"));
-        colCategorie.setCellValueFactory(cellData -> {
-            Categorie cat = cellData.getValue().getCategorie();
+        colCategorie.setCellValueFactory(cell -> {
+            Categorie cat = cell.getValue().getCategorie();
             return new SimpleStringProperty(cat != null ? cat.getNom() : "");
         });
-        colFournisseur.setCellValueFactory(cellData -> {
-            Fournisseur fourn = cellData.getValue().getFournisseur();
-            return new SimpleStringProperty(fourn != null ? fourn.getNom() : "");
+        colFournisseur.setCellValueFactory(cell -> {
+            Fournisseur f = cell.getValue().getFournisseur();
+            return new SimpleStringProperty(f != null ? f.getNom() : "");
         });
-    }
-
-    private void loadProduits() {
-        try {
-            produitsList.clear();
-            produitsList.addAll(ProduitDAO.getAll());
-            tableProduits.setItems(produitsList);
-        } catch (Exception e) {
-            showAlert("Erreur", "Erreur lors du chargement des produits: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    private void setupSearchFilter() {
-        filteredData = new FilteredList<>(produitsList, p -> true);
-        
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(produit -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                
-                String lowerCaseFilter = newValue.toLowerCase();
-                
-                if (produit.getNom().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (produit.getDescription().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (produit.getCategorie() != null && 
-                           produit.getCategorie().getNom().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (produit.getFournisseur() != null && 
-                           produit.getFournisseur().getNom().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
-        
-        SortedList<Produit> sortedData = new SortedList<>(filteredData);
-        sortedData.comparatorProperty().bind(tableProduits.comparatorProperty());
-        tableProduits.setItems(sortedData);
     }
 
     private void setupActionsColumn() {
-        colActions.setCellFactory(param -> new TableCell<Produit, Void>() {
-            private final Button editButton = new Button("Modifier");
-            private final Button deleteButton = new Button("Supprimer");
+        colActions.setCellFactory(param -> new TableCell<>() {
+            private final Button editButton = new Button("✎");
+            private final Button deleteButton = new Button("🗑");
 
             {
-                editButton.getStyleClass().add("action-button");
-                deleteButton.getStyleClass().addAll("action-button", "action-button-delete");
-                
-                editButton.setOnAction(event -> {
-                    Produit produit = getTableView().getItems().get(getIndex());
-                    handleEditProduct(produit);
-                });
-                
-                deleteButton.setOnAction(event -> {
-                    Produit produit = getTableView().getItems().get(getIndex());
-                    handleDeleteProduct(produit);
-                });
+                editButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+                deleteButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+
+                editButton.setOnAction(event -> handleEditProduct(getTableView().getItems().get(getIndex())));
+                deleteButton.setOnAction(event -> handleDeleteProduct(getTableView().getItems().get(getIndex())));
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    HBox buttons = new HBox(5, editButton, deleteButton);
-                    setGraphic(buttons);
-                }
+                if (empty) setGraphic(null);
+                else setGraphic(new HBox(5, editButton, deleteButton));
             }
         });
+    }
+
+    private void loadProduits() {
+        javafx.concurrent.Task<java.util.List<Produit>> task = new javafx.concurrent.Task<>() {
+            @Override
+            protected java.util.List<Produit> call() throws Exception {
+                return produitService.getAllProduits();
+            }
+        };
+        task.setOnSucceeded(evt -> {
+            produitsList.clear();
+            produitsList.addAll(task.getValue());
+            tableProduits.setItems(produitsList);
+        });
+        task.setOnFailed(evt -> showAlert("Erreur", "Erreur chargement: " + task.getException().getMessage(), Alert.AlertType.ERROR));
+        new Thread(task).start();
+    }
+
+    private void setupSearchFilter() {
+        filteredData = new FilteredList<>(produitsList, p -> true);
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            filteredData.setPredicate(p -> {
+                if (newVal == null || newVal.isEmpty()) return true;
+                return p.getNom().toLowerCase().startsWith(newVal.toLowerCase());
+            });
+        });
+        SortedList<Produit> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(tableProduits.comparatorProperty());
+        tableProduits.setItems(sortedData);
+    }
+
+    private void setupButtonsStyle() {
+        addButton.setStyle("-fx-background-color: black; -fx-text-fill: white; -fx-font-weight: bold;");
+        exportButton.setStyle("-fx-background-color: black; -fx-text-fill: white; -fx-font-weight: bold;");
     }
 
     @FXML
@@ -139,20 +125,16 @@ public class ProduitController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/add_produit.fxml"));
             Parent root = loader.load();
-            
             AddProduitController controller = loader.getController();
             controller.setProduitController(this);
-            
+
             Stage stage = new Stage();
             stage.setTitle("Ajouter un Produit");
             stage.initModality(Modality.APPLICATION_MODAL);
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/styles/application.css").toExternalForm());
-            stage.setScene(scene);
+            stage.setScene(new Scene(root));
             stage.showAndWait();
-            
         } catch (IOException e) {
-            showAlert("Erreur", "Impossible d'ouvrir le formulaire d'ajout: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
@@ -160,62 +142,63 @@ public class ProduitController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit_produit.fxml"));
             Parent root = loader.load();
-            
             EditProduitController controller = loader.getController();
             controller.setProduit(produit);
             controller.setProduitController(this);
-            
+
             Stage stage = new Stage();
             stage.setTitle("Modifier le Produit");
             stage.initModality(Modality.APPLICATION_MODAL);
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/styles/application.css").toExternalForm());
-            stage.setScene(scene);
+            stage.setScene(new Scene(root));
             stage.showAndWait();
-            
         } catch (IOException e) {
-            showAlert("Erreur", "Impossible d'ouvrir le formulaire de modification: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
     private void handleDeleteProduct(Produit produit) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation de suppression");
-        alert.setHeaderText("Supprimer le produit");
-        alert.setContentText("Êtes-vous sûr de vouloir supprimer le produit \"" + produit.getNom() + "\" ?");
-        
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Supprimer le produit \"" + produit.getNom() + "\" ?", ButtonType.OK, ButtonType.CANCEL);
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                try {
-                    // Supprimer de la liste
-                    produitsList.remove(produit);
+                javafx.concurrent.Task<Void> task = new javafx.concurrent.Task<>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        produitService.deleteProduit(produit.getId());
+                        return null;
+                    }
+                };
+                task.setOnSucceeded(ev -> {
                     showAlert("Succès", "Produit supprimé avec succès!", Alert.AlertType.INFORMATION);
-                } catch (Exception e) {
-                    showAlert("Erreur", "Erreur lors de la suppression: " + e.getMessage(), Alert.AlertType.ERROR);
-                }
+                    refreshTable();
+                });
+                task.setOnFailed(ev -> showAlert("Erreur", "Erreur suppression: " + task.getException().getMessage(), Alert.AlertType.ERROR));
+                new Thread(task).start();
             }
         });
     }
 
     @FXML
     private void handleExport() {
-        try {
-            ProduitDAO.exportToCSV("produits_export.csv");
-            showAlert("Succès", "Exportation CSV réussie!", Alert.AlertType.INFORMATION);
-        } catch (Exception e) {
-            showAlert("Erreur", "Erreur lors de l'exportation: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
+        javafx.concurrent.Task<Void> task = new javafx.concurrent.Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                produitService.exportProduits("produits_export.csv");
+                return null;
+            }
+        };
+        task.setOnSucceeded(evt -> showAlert("Succès", "Export CSV réussi!", Alert.AlertType.INFORMATION));
+        task.setOnFailed(evt -> showAlert("Erreur", "Erreur export: " + task.getException().getMessage(), Alert.AlertType.ERROR));
+        new Thread(task).start();
     }
 
-    public void refreshTable() {
-        loadProduits();
-    }
+    public void refreshTable() { loadProduits(); }
 
-    private void showAlert(String title, String message, Alert.AlertType type) {
+    private void showAlert(String title, String msg, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText(msg);
         alert.showAndWait();
     }
 }
