@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="gestiondestock.controller.FournisseurController" 
+      styleClass="root-container" spacing="0">
+    
+    <!-- En-tête de la page -->
+    <VBox styleClass="page-header">
+        <Label text="Gestion des Fournisseurs" styleClass="main-title">
+            <font><Font name="System Bold" size="32"/></font>
+        </Label>
+        <Label text="Gérez votre inventaire de fournisseurs" styleClass="subtitle">
+            <font><Font size="14"/></font>
+        </Label>
+        <VBox.margin>
+            <Insets top="40" bottom="30" left="40" right="40"/>
+        </VBox.margin>
+    </VBox>
+    
+    <!-- Carte blanche principale -->
+    <VBox styleClass="content-card" VBox.vgrow="ALWAYS">
+        
+        <!-- Barre de recherche et boutons -->
+        <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="15">
+            <!-- Zone de recherche avec icône -->
+            <HBox styleClass="search-container" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                <Label text="🔍" styleClass="search-icon">
+                    <font><Font size="16"/></font>
+                </Label>
+                <TextField fx:id="txtSearch" promptText="Rechercher un fournisseur par nom..." 
+                          styleClass="search-input" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            
+            <!-- Bouton Rechercher -->
+            <Button fx:id="btnRechercher" text="Rechercher" onAction="#handleRechercher" styleClass="btn-secondary"/>
+            
+            <!-- Bouton Afficher supprimés -->
+            <Button fx:id="btnShowDeleted" text="Afficher supprimés" styleClass="btn-secondary"/>
+            
+            <!-- Bouton Rafraîchir -->
+            <Button fx:id="btnRafraichir" text="🔄 Rafraîchir" onAction="#handleRafraichir" styleClass="btn-secondary"/>
+            
+            <!-- Bouton Ajouter -->
+            <Button fx:id="btnAjouter" onAction="#handleAjouter" styleClass="btn-add">
+                <graphic>
+                    <HBox alignment="CENTER" spacing="8">
+                        <Label text="+" styleClass="plus-icon">
+                            <font><Font size="18"/></font>
+                        </Label>
+                        <Label text="Ajouter Fournisseur" styleClass="btn-text">
+                            <font><Font size="13"/></font>
+                        </Label>
+                    </HBox>
+                </graphic>
+            </Button>
+            
+            <!-- Bouton Exporter -->
+            <Button fx:id="btnExporter" styleClass="btn-export">
+                <graphic>
+                    <HBox alignment="CENTER" spacing="8">
+                        <Label text="📄" styleClass="icon-export"/>
+                        <Label text="Exporter" styleClass="btn-text">
+                            <font><Font size="13"/></font>
+                        </Label>
+                    </HBox>
+                </graphic>
+            </Button>
+        </HBox>
+        
+        <!-- Tableau des fournisseurs -->
+        <TableView fx:id="tableFournisseurs" VBox.vgrow="ALWAYS" styleClass="data-table">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="120" styleClass="table-header"/>
+                <TableColumn fx:id="colNom" text="Nom" prefWidth="180" styleClass="table-header"/>
+                <TableColumn fx:id="colPrenom" text="Prénom" prefWidth="180" styleClass="table-header"/>
+                <TableColumn fx:id="colEmail" text="Email" prefWidth="250" styleClass="table-header"/>
+                <TableColumn fx:id="colTelephone" text="Téléphone" prefWidth="160" styleClass="table-header"/>
+                <TableColumn fx:id="colAdresse" text="Adresse" prefWidth="280" styleClass="table-header"/>
+                <TableColumn fx:id="colActions" text="Actions" prefWidth="150" styleClass="table-header"/>
+            </columns>
+        </TableView>
+        
+        <VBox.margin>
+            <Insets top="0" bottom="40" left="40" right="40"/>
+        </VBox.margin>
+    </VBox>
+    
+</VBox>
