@@ -6,8 +6,10 @@ import com.gestiondestock.entity.CommandeClient;
 import com.gestiondestock.entity.CommandeFournisseur;
 import com.gestiondestock.entity.Produit;
 import com.gestiondestock.entity.Stock;
+import com.gestiondestock.entity.Magasinier;
 import com.gestiondestock.repository.AdminRepository;
 import com.gestiondestock.repository.ClientRepository;
+import com.gestiondestock.repository.MagasinierRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -24,12 +26,14 @@ public class DataInitializer implements CommandLineRunner {
 
     private final AdminRepository adminRepository;
     private final ClientRepository clientRepository;
+    private final MagasinierRepository magasinierRepository;
     private final PasswordEncoder passwordEncoder;
     @PersistenceContext private EntityManager em;
 
-    public DataInitializer(AdminRepository adminRepository, ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(AdminRepository adminRepository, ClientRepository clientRepository, MagasinierRepository magasinierRepository, PasswordEncoder passwordEncoder) {
         this.adminRepository = adminRepository;
         this.clientRepository = clientRepository;
+        this.magasinierRepository = magasinierRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -63,6 +67,19 @@ public class DataInitializer implements CommandLineRunner {
             c.setMotDePasse(passwordEncoder.encode("client123"));
             clientRepository.save(c);
             System.out.println("Seeded client user: " + clientUsername + " / client123");
+        }
+
+        // Seed Magasinier
+        String magasinierUsername = "magasinier";
+        if (magasinierRepository.findByUsername(magasinierUsername).isEmpty()) {
+            Magasinier m = new Magasinier();
+            m.setUsername(magasinierUsername);
+            m.setNom("Paul");
+            m.setPrenom("Magasinier");
+            m.setTelephone("5555555555");
+            m.setMotDePasse(passwordEncoder.encode("magasinier123"));
+            magasinierRepository.save(m);
+            System.out.println("Seeded magasinier user: " + magasinierUsername + " / magasinier123");
         }
 
         // If there are already commandes, assume demo dataset exists

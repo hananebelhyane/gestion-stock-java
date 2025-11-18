@@ -36,7 +36,13 @@ public class ViewController {
     public void initialize() {
         var s = Session.get();
         if (s.getUsername() != null && s.getRole() != null) {
-            WelcomeLabel.setText("Vous êtes: \"" + s.getUsername() + "\" (" + s.getRole() + ") , welcome");
+            if (s.getRole().equalsIgnoreCase("MAGASINIER")) {
+                WelcomeLabel.setText("Bienvenue Magasinier: \"" + s.getUsername() + "\"");
+            } else if (s.getRole().equalsIgnoreCase("CLIENT")) {
+                WelcomeLabel.setText("Bienvenue Client: \"" + s.getUsername() + "\"");
+            } else {
+                WelcomeLabel.setText("Vous êtes: \"" + s.getUsername() + "\" (" + s.getRole() + ") , welcome");
+            }
         }
         // Show sidebar only for admin role if provided
         String role = s.getRole();
