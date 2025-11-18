@@ -1,19 +1,24 @@
 /* Root background similar to test.fxml */
 .root {
+  background-color: #EAEEF4; /* fallback */
   -fx-background-color: #EAEEF4;
 }
 
 /* Top bar */
 .topbar {
+  background-color: #EAEEF4; /* fallback */
   -fx-background-color: #EAEEF4;
   -fx-spacing: 8;
 }
 .search {
   -fx-background-radius: 20;
+  padding: 6 12 6 12; /* fallback */
   -fx-padding: 6 12 6 12;
 }
 .icon-btn {
+  background-color: transparent; /* fallback */
   -fx-background-color: transparent;
+  font-size: 16px; /* fallback */
   -fx-font-size: 16px;
 }
 .welcome {
@@ -21,32 +26,42 @@
 }
 .crumb { -fx-text-fill: #7a7a7a; }
 .crumb-sep { -fx-text-fill: #aaaaaa; }
-.crumb-active { -fx-text-fill: #222; -fx-font-weight: bold; }
+.crumb-active { -fx-text-fill: #222; font-weight: bold; -fx-font-weight: bold; }
 
 /* Sidebar similar to the dark panel */
 .sidebar {
+  background-color: #353A56; /* fallback */
   -fx-background-color: #353A56;
+  border-width: 2; /* fallback */
   -fx-border-width: 2;
+  border-radius: 20; /* fallback */
   -fx-border-radius: 20;
   -fx-background-radius: 20;
+  border-color: #353A56; /* fallback */
   -fx-border-color: #353A56;
 }
 .section {
   -fx-text-fill: #cfd3e1;
+  font-weight: bold; /* fallback */
   -fx-font-weight: bold;
 }
 .side-button {
+  background-color: #353A56; /* fallback */
   -fx-background-color: #353A56;
   -fx-text-fill: #c6b6b6;
   -fx-background-radius: 50;
+  border-radius: 50; /* fallback */
   -fx-border-radius: 50;
+  padding: 8 14 8 14; /* fallback */
   -fx-padding: 8 14 8 14;
 }
 .side-button.active {
+  background-color: #141313; /* fallback */
   -fx-background-color: #141313;
   -fx-text-fill: white;
 }
 .side-button.ghost {
+  background-color: transparent; /* fallback */
   -fx-background-color: transparent;
   -fx-text-fill: #d0d3df;
 }
@@ -54,11 +69,101 @@
 .profile-name { -fx-text-fill: #f0f2f8; }
 .profile-email { -fx-text-fill: #a9b0c9; }
 
-/* Cards */
+/* Outline container for KPI group */
+.outline-container {
+  background-color: transparent; /* fallback */
+  -fx-background-color: transparent;
+  border-color: transparent; /* remove outer border to avoid double lines */
+  -fx-border-color: transparent;
+  border-radius: 12; /* fallback */
+  -fx-border-radius: 12;
+  padding: 12; /* fallback */
+  -fx-padding: 12;
+  -fx-background-radius: 12;
+}
+
+/* Card frame: inner VBox that always shows an outline */
+.kpi-card-frame {
+  background-color: transparent; /* fallback */
+  -fx-background-color: transparent;
+  padding: 16; /* fallback */
+  -fx-padding: 16;
+  border-color: black; /* fallback */
+  -fx-border-color: black;
+  border-width: 2; /* fallback */
+  -fx-border-width: 2;
+  border-radius: 10; /* fallback */
+  -fx-border-radius: 10;
+  -fx-background-radius: 10;
+}
+
+.kpi-card .kpi-value {
+  font-size: 36px;
+  -fx-font-size: 36px;
+  font-weight: 800;
+  -fx-font-weight: 800;
+  -fx-text-fill: #0f172a;
+}
+
+.kpi-card .kpi-sub {
+  -fx-text-fill: #64748b;
+}
+
+.kpi-header {
+  -fx-alignment: center-left;
+  -fx-spacing: 10;
+}
+
+.kpi-icon {
+  font-size: 18px;
+  -fx-font-size: 18px;
+  font-weight: bold;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-alignment: center;
+  -fx-pref-width: 34;
+  -fx-pref-height: 34;
+  border-radius: 17;
+  -fx-background-radius: 17;
+  -fx-border-radius: 17;
+}
+
+.kpi-foot {
+  -fx-text-fill: #94a3b8;
+  font-size: 12px;
+  -fx-font-size: 12px;
+}
+
+/* Accent classes kept minimal so they don't override border/frame */
+.kpi-blue { opacity: 1.0; -fx-opacity: 1.0; }
+.kpi-indigo { opacity: 1.0; -fx-opacity: 1.0; }
+.kpi-amber { opacity: 1.0; -fx-opacity: 1.0; }
+.kpi-red { opacity: 1.0; -fx-opacity: 1.0; }
+
+.kpi-blue .kpi-icon { background-color: #1d4ed8; -fx-background-color: #1d4ed8; }
+.kpi-indigo .kpi-icon { background-color: #312e81; -fx-background-color: #312e81; }
+.kpi-amber .kpi-icon { background-color: #b45309; -fx-background-color: #b45309; }
+.kpi-red .kpi-icon { background-color: #b91c1c; -fx-background-color: #b91c1c; }
+
+/* Dark mode adjustments */
+.theme-dark .kpi-card {
+  background-color: transparent; /* fallback */
+  -fx-background-color: transparent;
+  border-color: white; /* fallback */
+  -fx-border-color: white;
+}
+.theme-dark .kpi-card .kpi-value { -fx-text-fill: #f8fafc; }
+.theme-dark .kpi-card .kpi-sub { -fx-text-fill: #cbd5f5; }
+.theme-dark .kpi-foot { -fx-text-fill: #94a3b8; }
+.theme-dark .kpi-icon { -fx-text-fill: white; }
+
 .card {
+  background-color: white; /* fallback */
   -fx-background-color: white;
+  border-radius: 16; /* fallback */
   -fx-background-radius: 16;
   -fx-border-radius: 16;
+  padding: 12; /* fallback */
   -fx-padding: 12;
   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 12, 0.2, 0, 2);
 }

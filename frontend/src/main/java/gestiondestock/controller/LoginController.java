@@ -63,8 +63,11 @@ public class LoginController {
     private void switchToView() {
         try {
             Stage stage = (Stage) loginButton.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/view.fxml"));
-            stage.setScene(new Scene(root));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/layoutBar.fxml"));
+            Scene scene = new Scene(root);
+            var css = getClass().getResource("/styles/login.css");
+            if (css != null) scene.getStylesheets().add(css.toExternalForm());
+            stage.setScene(scene);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Navigation error", "Cannot open view: " + e.getMessage());
         }

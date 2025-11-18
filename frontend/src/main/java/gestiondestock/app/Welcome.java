@@ -21,6 +21,10 @@ public class Welcome extends Application {
             if (css != null) {
                 scene.getStylesheets().add(css.toExternalForm());
             }
+            var dashCss = getClass().getResource("/styles/dashboard.css");
+            if (dashCss != null) {
+                scene.getStylesheets().add(dashCss.toExternalForm());
+            }
             primaryStage.setTitle("Login");
             primaryStage.setScene(scene);
             primaryStage.show();

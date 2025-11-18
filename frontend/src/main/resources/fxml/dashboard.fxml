@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="gestiondestock.controller.DashboardController"
+      spacing="16" alignment="TOP_LEFT">
+  <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+  <Label text="Overview" styleClass="page-title" />
+  <VBox styleClass="outline-container">
+    <GridPane hgap="16" vgap="16" styleClass="kpi-grid">
+      <columnConstraints>
+        <ColumnConstraints percentWidth="25"/>
+        <ColumnConstraints percentWidth="25"/>
+        <ColumnConstraints percentWidth="25"/>
+        <ColumnConstraints percentWidth="25"/>
+      </columnConstraints>
+
+      <!-- New Clients (7d) -->
+
+      <VBox GridPane.columnIndex="0">
+          <VBox spacing="10" styleClass="kpi-blue"
+            style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+          <HBox spacing="10" styleClass="kpi-header">
+            <Label text="👥" styleClass="kpi-icon" />
+            <VBox spacing="2">
+              <Label text="New Clients (7d)" styleClass="kpi-title"/>
+              <Label text="First-time signups" styleClass="kpi-sub"/>
+            </VBox>
+          </HBox>
+          <Label fx:id="newClients7d" text="0" styleClass="kpi-value"/>
+          <Label text="Last 7 days" styleClass="kpi-foot"/>
+        </VBox>
+      </VBox>
+
+      <!-- Client Orders (7d) -->
+      <VBox GridPane.columnIndex="1">
+          <VBox spacing="10" styleClass="kpi-indigo"
+            style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+          <HBox spacing="10" styleClass="kpi-header">
+            <Label text="🧾" styleClass="kpi-icon" />
+            <VBox spacing="2">
+              <Label text="Client Orders (7d)" styleClass="kpi-title"/>
+              <Label text="Orders placed" styleClass="kpi-sub"/>
+            </VBox>
+          </HBox>
+          <Label fx:id="clientOrders7d" text="0" styleClass="kpi-value"/>
+          <Label text="Last 7 days" styleClass="kpi-foot"/>
+        </VBox>
+      </VBox>
+
+      <!-- Pending Supplier Orders -->
+      <VBox GridPane.columnIndex="2">
+          <VBox spacing="10" styleClass="kpi-amber"
+            style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+          <HBox spacing="10" styleClass="kpi-header">
+            <Label text="📦" styleClass="kpi-icon" />
+            <VBox spacing="2">
+              <Label text="Pending Supplier Orders" styleClass="kpi-title"/>
+              <Label text="Awaiting delivery" styleClass="kpi-sub"/>
+            </VBox>
+          </HBox>
+          <Label fx:id="pendingSupplierOrders" text="0" styleClass="kpi-value"/>
+          <Label text="CommandeFournisseur EN_ATTENTE" styleClass="kpi-foot"/>
+        </VBox>
+      </VBox>
+
+      <!-- Out-of-Stock Products -->
+      <VBox GridPane.columnIndex="3">
+          <VBox spacing="10" styleClass="kpi-red"
+            style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+          <HBox spacing="10" styleClass="kpi-header">
+            <Label text="⚠" styleClass="kpi-icon" />
+            <VBox spacing="2">
+              <Label text="Out-of-Stock Products" styleClass="kpi-title"/>
+              <Label text="Zero quantity" styleClass="kpi-sub"/>
+            </VBox>
+          </HBox>
+          <Label fx:id="outOfStock" text="0" styleClass="kpi-value"/>
+          <Label text="SKUs with zero quantity" styleClass="kpi-foot"/>
+        </VBox>
+      </VBox>
+    </GridPane>
+  </VBox>
+</VBox>
