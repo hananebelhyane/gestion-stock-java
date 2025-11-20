@@ -8,7 +8,8 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gestiondestock.controller.ViewController" fx:id="root">
   <left>
-    <VBox spacing="10" styleClass="sidebar" fx:id="sidebar">
+        <VBox spacing="10" styleClass="sidebar" fx:id="sidebar"
+          style="-fx-background-color: #ffffff;">
       <padding><Insets top="18" right="14" bottom="18" left="14"/></padding>
 
       <!-- Sidebar header with logo only -->
@@ -33,9 +34,9 @@
       <!-- Profile card at bottom -->
       <HBox spacing="10" alignment="CENTER_LEFT" styleClass="profile-card">
         <Label fx:id="avatarLabel" text="U" styleClass="avatar" />
-        <Label fx:id="usernameLabel" text="Username" styleClass="profile-name" />
+        <Label fx:id="usernameLabel" text="Username" styleClass="profile-name" style="-fx-text-fill: black;" />
         <Pane HBox.hgrow="ALWAYS" />
-        <Button fx:id="profileMenuBtn" text="⋯" onAction="#showProfileMenu" />
+        <Button fx:id="profileMenuBtn" text="➜]" onAction="#doSignOut" />
       </HBox>
     </VBox>
   </left>
@@ -47,7 +48,6 @@
         <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
         <Label text="Admin Dashboard" styleClass="topbar-title" />
         <Pane HBox.hgrow="ALWAYS" />
-        <ToggleButton text="🌙" fx:id="themeToggle" onAction="#toggleTheme" />
         <Button fx:id="sidebarToggleBtn" text="⟨" onAction="#toggleSidebar" />
       </HBox>
       

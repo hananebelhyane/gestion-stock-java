@@ -8,7 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ToggleButton;
+// removed: import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,14 +16,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+// removed duplicate: import javafx.scene.Parent;
 import javafx.scene.Node;
 
 public class ViewController {
     @FXML private Label WelcomeLabel;
     @FXML private VBox sidebar;
     @FXML private BorderPane root;
-    @FXML private ToggleButton themeToggle;
+    // removed: @FXML private ToggleButton themeToggle;
     @FXML private ImageView logoImage;
     @FXML private javafx.scene.layout.HBox topbar;
     @FXML private Button sidebarToggleBtn;
@@ -73,11 +73,6 @@ public class ViewController {
             }
         }
 
-        // Init theme toggle icon
-        if (themeToggle != null) {
-            setThemeIcon(false);
-        }
-
         // Init sidebar toggle state (in topbar, right side)
         if (sidebarToggleBtn != null) {
             sidebarToggleBtn.setText("⟨");
@@ -120,19 +115,7 @@ public class ViewController {
     @FXML public void openAlerts(ActionEvent e) { loadContent("alerts"); }
     @FXML public void openSettings(ActionEvent e) { loadContent("settings"); }
 
-    @FXML
-    public void toggleTheme(ActionEvent e) {
-        if (root == null) return;
-        Scene scene = root.getScene();
-        boolean enableDark = themeToggle != null && themeToggle.isSelected();
-        if (enableDark) {
-            if (!root.getStyleClass().contains("theme-dark")) root.getStyleClass().add("theme-dark");
-        } else {
-            root.getStyleClass().remove("theme-dark");
-        }
-        setThemeIcon(enableDark);
-        if (scene != null) scene.getRoot().applyCss();
-    }
+    // removed theme toggling handler and icon methods
 
     @FXML
     public void toggleSidebar(ActionEvent e) {
@@ -172,6 +155,7 @@ public class ViewController {
         item.setGraphic(emoji);
     }
 
+    @FXML
     private void doSignOut() {
         try {
             Session.get().clear();
@@ -184,23 +168,5 @@ public class ViewController {
         } catch (Exception ex) {
             // ignore navigation errors here
         }
-    }
-
-    private void setThemeIcon(boolean darkEnabled) {
-        if (themeToggle == null) return;
-        try {
-            String iconPath = darkEnabled ? "/assets/sun.png" : "/assets/moon.png";
-            var url = getClass().getResource(iconPath);
-            if (url != null) {
-                Image img = new Image(url.toExternalForm(), 16, 16, true, true);
-                ImageView iv = new ImageView(img);
-                themeToggle.setGraphic(iv);
-                themeToggle.setText("");
-                return;
-            }
-        } catch (Exception ignore) {}
-        // Fallback to emoji if custom icons not provided
-        themeToggle.setGraphic(null);
-        themeToggle.setText(darkEnabled ? "☀" : "🌙");
     }
 }

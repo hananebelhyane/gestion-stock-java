@@ -1,4 +1,10 @@
-c:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\LoginController.java
-c:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\model\Admin.java
-c:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\ViewController.java
-c:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\app\Welcome.java
+C:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\LoginController.java
+C:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\model\Session.java
+C:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\model\AuthService.java
+C:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\ViewController.java
+C:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\model\DashboardService.java
+C:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\SignupController.java
+C:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\model\AuthResponse.java
+C:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\ui\FieldToast.java
+C:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\app\Welcome.java
+C:\Users\My-PC\Desktop\projava\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\DashboardController.java

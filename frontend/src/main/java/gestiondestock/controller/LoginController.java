@@ -67,6 +67,9 @@ public class LoginController {
             Scene scene = new Scene(root);
             var css = getClass().getResource("/styles/login.css");
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
+            // Add dashboard stylesheet so dashboard view uses its styles
+            var dashCss = getClass().getResource("/styles/dashboard.css");
+            if (dashCss != null) scene.getStylesheets().add(dashCss.toExternalForm());
             stage.setScene(scene);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Navigation error", "Cannot open view: " + e.getMessage());

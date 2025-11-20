@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -8,8 +11,8 @@
       fx:controller="gestiondestock.controller.DashboardController"
       spacing="16" alignment="TOP_LEFT">
   <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-  <Label text="Overview" styleClass="page-title" />
-  <VBox styleClass="outline-container">
+  <Label text="Aperçu" styleClass="page-title" />
+  <VBox style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;" styleClass="outline-container">
     <GridPane hgap="16" vgap="16" styleClass="kpi-grid">
       <columnConstraints>
         <ColumnConstraints percentWidth="25"/>
@@ -26,12 +29,12 @@
           <HBox spacing="10" styleClass="kpi-header">
             <Label text="👥" styleClass="kpi-icon" />
             <VBox spacing="2">
-              <Label text="New Clients (7d)" styleClass="kpi-title"/>
-              <Label text="First-time signups" styleClass="kpi-sub"/>
+              <Label text="Nouveaux clients (7j)" styleClass="kpi-title"/>
+              <Label text="Premières inscriptions" styleClass="kpi-sub"/>
             </VBox>
           </HBox>
           <Label fx:id="newClients7d" text="0" styleClass="kpi-value"/>
-          <Label text="Last 7 days" styleClass="kpi-foot"/>
+          <Label text="7 derniers jours" styleClass="kpi-foot"/>
         </VBox>
       </VBox>
 
@@ -42,12 +45,12 @@
           <HBox spacing="10" styleClass="kpi-header">
             <Label text="🧾" styleClass="kpi-icon" />
             <VBox spacing="2">
-              <Label text="Client Orders (7d)" styleClass="kpi-title"/>
-              <Label text="Orders placed" styleClass="kpi-sub"/>
+              <Label text="Commandes clients (7j)" styleClass="kpi-title"/>
+              <Label text="Commandes passées" styleClass="kpi-sub"/>
             </VBox>
           </HBox>
           <Label fx:id="clientOrders7d" text="0" styleClass="kpi-value"/>
-          <Label text="Last 7 days" styleClass="kpi-foot"/>
+          <Label text="7 derniers jours" styleClass="kpi-foot"/>
         </VBox>
       </VBox>
 
@@ -58,12 +61,12 @@
           <HBox spacing="10" styleClass="kpi-header">
             <Label text="📦" styleClass="kpi-icon" />
             <VBox spacing="2">
-              <Label text="Pending Supplier Orders" styleClass="kpi-title"/>
-              <Label text="Awaiting delivery" styleClass="kpi-sub"/>
+              <Label text="Commandes fournisseurs en attente" styleClass="kpi-title"/>
+              <Label text="En attente de livraison" styleClass="kpi-sub"/>
             </VBox>
           </HBox>
           <Label fx:id="pendingSupplierOrders" text="0" styleClass="kpi-value"/>
-          <Label text="CommandeFournisseur EN_ATTENTE" styleClass="kpi-foot"/>
+          <Label text="Commande fournisseur EN_ATTENTE" styleClass="kpi-foot"/>
         </VBox>
       </VBox>
 
@@ -74,14 +77,43 @@
           <HBox spacing="10" styleClass="kpi-header">
             <Label text="⚠" styleClass="kpi-icon" />
             <VBox spacing="2">
-              <Label text="Out-of-Stock Products" styleClass="kpi-title"/>
-              <Label text="Zero quantity" styleClass="kpi-sub"/>
+              <Label text="Produits en rupture de stock" styleClass="kpi-title"/>
+              <Label text="Quantité zéro" styleClass="kpi-sub"/>
             </VBox>
           </HBox>
           <Label fx:id="outOfStock" text="0" styleClass="kpi-value"/>
-          <Label text="SKUs with zero quantity" styleClass="kpi-foot"/>
+          <Label text="Articles avec quantité zéro" styleClass="kpi-foot"/>
         </VBox>
       </VBox>
     </GridPane>
   </VBox>
+
+  <!-- Orders Over Time Line Chart -->
+  <VBox style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;" styleClass="outline-container card large chart-section" spacing="8">
+    <Label text="Commandes au fil du temps" styleClass="section" style="-fx-text-fill: black;" />
+    <HBox spacing="8" alignment="CENTER_LEFT">
+      <Label text="Période :" />
+      <ComboBox fx:id="rangeSelector" promptText="Sélectionner la période" onAction="#onRangeChanged" />
+    </HBox>
+    <LineChart fx:id="ordersLineChart" prefHeight="280" prefWidth="800" styleClass="orders-chart brand-blue hide-legend">
+      <xAxis>
+        <CategoryAxis label="Day" />
+      </xAxis>
+      <yAxis>
+        <NumberAxis label="Orders" />
+      </yAxis>
+    </LineChart>
+  </VBox>
+
+  <!-- Recent Activities and Alerts side-by-side -->
+  <HBox spacing="16">
+    <VBox style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;" styleClass="outline-container card" spacing="12" HBox.hgrow="ALWAYS">
+      <Label text="Activités récentes" styleClass="section" style="-fx-text-fill: black;" />
+      <VBox fx:id="activitiesList" styleClass="activities" spacing="8" />
+    </VBox>
+    <VBox style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;" styleClass="outline-container card" spacing="12" HBox.hgrow="ALWAYS">
+      <Label text="Alertes récentes" styleClass="section" style="-fx-text-fill: black;" />
+      <VBox fx:id="alertsList" styleClass="alerts" spacing="8" />
+    </VBox>
+  </HBox>
 </VBox>

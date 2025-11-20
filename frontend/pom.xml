@@ -105,6 +105,9 @@
         <version>0.0.8</version>
         <configuration>
           <mainClass>gestiondestock.app.Welcome</mainClass>
+          <jvmArgs>
+            <jvmArg>--enable-native-access=javafx.graphics</jvmArg>
+          </jvmArgs>
         </configuration>
       </plugin>
     </plugins>
