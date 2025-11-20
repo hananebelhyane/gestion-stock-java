@@ -1,0 +1,11 @@
+/* Simple styles for the modern login sample */
+.root {
+    -fx-background-color: floralwhite;
+}
+.sidepane {
+    -fx-background-color: #A73627;
+}
+.btn {
+    -fx-background-color: #F1634F;
+    -fx-background-radius: 6px;
+}
