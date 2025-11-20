@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="gestiondestock.controller.AddCommandeClientController"
+      spacing="10">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <Label text="Nouvelle commande client" style="-fx-font-size:18px;-fx-font-weight:bold"/>
+    <TextField fx:id="clientNomField" promptText="Nom du client"/>
+    <TextField fx:id="clientPrenomField" promptText="Prénom du client"/>
+    <TextField fx:id="seuilMaxField" promptText="Seuil max"/>
+    <ComboBox fx:id="statutCombo" prefWidth="200"/>
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="btnCancel" text="Annuler" onAction="#handleCancel"/>
+        <Button fx:id="btnSave" text="Enregistrer" onAction="#handleSave" defaultButton="true"/>
+    </HBox>
+</VBox>

@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.UUID;
 
 @Entity
+@EntityListeners(EntityIdGenerator.class)
 @Setter
 @Getter
 @NoArgsConstructor
@@ -18,7 +19,6 @@ import java.util.UUID;
 public class Produit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonProperty("id")
     private UUID id;
 
@@ -29,9 +29,11 @@ public class Produit {
     private String description;
 
     @JsonProperty("prixUnitaire")
+    @Column(name = "prix_unitaire")
     private Double prixUnitaire;
 
     @JsonProperty("urlImage")
+    @Column(name = "url_image")
     private String urlImage;
 
     @ManyToOne

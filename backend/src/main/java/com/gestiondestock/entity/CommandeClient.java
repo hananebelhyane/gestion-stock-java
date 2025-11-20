@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "COMMANDE_CLIENT")
+@EntityListeners(EntityIdGenerator.class)
 @Setter
 @Getter
 @NoArgsConstructor
@@ -20,11 +21,12 @@ import java.util.UUID;
 public class CommandeClient {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonProperty("id")
     @Column(name = "id", columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonProperty("client")
     @JoinColumn(name = "client_id")
     @JsonIgnoreProperties({"commandeClients", "motDePasse", "deletedAt", "deletedBy"})

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@EntityListeners(EntityIdGenerator.class)
 @Setter
 @Getter
 @NoArgsConstructor
@@ -20,7 +21,6 @@ public class Client {
 
     @Id
     @JsonProperty("id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @JsonProperty("nom")

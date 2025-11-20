@@ -126,4 +126,15 @@ public class CommandeClient {
     public void setSeuilMax(Integer seuilMax) {
         this.seuilMax = seuilMax;
     }
+
+    // Propriété montantTotal pour l'affichage dans la table
+    public Double getMontantTotal() {
+        return seuilMax != null ? seuilMax.doubleValue() : 0.0;
+    }
+
+    public void setMontantTotal(Double montantTotal) {
+        // Cette méthode est nécessaire pour PropertyValueFactory
+        // mais on stocke dans seuilMax
+        this.seuilMax = montantTotal != null ? montantTotal.intValue() : null;
+    }
 }
