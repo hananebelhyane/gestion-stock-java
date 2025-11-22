@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="gestiondestock.controller.ViewController" fx:id="root">
+  <left>
+    <VBox spacing="10" styleClass="sidebar" fx:id="sidebar"
+          style="-fx-background-color: #ffffff;">
+      <padding><Insets top="18" right="14" bottom="18" left="14"/></padding>
+
+      <!-- Sidebar header with logo only -->
+      <HBox spacing="8" alignment="CENTER_LEFT">
+        <ImageView fx:id="logoImage" fitWidth="120" preserveRatio="true" smooth="true" />
+      </HBox>
+
+      <Separator />
+
+      <!-- Menu -->
+      <VBox spacing="6">
+        <Button text="Dashboard" styleClass="menu-btn" onAction="#openDashboard" />
+        <Button text="Gestion des Produits" styleClass="menu-btn" onAction="#openProducts" />
+        <Button text="Gestion de Stock" styleClass="menu-btn" onAction="#openOrders" />
+        <Button text="Gestion de Fournisseur" styleClass="menu-btn" onAction="#openClients" />
+        
+        <!-- ✅ MODIFICATION : Ce bouton ouvre maintenant le menu des utilisateurs -->
+        <Button text="Gestion des Utilisateurs" styleClass="menu-btn" onAction="#openUsersMenu" />
+        
+        <Button text="Profile" styleClass="menu-btn" onAction="#openStock" />
+      </VBox>
+      
+      <Pane VBox.vgrow="ALWAYS" />
+
+      <!-- Profile card at bottom -->
+      <HBox spacing="10" alignment="CENTER_LEFT" styleClass="profile-card">
+        <Label fx:id="avatarLabel" text="U" styleClass="avatar" />
+        <Label fx:id="usernameLabel" text="Username" styleClass="profile-name" style="-fx-text-fill: black;" />
+        <Pane HBox.hgrow="ALWAYS" />
+        <Button fx:id="profileMenuBtn" text="➜]" onAction="#doSignOut" />
+      </HBox>
+    </VBox>
+  </left>
+  
+  <center>
+    <VBox spacing="0">
+      <!-- Top bar sits above content, aligned to the right of sidebar -->
+      <HBox spacing="10" styleClass="topbar" fx:id="topbar">
+        <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+        <Label text="Admin Dashboard" styleClass="topbar-title" />
+        <Pane HBox.hgrow="ALWAYS" />
+        <Button fx:id="sidebarToggleBtn" text="⟨" onAction="#toggleSidebar" />
+      </HBox>
+      
+      <!-- Main content area -->
+      <StackPane fx:id="contentRoot" VBox.vgrow="ALWAYS">
+        <children>
+          <VBox spacing="8" alignment="CENTER">
+            <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+            <Label text="Welcome" fx:id="WelcomeLabel" styleClass="page-title" />
+            <Label text="Choose an option from the sidebar." styleClass="page-subtitle" />
+          </VBox>
+        </children>
+      </StackPane>
+    </VBox>
+  </center>
+</BorderPane>

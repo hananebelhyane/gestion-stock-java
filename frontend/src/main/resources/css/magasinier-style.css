@@ -1,0 +1,323 @@
+/* ============================================
+   CONTENEUR PRINCIPAL
+   ============================================ */
+.root-container {
+    -fx-background-color: #f5f5f5;
+}
+
+/* ============================================
+   EN-TÊTE
+   ============================================ */
+.page-header {
+    -fx-background-color: #f5f5f5;
+    -fx-padding: 0;
+}
+
+.main-title {
+    -fx-text-fill: #1a1a1a;
+    -fx-font-weight: bold;
+}
+
+.subtitle {
+    -fx-text-fill: #6b6b6b;
+    -fx-padding: 5 0 0 0;
+}
+
+/* ✅ NOUVEAU : Label utilisateur connecté */
+.user-label {
+    -fx-text-fill: #666666;
+    -fx-font-size: 12;
+    -fx-padding: 10 0 0 0;
+    -fx-font-style: italic;
+}
+
+/* ============================================
+   CARTE BLANCHE PRINCIPALE
+   ============================================ */
+.content-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
+}
+
+/* ============================================
+   BARRE D'OUTILS (Recherche + Boutons)
+   ============================================ */
+.toolbar {
+    -fx-padding: 25 30 25 30;
+    -fx-border-color: transparent transparent #f0f0f0 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Zone de recherche */
+.search-container {
+    -fx-background-color: #f8f8f8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 15 10 15;
+    -fx-spacing: 10;
+    -fx-max-width: 350;
+    -fx-pref-width: 350;
+}
+
+.search-icon {
+    -fx-text-fill: #999999;
+}
+
+.search-input {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-text-fill: #1a1a1a;
+    -fx-prompt-text-fill: #999999;
+    -fx-font-size: 14;
+    -fx-padding: 0;
+}
+
+.search-input:focused {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-effect: none;
+}
+
+/* ============================================
+   BOUTONS
+   ============================================ */
+
+/* Bouton Ajouter (Noir) */
+.btn-add {
+    -fx-background-color: #000000;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 12 24 12 24;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0, 0, 2);
+}
+
+.btn-add:hover {
+    -fx-background-color: #2a2a2a;
+}
+
+.btn-add .plus-icon {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.btn-add .btn-text {
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+}
+
+/* Bouton Exporter */
+.btn-export {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 12 24 12 24;
+}
+
+.btn-export:hover {
+    -fx-background-color: #fafafa;
+    -fx-border-color: #d0d0d0;
+}
+
+.btn-export .icon-export {
+    -fx-text-fill: #333333;
+}
+
+.btn-export .btn-text {
+    -fx-text-fill: #333333;
+    -fx-font-weight: 500;
+}
+
+/* Boutons Secondaires (Rechercher, Afficher supprimés, Rafraîchir) */
+.btn-secondary {
+    -fx-background-color: #000000;
+    -fx-text-fill: white;
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 12 20 12 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0, 0, 2);
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #2a2a2a;
+}
+
+/* Bouton Afficher actifs en mode actif (vert) */
+.btn-show-active {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 12 20 12 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0, 0, 2);
+}
+
+.btn-show-active:hover {
+    -fx-background-color: #218838;
+}
+
+/* ============================================
+   TABLEAU
+   ============================================ */
+.data-table {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+    -fx-padding: 0 30 0 30;
+}
+
+.data-table .table-view {
+    -fx-background-color: white;
+}
+
+.data-table .column-header-background {
+    -fx-background-color: white;
+}
+
+.data-table .filler {
+    -fx-background-color: white;
+}
+
+/* En-têtes de colonnes */
+.data-table .column-header {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f0f0f0 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 16 10 16 10;
+}
+
+.data-table .column-header .label {
+    -fx-text-fill: #4a4a4a;
+    -fx-font-size: 14;
+    -fx-font-weight: 600;
+}
+
+/* Lignes du tableau */
+.data-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f8f8f8 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0;
+}
+
+.data-table .table-row-cell:hover {
+    -fx-background-color: #fafafa;
+}
+
+.data-table .table-row-cell:selected {
+    -fx-background-color: #f0f7ff;
+}
+
+/* Cellules */
+.data-table .table-cell {
+    -fx-border-color: transparent;
+    -fx-padding: 18 10 18 10;
+    -fx-text-fill: #2a2a2a;
+    -fx-font-size: 14;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.data-table .table-row-cell:selected .table-cell {
+    -fx-text-fill: #2a2a2a;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+.data-table .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8;
+}
+
+.data-table .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.data-table .scroll-bar:vertical .thumb {
+    -fx-background-color: #d0d0d0;
+    -fx-background-radius: 4;
+}
+
+.data-table .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #b0b0b0;
+}
+
+.data-table .scroll-bar:vertical .increment-button,
+.data-table .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-pref-height: 0;
+}
+
+.data-table .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+/* ============================================
+   BOUTONS D'ACTION (Éditer/Supprimer)
+   ============================================ */
+.action-btn {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 14;
+    -fx-min-width: 40;
+    -fx-min-height: 35;
+}
+
+.action-btn:hover {
+    -fx-background-color: #fafafa;
+    -fx-border-color: #c0c0c0;
+}
+
+/* ============================================
+   PLACEHOLDER (Table vide)
+   ============================================ */
+.data-table .placeholder .label {
+    -fx-text-fill: #999999;
+    -fx-font-size: 14;
+}
+
+/* ============================================
+   DIALOGUES
+   ============================================ */
+.dialog-pane {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+}
+
+.dialog-pane .label {
+    -fx-text-fill: #2a2a2a;
+    -fx-font-size: 14;
+}
+
+.dialog-pane .text-field {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-padding: 10 15 10 15;
+    -fx-font-size: 14;
+}
+
+.dialog-pane .text-field:focused {
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
+}
+
+.dialog-pane .button {
+    -fx-background-radius: 8;
+    -fx-padding: 10 20 10 20;
+    -fx-font-size: 14;
+    -fx-font-weight: 600;
+}

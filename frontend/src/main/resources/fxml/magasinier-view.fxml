@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="gestiondestock.controller.MagasinierController" 
+      style="-fx-background-color: white;" spacing="0">
+    
+    <!-- Barre de navigation en haut -->
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15 40; -fx-border-color: transparent transparent #e0e0e0 transparent; -fx-border-width: 0 0 1 0;">
+        <Button fx:id="btnRetourMenu" text="← Menu Utilisateurs" 
+                style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 16; -fx-font-size: 13;"/>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <Button fx:id="btnNavigateClients" text="→ Gestion Clients" 
+                style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 16; -fx-font-size: 13;"/>
+    </HBox>
+    
+    <!-- En-tête de la page -->
+    <VBox style="-fx-background-color: white;">
+        <Label text="Gestion des Magasiniers" style="-fx-text-fill: #333333;">
+            <font><Font name="System Bold" size="32"/></font>
+        </Label>
+        <Label text="Gérez votre inventaire de magasiniers" style="-fx-text-fill: #666666;">
+            <font><Font size="14"/></font>
+        </Label>
+        <Label fx:id="lblUser" text="Connecté: [Utilisateur]" style="-fx-text-fill: #888888;">
+            <font><Font size="12"/></font>
+        </Label>
+        <padding>
+            <Insets top="30" bottom="20" left="40" right="40"/>
+        </padding>
+    </VBox>
+    
+    <!-- Contenu principal -->
+    <VBox style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+        
+        <!-- Barre de recherche et boutons -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <!-- Zone de recherche avec icône -->
+            <HBox alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 3; -fx-background-radius: 3; -fx-pref-height: 36;" HBox.hgrow="ALWAYS">
+                <Label text="🔍" style="-fx-text-fill: #999999; -fx-padding: 0 5 0 10;">
+                    <font><Font size="14"/></font>
+                </Label>
+                <TextField fx:id="txtSearch" promptText="Rechercher un magasinier par nom, prénom..." 
+                          style="-fx-background-color: transparent; -fx-border-color: transparent;" 
+                          HBox.hgrow="ALWAYS">
+                    <font><Font size="13"/></font>
+                </TextField>
+            </HBox>
+            
+            <!-- Bouton Rechercher -->
+            <Button fx:id="btnRechercher" text="Rechercher" onAction="#handleRechercher" 
+                    style="-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 3; -fx-background-radius: 3; -fx-cursor: hand; -fx-font-size: 13; -fx-text-fill: #333333;"
+                    prefHeight="36"/>
+            
+            <!-- Bouton Afficher supprimés -->
+            <Button fx:id="btnShowDeleted" text="Afficher supprimés"
+                    style="-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 3; -fx-background-radius: 3; -fx-cursor: hand; -fx-font-size: 13; -fx-text-fill: #333333;"
+                    prefHeight="36" minWidth="130"/>
+            
+            <!-- Bouton Rafraîchir -->
+            <Button fx:id="btnRafraichir" text="🔄 Rafraîchir" onAction="#handleRafraichir" 
+                    style="-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 3; -fx-background-radius: 3; -fx-cursor: hand; -fx-font-size: 13; -fx-text-fill: #333333;"
+                    prefHeight="36"/>
+            
+            <!-- Bouton Ajouter -->
+            <Button fx:id="btnAjouter" text="+ Ajouter Magasinier" onAction="#handleAjouter" 
+                    style="-fx-background-color: white; -fx-border-color: #0096c7; -fx-border-width: 1; -fx-border-radius: 3; -fx-background-radius: 3; -fx-text-fill: #0096c7; -fx-cursor: hand; -fx-font-size: 13;"
+                    prefHeight="36"/>
+            
+            <!-- Bouton Exporter -->
+            <Button fx:id="btnExporter" text="📄 Exporter"
+                    style="-fx-background-color: white; -fx-border-color: #0096c7; -fx-border-width: 1; -fx-border-radius: 3; -fx-background-radius: 3; -fx-text-fill: #0096c7; -fx-cursor: hand; -fx-font-size: 13;"
+                    prefHeight="36"/>
+        </HBox>
+        
+        <!-- Espacement -->
+        <Region prefHeight="15"/>
+        
+        <!-- Tableau des magasiniers -->
+        <TableView fx:id="tableMagasiniers" VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 1;">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="120"/>
+                <TableColumn fx:id="colNom" text="Nom" prefWidth="200"/>
+                <TableColumn fx:id="colPrenom" text="Prénom" prefWidth="200"/>
+                <TableColumn fx:id="colUsername" text="Username" prefWidth="200"/>
+                <TableColumn fx:id="colTelephone" text="Téléphone" prefWidth="200"/>
+                <TableColumn fx:id="colActions" text="Actions" prefWidth="150"/>
+            </columns>
+        </TableView>
+        
+        <padding>
+            <Insets top="0" bottom="40" left="40" right="40"/>
+        </padding>
+    </VBox>
+    
+</VBox>

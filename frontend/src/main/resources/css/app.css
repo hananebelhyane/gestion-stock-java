@@ -1,0 +1,136 @@
+
+/* App base */
+.root {
+    font-size: 14px; /* fallback */
+    -fx-font-size: 14px;
+    background-color: #EAEEF4; /* fallback */
+    -fx-background-color: #EAEEF4;
+}
+
+/* Card (shadcn-like) */
+.card {
+    background-color: white; /* fallback */
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    padding: 24px; /* fallback */
+    -fx-padding: 24px;
+    border-color: #e5e7eb; /* fallback */
+    -fx-border-color: #e5e7eb;
+    border-radius: 12px; /* fallback */
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 24, 0.25, 0, 8);
+}
+
+.login-card {
+    max-width: 920px; /* fallback */
+    -fx-max-width: 920px;
+}
+
+.card-section {
+    -fx-alignment: center;
+}
+
+/* Headings & text */
+.heading {
+    font-size: 32px; /* fallback */
+    -fx-font-size: 32px;
+    font-weight: bold; /* fallback */
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+/* Increase specificity to win over theme defaults */
+Label.heading {
+    font-size: 32px; /* fallback */
+    -fx-font-size: 32px;
+    font-weight: bold; /* fallback */
+    -fx-font-weight: bold;
+}
+
+.muted { -fx-text-fill: #6b7280; }
+
+.center {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    text-align: center; /* fallback */
+}
+
+.small { font-size: 12px; -fx-font-size: 12px; }
+
+.label {
+    font-size: 12px; /* fallback */
+    -fx-font-size: 12px;
+    font-weight: bold; /* fallback */
+    -fx-font-weight: bold;
+    -fx-text-fill: #6b7280;
+}
+
+.caption.muted { -fx-text-fill: #6b7280; }
+
+/* Inputs */
+.text-field, .password-field {
+    background-color: white; /* fallback */
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    border-color: #d1d5db; /* fallback */
+    -fx-border-color: #d1d5db;
+    border-radius: 8px; /* fallback */
+    -fx-border-radius: 8px;
+    padding: 10px 12px 10px 12px; /* fallback */
+    -fx-padding: 10px 12px 10px 12px;
+}
+
+.text-field:focused, .password-field:focused {
+    border-color: #2563eb; /* fallback */
+    -fx-border-color: #2563eb;
+    background-color: white; /* fallback */
+    -fx-background-color: white;
+}
+
+/* Buttons */
+.btn {
+    -fx-background-radius: 8px;
+    padding: 10px 14px 10px 14px; /* fallback */
+    -fx-padding: 10px 14px 10px 14px;
+    font-weight: bold; /* fallback */
+    -fx-font-weight: bold;
+    cursor: pointer; /* fallback */
+    -fx-cursor: hand;
+}
+
+.btn-primary { background-color: #2563eb; -fx-background-color: #2563eb; -fx-text-fill: white; }
+
+.btn-primary:hover { background-color: #1d4ed8; -fx-background-color: #1d4ed8; }
+
+/* Outline button */
+.btn-outline {
+    background-color: transparent; /* fallback */
+    -fx-background-color: transparent;
+    -fx-text-fill: #111827;
+    border-color: #d1d5db; /* fallback */
+    -fx-border-color: #d1d5db;
+    border-width: 1px; /* fallback */
+    -fx-border-width: 1px;
+}
+
+.btn-outline:hover { background-color: #f3f4f6; -fx-background-color: #f3f4f6; }
+
+/* Right image pane styling */
+.image-pane {
+    min-height: 360px; /* fallback */
+    -fx-min-height: 360px;
+    background-color: #f3f4f6; /* fallback */
+    -fx-background-color: #f3f4f6;
+    -fx-background-radius: 0 12px 12px 0;
+}
+
+.image-placeholder {
+    background: linear-gradient(to bottom right, rgba(2,132,199,0.25), rgba(14,165,233,0.15)); /* fallback */
+    background-color: transparent; /* fallback */
+    -fx-background-color: linear-gradient(to bottom right, rgba(2,132,199,0.25), rgba(14,165,233,0.15));
+    -fx-background-radius: 0 12px 12px 0;
+    min-width: 100%; /* fallback */
+    -fx-min-width: 100%;
+    min-height: 100%; /* fallback */
+    -fx-min-height: 100%;
+}
