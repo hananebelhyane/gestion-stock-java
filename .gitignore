@@ -1,6 +1,8 @@
 # Fichiers compilés
 target/
+frontend/target/
 *.class
+
 
 # Logs
 *.log

@@ -39,31 +39,40 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
-
-        // Partie Admin
+        // Admin login
         Optional<Admin> adminOpt = adminRepository.findByUsername(request.getUsername());
-        if (adminOpt.isPresent() && passwordEncoder.matches(request.getPassword(), adminOpt.get().getMotDePasse())) {
+        if (adminOpt.isPresent()) {
             Admin admin = adminOpt.get();
-            String token = jwtService.generateToken(admin.getUsername(), "ADMIN", 24 * 60 * 60);
-            return ResponseEntity.ok(new AuthResponse(token, "ADMIN", admin.getUsername()));
+            if (passwordEncoder.matches(request.getPassword(), admin.getMotDePasse())) {
+                String token = jwtService.generateToken(admin.getUsername(), "ADMIN", 24 * 60 * 60);
+                return ResponseEntity.ok(new AuthResponse(token, "ADMIN", admin.getUsername()));
+            }
+            return ResponseEntity.status(401).build();
         }
 
-        // Partie Client
+        // Client login
         Optional<Client> clientOpt = clientRepository.findByUsername(request.getUsername());
-        if (clientOpt.isPresent() && passwordEncoder.matches(request.getPassword(), clientOpt.get().getMotDePasse())) {
+        if (clientOpt.isPresent()) {
             Client client = clientOpt.get();
-            String token = jwtService.generateToken(client.getUsername(), "CLIENT", 24 * 60 * 60);
-            return ResponseEntity.ok(new AuthResponse(token, "CLIENT", client.getUsername()));
+            if (passwordEncoder.matches(request.getPassword(), client.getMotDePasse())) {
+                String token = jwtService.generateToken(client.getUsername(), "CLIENT", 24 * 60 * 60);
+                return ResponseEntity.ok(new AuthResponse(token, "CLIENT", client.getUsername()));
+            }
+            return ResponseEntity.status(401).build();
         }
 
-        // Partie Magasinier
+        // Magasinier login
         Optional<Magasinier> magasinierOpt = magasinierRepository.findByUsername(request.getUsername());
-        if (magasinierOpt.isPresent() && passwordEncoder.matches(request.getPassword(), magasinierOpt.get().getMotDePasse())) {
+        if (magasinierOpt.isPresent()) {
             Magasinier magasinier = magasinierOpt.get();
-            String token = jwtService.generateToken(magasinier.getUsername(), "MAGASINIER", 24 * 60 * 60);
-            return ResponseEntity.ok(new AuthResponse(token, "MAGASINIER", magasinier.getUsername()));
+            if (passwordEncoder.matches(request.getPassword(), magasinier.getMotDePasse())) {
+                String token = jwtService.generateToken(magasinier.getUsername(), "MAGASINIER", 24 * 60 * 60);
+                return ResponseEntity.ok(new AuthResponse(token, "MAGASINIER", magasinier.getUsername()));
+            }
+            return ResponseEntity.status(401).build();
         }
 
-        // Aucun utilisateur trouvé ou mot de passe incorrect
+        // No user found
         return ResponseEntity.status(401).build();
-    }}
+    }
+}
