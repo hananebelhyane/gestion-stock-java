@@ -1,110 +1,105 @@
 package gestiondestock.controller;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
+import gestiondestock.model.AuthResponse;
+import gestiondestock.model.AuthService;
+import gestiondestock.model.Session;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import com.google.gson.Gson;
-import gestiondestock.model.Admin;
+import gestiondestock.ui.FieldToast;
 
 public class LoginController {
 
-    @FXML
-    private TextField userfirstname;
+    @FXML private TextField userusername;
+    @FXML private PasswordField usermdp;
+    @FXML private Button loginButton;
+    @FXML private Label errorLabel;
+
+    private final AuthService authService = new AuthService();
 
     @FXML
-    private TextField userlastname;
+    public void initialize() {
+        // Simple inline checks only.
+    }
 
     @FXML
-    private TextField useremail;
+    public void handleLogin(ActionEvent actionEvent) {
+        String username = userusername.getText() == null ? "" : userusername.getText().trim();
+        String password = usermdp.getText() == null ? "" : usermdp.getText();
 
-    @FXML
-    private TextField userusername;
+        // Client-side validation
+        if (username.isEmpty()) { FieldToast.show(userusername, "Username is required"); return; }
+        if (username.length() < 3) { FieldToast.show(userusername, "Username must be at least 3 characters"); return; }
+        if (password.isEmpty()) { FieldToast.show(usermdp, "Password is required"); return; }
+        if (password.length() < 8) { FieldToast.show(usermdp, "Password must be at least 8 characters"); return; }
+        clearError();
 
-    @FXML
-    private TextField usertelephone;
+        loginButton.setDisable(true);
+        new Thread(() -> {
+            try {
+                AuthResponse res = authService.login(username, password);
+                Session.get().setToken(res.getToken());
+                Session.get().setRole(res.getRole());
+                Session.get().setUsername(res.getUsername());
+                Platform.runLater(this::switchToView);
+            } catch (Exception ex) {
+                Platform.runLater(() -> {
+                    FieldToast.show(usermdp, ex.getMessage());
+                    loginButton.setDisable(false);
+                });
+            }
+        }).start();
+    }
 
-    @FXML
-    private TextField usermdp;
-
-    @FXML
-    private Button loginButton;
-
-    @FXML
-    public void handleLogin(ActionEvent event) {
-        String nom = userfirstname.getText();
-        String prenom = userlastname.getText();
-        String email = useremail.getText();
-        String username = userusername.getText();
-        String telephone = usertelephone.getText();
-        String mdp = usermdp.getText();
-
-        // Vérification
-        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty()
-                || username.isEmpty() || telephone.isEmpty() || mdp.isEmpty()) {
-            System.out.println("Veuillez remplir tous les champs !");
-            return;
-        }
-
-        // Créer l'objet Admin
-        Admin admin = new Admin(nom, prenom, email, username, telephone, mdp);
-
-        // Envoyer au backend
+    private void switchToView() {
         try {
-            // Convertir en JSON
-            Gson gson = new Gson();
-            String jsonData = gson.toJson(admin);
-
-            // Créer la connexion HTTP
-            URL url = new URL("http://localhost:8082/api/admins/register");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setDoOutput(true);
-
-            // Envoyer les données
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = jsonData.getBytes("utf-8");
-                os.write(input, 0, input.length);
-            }
-
-            // Lire la réponse
-            int responseCode = conn.getResponseCode();
-            System.out.println("Response Code: " + responseCode);
-
-            if (responseCode == 200) {
-                System.out.println("Admin enregistré avec succès !");
-
-                // Fermer la fenêtre de login
-                Stage currentStage = (Stage) loginButton.getScene().getWindow();
-                currentStage.close();
-
-                // Ouvrir view.fxml
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view.fxml"));
-                Parent root = loader.load();
-
-                ViewController controller = loader.getController();
-                controller.setAdminData(prenom, nom);
-
-                Stage mainStage = new Stage();
-                Scene scene = new Scene(root);
-                mainStage.setTitle("Gestion de Commande - " + prenom + " " + nom);
-                mainStage.setScene(scene);
-                mainStage.show();
-            } else {
-                System.out.println("Erreur lors de l'enregistrement !");
-            }
-
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/layoutBar.fxml"));
+            Scene scene = new Scene(root);
+            var css = getClass().getResource("/styles/login.css");
+            if (css != null) scene.getStylesheets().add(css.toExternalForm());
+            // Add dashboard stylesheet so dashboard view uses its styles
+            var dashCss = getClass().getResource("/styles/dashboard.css");
+            if (dashCss != null) scene.getStylesheets().add(dashCss.toExternalForm());
+            stage.setScene(scene);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Erreur de connexion au serveur : " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Navigation error", "Cannot open view: " + e.getMessage());
+        }
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.show();
+    }
+
+    private void setError(String msg) { if (errorLabel != null) errorLabel.setText(msg); }
+    private void clearError() { if (errorLabel != null) errorLabel.setText(""); }
+
+    @FXML
+    public void goToSignup(javafx.event.ActionEvent e) {
+        try {
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/signup.fxml"));
+            Scene scene = new Scene(root);
+            var css = getClass().getResource("/styles/login.css");
+            if (css != null) {
+                scene.getStylesheets().add(css.toExternalForm());
+            }
+            stage.setScene(scene);
+        } catch (Exception ex) {
+            showAlert(Alert.AlertType.ERROR, "Navigation error", ex.getMessage());
         }
     }
 }

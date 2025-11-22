@@ -13,17 +13,24 @@ public class Welcome extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/fournisseur-view.fxml"));
-        Scene scene = new Scene(root);
-        
-        // Charger le CSS
-        String css = getClass().getResource("/css/fournisseur-style.css").toExternalForm();
-        scene.getStylesheets().add(css);
-        
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Gestion des Fournisseurs");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
+    public void start(Stage primaryStage) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+            Scene scene = new Scene(root, 900, 600);
+            var css = getClass().getResource("/styles/login.css");
+            if (css != null) {
+                scene.getStylesheets().add(css.toExternalForm());
+            }
+            var dashCss = getClass().getResource("/styles/dashboard.css");
+            if (dashCss != null) {
+                scene.getStylesheets().add(dashCss.toExternalForm());
+            }
+            primaryStage.setTitle("Login");
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load login.fxml", e);
+        }
+
     }
 }

@@ -1,17 +1,24 @@
 package gestiondestock.controller;
 
 import gestiondestock.model.FournisseurModel;
+import gestiondestock.model.Session;
 import gestiondestock.service.FournisseurService;
+import gestiondestock.util.CSVExporter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -36,6 +43,8 @@ public class FournisseurController {
     @FXML private Button btnRafraichir;
     @FXML private Button btnShowDeleted;
     @FXML private Button btnExporter;
+    @FXML private Button btnLogout;
+    @FXML private Label lblUser;
 
     private final FournisseurService fournisseurService = new FournisseurService();
     private final ObservableList<FournisseurModel> fournisseursList = FXCollections.observableArrayList();
@@ -43,10 +52,75 @@ public class FournisseurController {
 
     @FXML
     public void initialize() {
+        // Vérifier l'authentification au chargement
+        if (!checkAuthentication()) {
+            return;
+        }
+        
+        // Afficher le nom de l'utilisateur connecté (si le label existe dans le FXML)
+        if (lblUser != null) {
+            String username = Session.get().getUsername();
+            String role = Session.get().getRole();
+            lblUser.setText("Connecté: " + username + " (" + role + ")");
+        }
+        
         setupTableColumns();
         loadFournisseurs();
         setupActionButtons();
         setupButtonHandlers();
+    }
+    
+    // Vérifier l'authentification
+    private boolean checkAuthentication() {
+        Session session = Session.get();
+        if (session.getToken() == null || session.getRole() == null) {
+            showAlert(Alert.AlertType.ERROR, "Non authentifié", 
+                "Vous devez être connecté pour accéder à cette page.");
+            redirectToLogin();
+            return false;
+        }
+        
+        if (!"ADMIN".equalsIgnoreCase(session.getRole())) {
+            showAlert(Alert.AlertType.ERROR, "Accès refusé", 
+                "Seuls les administrateurs peuvent accéder à cette page.");
+            redirectToLogin();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    // Gérer la déconnexion (si le bouton existe dans le FXML)
+    @FXML
+    private void handleLogout() {
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Déconnexion");
+        confirmDialog.setHeaderText("Confirmer la déconnexion");
+        confirmDialog.setContentText("Êtes-vous sûr de vouloir vous déconnecter?");
+
+        Optional<ButtonType> result = confirmDialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Session.get().clear();
+            redirectToLogin();
+        }
+    }
+    
+    // Rediriger vers la page de login
+    private void redirectToLogin() {
+        try {
+            Stage stage = (Stage) tableFournisseurs.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+            Scene scene = new Scene(root, 900, 600);
+            var css = getClass().getResource("/styles/login.css");
+            if (css != null) {
+                scene.getStylesheets().add(css.toExternalForm());
+            }
+            stage.setScene(scene);
+            stage.setTitle("Connexion");
+            stage.setMaximized(false);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Erreur lors de la redirection vers login", e);
+        }
     }
     
     private void setupButtonHandlers() {
@@ -70,9 +144,7 @@ public class FournisseurController {
         
         // Bouton Exporter
         if (btnExporter != null) {
-            btnExporter.setOnAction(e -> {
-                showAlert(Alert.AlertType.INFORMATION, "Export", "Fonctionnalité d'export en cours de développement...");
-            });
+            btnExporter.setOnAction(e -> handleExporter());
         }
     }
 
@@ -201,7 +273,7 @@ public class FournisseurController {
                 loadFournisseurs();
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, "Erreur lors de l'ajout du fournisseur", ex);
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'ajout: " + ex.getMessage());
+                handleServiceError(ex);
             }
         });
     }
@@ -217,7 +289,7 @@ public class FournisseurController {
                 loadFournisseurs();
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, "Erreur lors de la modification du fournisseur", ex);
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification: " + ex.getMessage());
+                handleServiceError(ex);
             }
         });
     }
@@ -236,7 +308,7 @@ public class FournisseurController {
                 loadFournisseurs();
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, "Erreur lors de la suppression du fournisseur", ex);
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la suppression: " + ex.getMessage());
+                handleServiceError(ex);
             }
         }
     }
@@ -255,7 +327,7 @@ public class FournisseurController {
                 loadDeletedFournisseurs();
             } catch (Exception ex) {
                 LOGGER.log(Level.SEVERE, "Erreur lors de la restauration du fournisseur", ex);
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la restauration: " + ex.getMessage());
+                handleServiceError(ex);
             }
         }
     }
@@ -278,7 +350,7 @@ public class FournisseurController {
             tableFournisseurs.setItems(fournisseursList);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Erreur lors de la recherche", ex);
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la recherche: " + ex.getMessage());
+            handleServiceError(ex);
         }
     }
 
@@ -292,6 +364,44 @@ public class FournisseurController {
         }
     }
     
+    // NOUVELLE MÉTHODE : Export CSV
+    @FXML
+    private void handleExporter() {
+        try {
+            // Vérifier qu'il y a des données à exporter
+            if (fournisseursList.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Export", 
+                    "Aucun fournisseur à exporter. La liste est vide.");
+                return;
+            }
+            
+            // Déterminer le nom du fichier selon la vue actuelle
+            String fileName = showingDeleted ? 
+                "fournisseurs_supprimes_" : "fournisseurs_actifs_";
+            fileName += java.time.LocalDateTime.now()
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".csv";
+            
+            // Exporter
+            Stage stage = (Stage) tableFournisseurs.getScene().getWindow();
+            File exportedFile = CSVExporter.exportToCSV(fournisseursList, stage, fileName);
+            
+            if (exportedFile != null) {
+                showAlert(Alert.AlertType.INFORMATION, "Export réussi", 
+                    "Les fournisseurs ont été exportés avec succès !\n\n" +
+                    "Fichier: " + exportedFile.getName() + "\n" +
+                    "Emplacement: " + exportedFile.getParent() + "\n" +
+                    "Nombre de lignes: " + fournisseursList.size());
+            }
+            
+        } catch (IllegalArgumentException ex) {
+            showAlert(Alert.AlertType.WARNING, "Export", ex.getMessage());
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Erreur lors de l'export CSV", ex);
+            showAlert(Alert.AlertType.ERROR, "Erreur d'export", 
+                "Erreur lors de l'export: " + ex.getMessage());
+        }
+    }
+    
     private void loadFournisseurs() {
         try {
             fournisseursList.clear();
@@ -299,7 +409,7 @@ public class FournisseurController {
             tableFournisseurs.setItems(fournisseursList);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Erreur lors du chargement des fournisseurs", ex);
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du chargement: " + ex.getMessage());
+            handleServiceError(ex);
         }
     }
     
@@ -310,7 +420,24 @@ public class FournisseurController {
             tableFournisseurs.setItems(fournisseursList);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Erreur lors du chargement des fournisseurs supprimés", ex);
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du chargement: " + ex.getMessage());
+            handleServiceError(ex);
+        }
+    }
+    
+    // Gérer les erreurs d'authentification
+    private void handleServiceError(Exception ex) {
+        String message = ex.getMessage();
+        if (message.contains("Session expirée") || message.contains("Non authentifié")) {
+            showAlert(Alert.AlertType.ERROR, "Session expirée", 
+                "Votre session a expiré. Veuillez vous reconnecter.");
+            Session.get().clear();
+            redirectToLogin();
+        } else if (message.contains("Accès refusé") || message.contains("permissions")) {
+            showAlert(Alert.AlertType.ERROR, "Accès refusé", message);
+            Session.get().clear();
+            redirectToLogin();
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Erreur", message);
         }
     }
 

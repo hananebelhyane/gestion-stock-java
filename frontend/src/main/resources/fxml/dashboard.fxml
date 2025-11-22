@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="gestiondestock.controller.DashboardController"
+      spacing="16" alignment="TOP_LEFT">
+  <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+  <Label text="Aperçu" styleClass="page-title" />
+  <VBox style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;" styleClass="outline-container">
+    <GridPane hgap="16" vgap="16" styleClass="kpi-grid">
+      <columnConstraints>
+        <ColumnConstraints percentWidth="25"/>
+        <ColumnConstraints percentWidth="25"/>
+        <ColumnConstraints percentWidth="25"/>
+        <ColumnConstraints percentWidth="25"/>
+      </columnConstraints>
+
+      <!-- New Clients (7d) -->
+
+      <VBox GridPane.columnIndex="0">
+          <VBox spacing="10" styleClass="kpi-blue"
+            style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+          <HBox spacing="10" styleClass="kpi-header">
+            <Label text="👥" styleClass="kpi-icon" />
+            <VBox spacing="2">
+              <Label text="Nouveaux clients (7j)" styleClass="kpi-title"/>
+              <Label text="Premières inscriptions" styleClass="kpi-sub"/>
+            </VBox>
+          </HBox>
+          <Label fx:id="newClients7d" text="0" styleClass="kpi-value"/>
+          <Label text="7 derniers jours" styleClass="kpi-foot"/>
+        </VBox>
+      </VBox>
+
+      <!-- Client Orders (7d) -->
+      <VBox GridPane.columnIndex="1">
+          <VBox spacing="10" styleClass="kpi-indigo"
+            style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+          <HBox spacing="10" styleClass="kpi-header">
+            <Label text="🧾" styleClass="kpi-icon" />
+            <VBox spacing="2">
+              <Label text="Commandes clients (7j)" styleClass="kpi-title"/>
+              <Label text="Commandes passées" styleClass="kpi-sub"/>
+            </VBox>
+          </HBox>
+          <Label fx:id="clientOrders7d" text="0" styleClass="kpi-value"/>
+          <Label text="7 derniers jours" styleClass="kpi-foot"/>
+        </VBox>
+      </VBox>
+
+      <!-- Pending Supplier Orders -->
+      <VBox GridPane.columnIndex="2">
+          <VBox spacing="10" styleClass="kpi-amber"
+            style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+          <HBox spacing="10" styleClass="kpi-header">
+            <Label text="📦" styleClass="kpi-icon" />
+            <VBox spacing="2">
+              <Label text="Commandes fournisseurs en attente" styleClass="kpi-title"/>
+              <Label text="En attente de livraison" styleClass="kpi-sub"/>
+            </VBox>
+          </HBox>
+          <Label fx:id="pendingSupplierOrders" text="0" styleClass="kpi-value"/>
+          <Label text="Commande fournisseur EN_ATTENTE" styleClass="kpi-foot"/>
+        </VBox>
+      </VBox>
+
+      <!-- Out-of-Stock Products -->
+      <VBox GridPane.columnIndex="3">
+          <VBox spacing="10" styleClass="kpi-red"
+            style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+          <HBox spacing="10" styleClass="kpi-header">
+            <Label text="⚠" styleClass="kpi-icon" />
+            <VBox spacing="2">
+              <Label text="Produits en rupture de stock" styleClass="kpi-title"/>
+              <Label text="Quantité zéro" styleClass="kpi-sub"/>
+            </VBox>
+          </HBox>
+          <Label fx:id="outOfStock" text="0" styleClass="kpi-value"/>
+          <Label text="Articles avec quantité zéro" styleClass="kpi-foot"/>
+        </VBox>
+      </VBox>
+    </GridPane>
+  </VBox>
+
+  <!-- Orders Over Time Line Chart -->
+  <VBox style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;" styleClass="outline-container card large chart-section" spacing="8">
+    <Label text="Commandes au fil du temps" styleClass="section" style="-fx-text-fill: black;" />
+    <HBox spacing="8" alignment="CENTER_LEFT">
+      <Label text="Période :" />
+      <ComboBox fx:id="rangeSelector" promptText="Sélectionner la période" onAction="#onRangeChanged" />
+    </HBox>
+    <LineChart fx:id="ordersLineChart" prefHeight="280" prefWidth="800" styleClass="orders-chart brand-blue hide-legend">
+      <xAxis>
+        <CategoryAxis label="Day" />
+      </xAxis>
+      <yAxis>
+        <NumberAxis label="Orders" />
+      </yAxis>
+    </LineChart>
+  </VBox>
+
+  <!-- Recent Activities and Alerts side-by-side -->
+  <HBox spacing="16">
+    <VBox style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;" styleClass="outline-container card" spacing="12" HBox.hgrow="ALWAYS">
+      <Label text="Activités récentes" styleClass="section" style="-fx-text-fill: black;" />
+      <VBox fx:id="activitiesList" styleClass="activities" spacing="8" />
+    </VBox>
+    <VBox style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;" styleClass="outline-container card" spacing="12" HBox.hgrow="ALWAYS">
+      <Label text="Alertes récentes" styleClass="section" style="-fx-text-fill: black;" />
+      <VBox fx:id="alertsList" styleClass="alerts" spacing="8" />
+    </VBox>
+  </HBox>
+</VBox>

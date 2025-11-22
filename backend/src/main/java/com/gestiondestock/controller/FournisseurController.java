@@ -1,5 +1,6 @@
 package com.gestiondestock.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import com.gestiondestock.dto.FournisseurDTO;
 import com.gestiondestock.dto.FournisseurRequestDTO;
 import com.gestiondestock.service.FournisseurService;
@@ -13,19 +14,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: Ajouter @PreAuthorize("hasRole('ADMIN')") avant livraison finale
-// Actuellement ouvert pour faciliter les tests en équipe
+
 @RestController
 @RequestMapping("/api/fournisseurs")
 @RequiredArgsConstructor
 @Slf4j
 @CrossOrigin(origins = "*")
+@PreAuthorize("hasRole('ADMIN')")
 public class FournisseurController {
 
     private final FournisseurService fournisseurService;
 
     /**
-     * Créer un nouveau fournisseur
+     * CrÃ©er un nouveau fournisseur
      * POST /api/fournisseurs
      * @param request
      * @return 
@@ -33,51 +34,51 @@ public class FournisseurController {
     @PostMapping
     public ResponseEntity<ApiResponse<FournisseurDTO>> createFournisseur(
             @Valid @RequestBody FournisseurRequestDTO request) {
-        log.info("Requête de création de fournisseur reçue");
+        log.info("RequÃªte de crÃ©ation de fournisseur reÃ§ue");
         FournisseurDTO fournisseur = fournisseurService.createFournisseur(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(true, "Fournisseur créé avec succès", fournisseur));
+                .body(new ApiResponse<>(true, "Fournisseur crÃ©Ã© avec succÃ¨s", fournisseur));
     }
 
     /**
-     * Récupérer tous les fournisseurs actifs
+     * RÃ©cupÃ©rer tous les fournisseurs actifs
      * GET /api/fournisseurs
      * @return 
      */
     @GetMapping
     public ResponseEntity<ApiResponse<List<FournisseurDTO>>> getAllActiveFournisseurs() {
-        log.info("Requête de récupération de tous les fournisseurs actifs");
+        log.info("RequÃªte de rÃ©cupÃ©ration de tous les fournisseurs actifs");
         List<FournisseurDTO> fournisseurs = fournisseurService.getAllActiveFournisseurs();
-        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseurs récupérés avec succès", fournisseurs));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseurs rÃ©cupÃ©rÃ©s avec succÃ¨s", fournisseurs));
     }
 
     /**
-     * Récupérer tous les fournisseurs supprimés
+     * RÃ©cupÃ©rer tous les fournisseurs supprimÃ©s
      * GET /api/fournisseurs/deleted
      * @return 
      */
     @GetMapping("/deleted")
     public ResponseEntity<ApiResponse<List<FournisseurDTO>>> getAllDeletedFournisseurs() {
-        log.info("Requête de récupération de tous les fournisseurs supprimés");
+        log.info("RequÃªte de rÃ©cupÃ©ration de tous les fournisseurs supprimÃ©s");
         List<FournisseurDTO> fournisseurs = fournisseurService.getAllDeletedFournisseurs();
-        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseurs supprimés récupérés avec succès", fournisseurs));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseurs supprimÃ©s rÃ©cupÃ©rÃ©s avec succÃ¨s", fournisseurs));
     }
 
     /**
-     * Récupérer un fournisseur par ID
+     * RÃ©cupÃ©rer un fournisseur par ID
      * GET /api/fournisseurs/{id}
      * @param id
      * @return 
      */
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<FournisseurDTO>> getFournisseurById(@PathVariable UUID id) {
-        log.info("Requête de récupération du fournisseur avec ID: {}", id);
+        log.info("RequÃªte de rÃ©cupÃ©ration du fournisseur avec ID: {}", id);
         FournisseurDTO fournisseur = fournisseurService.getFournisseurById(id);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseur récupéré avec succès", fournisseur));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseur rÃ©cupÃ©rÃ© avec succÃ¨s", fournisseur));
     }
 
     /**
-     * Mettre à jour un fournisseur
+     * Mettre Ã  jour un fournisseur
      * PUT /api/fournisseurs/{id}
      * @param id
      * @param request
@@ -87,9 +88,9 @@ public class FournisseurController {
     public ResponseEntity<ApiResponse<FournisseurDTO>> updateFournisseur(
             @PathVariable UUID id,
             @Valid @RequestBody FournisseurRequestDTO request) {
-        log.info("Requête de mise à jour du fournisseur avec ID: {}", id);
+        log.info("RequÃªte de mise Ã  jour du fournisseur avec ID: {}", id);
         FournisseurDTO fournisseur = fournisseurService.updateFournisseur(id, request);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseur mis à jour avec succès", fournisseur));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseur mis Ã  jour avec succÃ¨s", fournisseur));
     }
 
     /**
@@ -103,30 +104,30 @@ public class FournisseurController {
     public ResponseEntity<ApiResponse<Void>> deleteFournisseur(
             @PathVariable UUID id,
             @RequestParam(required = false) UUID deleted_by) {
-        log.info("Requête de suppression du fournisseur avec ID: {}", id);
+        log.info("RequÃªte de suppression du fournisseur avec ID: {}", id);
         
-        // Si deletedBy n'est pas fourni, utiliser un UUID par défaut
+        // Si deletedBy n'est pas fourni, utiliser un UUID par dÃ©faut
         UUID userId = deleted_by != null ? deleted_by : UUID.randomUUID();
         
         fournisseurService.deleteFournisseur(id, userId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseur supprimé avec succès", null));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseur supprimÃ© avec succÃ¨s", null));
     }
 
     /**
-     * Restaurer un fournisseur supprimé
+     * Restaurer un fournisseur supprimÃ©
      * PATCH /api/fournisseurs/{id}/restore
      * @param id
      * @return 
      */
     @PatchMapping("/{id}/restore")
     public ResponseEntity<ApiResponse<FournisseurDTO>> restoreFournisseur(@PathVariable UUID id) {
-        log.info("Requête de restauration du fournisseur avec ID: {}", id);
+        log.info("RequÃªte de restauration du fournisseur avec ID: {}", id);
         FournisseurDTO fournisseur = fournisseurService.restoreFournisseur(id);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseur restauré avec succès", fournisseur));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseur restaurÃ© avec succÃ¨s", fournisseur));
     }
 
     /**
-     * Rechercher des fournisseurs par nom ou prénom
+     * Rechercher des fournisseurs par nom ou prÃ©nom
      * GET /api/fournisseurs/search?keyword=...
      * @param keyword
      * @return 
@@ -134,13 +135,13 @@ public class FournisseurController {
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<FournisseurDTO>>> searchFournisseurs(
             @RequestParam String keyword) {
-        log.info("Requête de recherche de fournisseurs avec le mot-clé: {}", keyword);
+        log.info("RequÃªte de recherche de fournisseurs avec le mot-clÃ©: {}", keyword);
         List<FournisseurDTO> fournisseurs = fournisseurService.searchFournisseurs(keyword);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Recherche effectuée avec succès", fournisseurs));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Recherche effectuÃ©e avec succÃ¨s", fournisseurs));
     }
 
     /**
-     * Récupérer un fournisseur par email
+     * RÃ©cupÃ©rer un fournisseur par email
      * GET /api/fournisseurs/by-email?email=...
      * @param email
      * @return 
@@ -148,13 +149,13 @@ public class FournisseurController {
     @GetMapping("/by-email")
     public ResponseEntity<ApiResponse<FournisseurDTO>> getFournisseurByEmail(
             @RequestParam String email) {
-        log.info("Requête de récupération du fournisseur avec email: {}", email);
+        log.info("RequÃªte de rÃ©cupÃ©ration du fournisseur avec email: {}", email);
         FournisseurDTO fournisseur = fournisseurService.getFournisseurByEmail(email);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseur récupéré avec succès", fournisseur));
+        return ResponseEntity.ok(new ApiResponse<>(true, "Fournisseur rÃ©cupÃ©rÃ© avec succÃ¨s", fournisseur));
     }
 
     /**
-     * Classe interne pour structurer les réponses API
+     * Classe interne pour structurer les rÃ©ponses API
      * @param <T>
      */
     public static class ApiResponse<T> {
