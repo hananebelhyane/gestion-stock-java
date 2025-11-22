@@ -6,9 +6,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gestiondestock.controller.ViewController" fx:id="root">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="gestiondestock.controller.ViewController" fx:id="root">
   <left>
-        <VBox spacing="10" styleClass="sidebar" fx:id="sidebar"
+    <VBox spacing="10" styleClass="sidebar" fx:id="sidebar"
           style="-fx-background-color: #ffffff;">
       <padding><Insets top="18" right="14" bottom="18" left="14"/></padding>
 
@@ -25,7 +26,10 @@
         <Button text="Gestion des Produits" styleClass="menu-btn" onAction="#openProducts" />
         <Button text="Gestion de Stock" styleClass="menu-btn" onAction="#openOrders" />
         <Button text="Gestion de Fournisseur" styleClass="menu-btn" onAction="#openClients" />
-        <Button text="Gestion des Utilisateurs" styleClass="menu-btn" onAction="#openSuppliers" />
+        
+        <!-- ✅ MODIFICATION : Ce bouton ouvre maintenant le menu des utilisateurs -->
+        <Button text="Gestion des Utilisateurs" styleClass="menu-btn" onAction="#openUsersMenu" />
+        
         <Button text="Profile" styleClass="menu-btn" onAction="#openStock" />
       </VBox>
       

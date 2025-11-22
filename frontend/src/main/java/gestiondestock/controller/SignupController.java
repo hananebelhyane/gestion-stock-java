@@ -64,7 +64,7 @@ public class SignupController {
             Stage stage = (Stage) signupButton.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
             Scene scene = new Scene(root);
-            var css = getClass().getResource("/styles/login.css");
+            var css = getClass().getResource("/css/login.css");
             if (css != null) {
                 scene.getStylesheets().add(css.toExternalForm());
             }

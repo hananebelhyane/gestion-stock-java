@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="gestiondestock.controller.UsersMenuController"
+      spacing="0" styleClass="root-container" alignment="CENTER">
+    
+    <padding>
+        <Insets top="40" bottom="40" left="40" right="40"/>
+    </padding>
+    
+    <!-- En-tête -->
+    <VBox alignment="CENTER" spacing="10">
+        <Label text="GESTION DES UTILISATEURS" styleClass="main-title">
+            <font><Font name="System Bold" size="36"/></font>
+        </Label>
+        <Label text="Sélectionnez le type d'utilisateur à gérer" styleClass="subtitle">
+            <font><Font size="16"/></font>
+        </Label>
+        
+        <VBox.margin>
+            <Insets bottom="50"/>
+        </VBox.margin>
+    </VBox>
+    
+    <!-- Boutons de sélection -->
+    <VBox spacing="30" alignment="CENTER" maxWidth="500">
+        
+        <!-- Bouton Gestion des Clients -->
+        <Button fx:id="btnClients" onAction="#openClientsView" maxWidth="Infinity"
+                style="-fx-background-color: #000000; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: 600; -fx-background-radius: 12; -fx-padding: 30 40 30 40; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 4);">
+            <graphic>
+                <VBox alignment="CENTER" spacing="10">
+                    <Label text="👥" style="-fx-font-size: 48;"/>
+                    <Label text="Gestion des Clients" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18;"/>
+                    <Label text="Gérer les comptes clients" style="-fx-text-fill: #e5e5e5; -fx-font-size: 13;"/>
+                </VBox>
+            </graphic>
+        </Button>
+        
+        <!-- Bouton Gestion des Magasiniers -->
+        <Button fx:id="btnMagasiniers" onAction="#openMagasiniersView" maxWidth="Infinity"
+                style="-fx-background-color: #000000; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: 600; -fx-background-radius: 12; -fx-padding: 30 40 30 40; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 4);">
+            <graphic>
+                <VBox alignment="CENTER" spacing="10">
+                    <Label text="🪧" style="-fx-font-size: 48;"/>
+                    <Label text="Gestion des Magasiniers" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18;"/>
+                    <Label text="Gérer les comptes magasiniers" style="-fx-text-fill: #e5e5e5; -fx-font-size: 13;"/>
+                </VBox>
+            </graphic>
+        </Button>
+        
+        <!-- Bouton Retour au Dashboard -->
+        <Button fx:id="btnRetour" text="← Retour au Dashboard" onAction="#returnToDashboard"
+                style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 12 24 12 24; -fx-cursor: hand; -fx-font-size: 14; -fx-font-weight: 600;">
+            <VBox.margin>
+                <Insets top="30"/>
+            </VBox.margin>
+        </Button>
+    </VBox>
+    
+</VBox>

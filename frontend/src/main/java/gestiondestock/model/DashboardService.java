@@ -24,7 +24,7 @@ public class DashboardService {
                                          java.util.function.Consumer<String> onErr) {
         try {
             var s = Session.get();
-            String base = "http://localhost:8080"; // align with AuthService default
+            String base = "http://localhost:8082"; // align with AuthService default
             HttpRequest.Builder b = HttpRequest.newBuilder()
                     .uri(URI.create(base + "/api/dashboard/summary"))
                     .GET();
@@ -53,7 +53,7 @@ public class DashboardService {
                                                 java.util.function.Consumer<String> onErr) {
         try {
             var s = Session.get();
-            String base = "http://localhost:8080";
+            String base = "http://localhost:8082";
             HttpRequest.Builder b = HttpRequest.newBuilder()
                     .uri(URI.create(base + "/api/dashboard/orders-over-time?days=" + days))
                     .GET();
@@ -95,7 +95,7 @@ public class DashboardService {
                                                   java.util.function.Consumer<String> onErr) {
         try {
             var s = Session.get();
-            String base = "http://localhost:8080";
+            String base = "http://localhost:8082";
             HttpRequest.Builder b = HttpRequest.newBuilder()
                     .uri(URI.create(base + "/api/dashboard/recent-activities?limit=" + limit))
                     .GET();
@@ -124,7 +124,7 @@ public class DashboardService {
                                               java.util.function.Consumer<String> onErr) {
         try {
             var s = Session.get();
-            String base = "http://localhost:8080";
+            String base = "http://localhost:8082";
             HttpRequest.Builder b = HttpRequest.newBuilder()
                     .uri(URI.create(base + "/api/dashboard/recent-alerts?limit=" + limit))
                     .GET();

@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-// removed: import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,14 +15,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
-// removed duplicate: import javafx.scene.Parent;
 import javafx.scene.Node;
 
 public class ViewController {
     @FXML private Label WelcomeLabel;
     @FXML private VBox sidebar;
     @FXML private BorderPane root;
-    // removed: @FXML private ToggleButton themeToggle;
     @FXML private ImageView logoImage;
     @FXML private javafx.scene.layout.HBox topbar;
     @FXML private Button sidebarToggleBtn;
@@ -54,7 +51,6 @@ public class ViewController {
         if (logoImage != null) {
             String[] candidates = new String[] {
                     "/assets/gs.png",
-                  
             };
             boolean set = false;
             for (String path : candidates) {
@@ -98,6 +94,22 @@ public class ViewController {
         String path = "/fxml/" + name + ".fxml";
         try {
             Parent view = FXMLLoader.load(getClass().getResource(path));
+            
+            // Charger le CSS approprié
+            Scene scene = contentRoot.getScene();
+            if (scene != null) {
+                scene.getStylesheets().clear();
+                scene.getStylesheets().add(getClass().getResource("/css/login.css").toExternalForm());
+                
+                if (name.equals("dashboard")) {
+                    scene.getStylesheets().add(getClass().getResource("/css/dashboard.css").toExternalForm());
+                } else if (name.equals("client-view")) {
+                    scene.getStylesheets().add(getClass().getResource("/css/client-style.css").toExternalForm());
+                } else if (name.equals("magasinier-view")) {
+                    scene.getStylesheets().add(getClass().getResource("/css/magasinier-style.css").toExternalForm());
+                }
+            }
+            
             contentRoot.getChildren().setAll(view);
         } catch (Exception ex) {
             Label fallback = new Label("Failed to load " + name + ": " + ex.getMessage());
@@ -109,13 +121,20 @@ public class ViewController {
     @FXML public void openDashboard(ActionEvent e) { loadContent("dashboard"); }
     @FXML public void openProducts(ActionEvent e) { loadContent("products"); }
     @FXML public void openOrders(ActionEvent e) { loadContent("orders"); }
-    @FXML public void openClients(ActionEvent e) { loadContent("clients"); }
-    @FXML public void openSuppliers(ActionEvent e) { loadContent("suppliers"); }
-    @FXML public void openStock(ActionEvent e) { loadContent("stock"); }
+    
+    // Charger la vue fournisseur
+    @FXML public void openClients(ActionEvent e) { loadContent("fournisseur-view"); }
+    
+    // ✅ MODIFICATION : Méthode pour ouvrir le menu des utilisateurs
+    @FXML public void openUsersMenu(ActionEvent e) { loadContent("users-menu"); }
+    
+    // Ancienne méthode suppliers (gardée pour compatibilité si besoin)
+    @FXML public void openSuppliers(ActionEvent e) { loadContent("users-menu"); }
+    
+    //charger la vue profile admin
+    @FXML public void openStock(ActionEvent e) { loadContent("admin-profile-view"); }
     @FXML public void openAlerts(ActionEvent e) { loadContent("alerts"); }
     @FXML public void openSettings(ActionEvent e) { loadContent("settings"); }
-
-    // removed theme toggling handler and icon methods
 
     @FXML
     public void toggleSidebar(ActionEvent e) {
@@ -162,7 +181,7 @@ public class ViewController {
             var stage = (javafx.stage.Stage) root.getScene().getWindow();
             Parent rootNode = javafx.fxml.FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
             javafx.scene.Scene scene = new javafx.scene.Scene(rootNode);
-            var css = getClass().getResource("/styles/login.css");
+            var css = getClass().getResource("/css/login.css");
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
             stage.setScene(scene);
         } catch (Exception ex) {
