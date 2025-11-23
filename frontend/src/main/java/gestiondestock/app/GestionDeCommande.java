@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Welcome extends Application {
+public class GestionDeCommande extends Application {
 
     public static void main(String[] args) {
         launch(args);

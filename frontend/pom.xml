@@ -14,9 +14,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
-    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.release>25</maven.compiler.release>
     <!-- Align JavaFX + libraries versions -->
     <javafx.version>21.0.5</javafx.version>
   </properties>
@@ -104,10 +102,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
         <configuration>
-          <mainClass>gestiondestock.app.Welcome</mainClass>
-          <jvmArgs>
-            <jvmArg>--enable-native-access=javafx.graphics</jvmArg>
-          </jvmArgs>
+          <mainClass>gestiondestock.app.GestionDeCommande</mainClass>
         </configuration>
       </plugin>
     </plugins>

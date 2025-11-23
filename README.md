@@ -9,13 +9,15 @@ Application de gestion de stock avec JavaFX (frontend) et Spring Boot (backend).
 ```bash
 cd backend
 mvn spring-boot:run
+mvn clean install
 ```
-Le serveur démarre sur `http://localhost:8082`
+Le serveur démarre sur `http://localhost:8080`
 
 2. **Démarrer le Frontend** :
 ```bash
 cd frontend
 mvn javafx:run
+mvn clean install
 ```
 
 # Github:

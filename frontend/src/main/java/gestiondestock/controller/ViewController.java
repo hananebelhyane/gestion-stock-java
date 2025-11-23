@@ -108,7 +108,10 @@ public class ViewController {
     // Sidebar navigation handlers
     @FXML public void openDashboard(ActionEvent e) { loadContent("dashboard"); }
     @FXML public void openProducts(ActionEvent e) { loadContent("products"); }
-    @FXML public void openOrders(ActionEvent e) { loadContent("orders"); }
+    //had ster dyal mouad 3endakum chi wahed y9isso
+    @FXML public void openOrders(ActionEvent e) { loadContent("GestionDeCommande"); }
+    @FXML public void openGestionDeCommande(ActionEvent e) { loadContent("GestionDeCommande"); }
+    //hani kan3lemkum
     @FXML public void openClients(ActionEvent e) { loadContent("clients"); }
     @FXML public void openSuppliers(ActionEvent e) { loadContent("suppliers"); }
     @FXML public void openStock(ActionEvent e) { loadContent("stock"); }
@@ -168,5 +171,16 @@ public class ViewController {
         } catch (Exception ex) {
             // ignore navigation errors here
         }
+    }
+
+    @FXML
+    public void getCommande(javafx.event.ActionEvent event) {
+        // Ajoute ici le code à exécuter lors du clic sur le RadioButton
+         loadContent("GestionDeCommande");
+    }
+
+    @FXML
+    public void handleSearch(javafx.scene.input.KeyEvent event) {
+        // Ajoute ici le code de recherche ou laisse vide pour l’instant
     }
 }

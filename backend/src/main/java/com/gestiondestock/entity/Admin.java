@@ -3,9 +3,10 @@ package com.gestiondestock.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="ADMIN")
+@Table(name = "ADMIN")
 
-public class Admin{
+public class Admin {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long admin_id;
@@ -14,6 +15,7 @@ public class Admin{
     private String email;
     private String username;
     private String telephone;
+    @Column(name = "mot_de_passe")
     private String motDePasse;
 
     public Admin(Long admin_id, String nom, String prenom, String email, String username, String telephone, String motDePasse) {
@@ -27,9 +29,8 @@ public class Admin{
     }
 
     public Admin() {
-        
-    }
 
+    }
 
     public Long getId() {
         return admin_id;

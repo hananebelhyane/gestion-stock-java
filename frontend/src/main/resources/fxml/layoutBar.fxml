@@ -21,12 +21,13 @@
 
       <!-- Menu -->
       <VBox spacing="6">
-        <Button text="Dashboard" styleClass="menu-btn" onAction="#openDashboard" />
+        <Button text="Main Page Dashboard" styleClass="menu-btn" onAction="#openDashboard" />
         <Button text="Gestion des Produits" styleClass="menu-btn" onAction="#openProducts" />
-        <Button text="Gestion de Stock" styleClass="menu-btn" onAction="#openOrders" />
-        <Button text="Gestion de Fournisseur" styleClass="menu-btn" onAction="#openClients" />
-        <Button text="Gestion des Utilisateurs" styleClass="menu-btn" onAction="#openSuppliers" />
-        <Button text="Profile" styleClass="menu-btn" onAction="#openStock" />
+        <Button text="Consulter du Stock" styleClass="menu-btn" onAction="#openStock" />
+        <Button text="Gestion Des Commande" styleClass="menu-btn" onAction="#openGestionDeCommande" />
+        <Button text="Gestion des Fournisseurs" styleClass="menu-btn" onAction="#openSuppliers" />
+        <Button text="Gestion des Utilisateurs" styleClass="menu-btn" onAction="#openClients" />
+        <Button text="Profil Admin" styleClass="menu-btn" onAction="#openSettings" />
       </VBox>
       
       <Pane VBox.vgrow="ALWAYS" />

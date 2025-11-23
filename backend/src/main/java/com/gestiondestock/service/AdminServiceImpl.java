@@ -18,7 +18,6 @@ public class AdminServiceImpl implements AdminService {
         this.passwordEncoder = passwordEncoder;
     }
     
-    @Override
     public Admin registerAdmin(Admin admin) {
         if (admin.getMotDePasse() != null) {
             admin.setMotDePasse(passwordEncoder.encode(admin.getMotDePasse()));

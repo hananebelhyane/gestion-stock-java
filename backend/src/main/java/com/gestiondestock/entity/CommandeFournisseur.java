@@ -5,11 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@EntityListeners(EntityIdGenerator.class)
 @Setter
 @Getter
 @NoArgsConstructor
@@ -17,19 +20,24 @@ import java.util.UUID;
 public class CommandeFournisseur {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonProperty("id")
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "produit_id")
+    @JsonProperty("produit")
+    @JsonIgnoreProperties({"commandeFournisseurs", "deletedAt", "deletedBy"})
     private Produit produit;
 
+    @JsonProperty("commandeDate")
+    @Column(name = "commande_date")
     private LocalDateTime commandeDate = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    private StatutCommande statut = StatutCommande.EN_ATTENTE;
+    @JsonProperty("statut")
+    private StatutCommande statut = StatutCommande.en_attente;
 
     public enum StatutCommande {
-        EN_ATTENTE, LIVREE, ANNULEE
+        en_attente, livree, annulee
     }
 }

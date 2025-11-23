@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS gestionStock;
-USE gestionStock;
+CREATE DATABASE IF NOT EXISTS gestionstock;
+USE gestionstock;
 
 -- =====================================================
 -- TABLE ADMIN (utilise BIGINT pour compatibilité existante)
@@ -111,7 +111,7 @@ CREATE TABLE COMMANDE_CLIENT (
     id BINARY(16) PRIMARY KEY,
     client_id BINARY(16) NOT NULL,
     date_commande DATETIME DEFAULT CURRENT_TIMESTAMP,
-    statut ENUM('en_attente', 'confirmee', 'annulee') DEFAULT 'EN_ATTENTE',
+    statut ENUM('en_attente', 'confirmee', 'annulee') DEFAULT 'en_attente',
     seuil_max INT,
     FOREIGN KEY (client_id) REFERENCES CLIENT(id) ON DELETE CASCADE
 );
@@ -137,9 +137,15 @@ CREATE TABLE COMMANDE_FOURNISSEUR (
     id BINARY(16) PRIMARY KEY,
     produit_id BINARY(16),
     commande_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    statut ENUM('EN_ATTENTE', 'LIVREE', 'ANNULEE') DEFAULT 'EN_ATTENTE',
+    statut ENUM('en_attente', 'livree', 'annulee') DEFAULT 'en_attente',
     FOREIGN KEY (produit_id) REFERENCES PRODUIT(id) ON DELETE CASCADE
 );
+
+-- Migration (exécuter après modification si tables déjà existantes):
+-- ALTER TABLE COMMANDE_CLIENT MODIFY statut ENUM('en_attente','confirmee','annulee') DEFAULT 'en_attente';
+-- ALTER TABLE COMMANDE_FOURNISSEUR MODIFY statut ENUM('en_attente','livree','annulee') DEFAULT 'en_attente';
+-- UPDATE COMMANDE_CLIENT SET statut = LOWER(statut);
+-- UPDATE COMMANDE_FOURNISSEUR SET statut = LOWER(statut);
 
 -- =====================================================
 -- TABLE ENTREE_STOCK
