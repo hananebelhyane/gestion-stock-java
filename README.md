@@ -81,3 +81,18 @@ spring.datasource.password=votre_mot_de_passe
 │   DATABASE          │  ← Persistance (MySQL)
 │   MySQL 8.0.44      │
 └─────────────────────┘
+
+
+
+# Docker
+
+# 1. Récupérer votre branche
+git pull origin votre-branche
+
+# 2. Compiler (chacun génère son propre JAR)
+cd backend
+mvn clean package -DskipTests
+cd ..
+
+# 3. Lancer Docker
+docker-compose up --build
