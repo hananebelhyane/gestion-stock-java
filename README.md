@@ -20,10 +20,11 @@ mvn javafx:run
 mvn clean install
 ```
 
-## Github:
-# Passer sur la branche main
+# Github:
+## Passer sur la branche main
+```bash
 git checkout main
-
+```
 
 ### Prérequis
 

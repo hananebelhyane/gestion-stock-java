@@ -1,0 +1,154 @@
+/* Simple, modern styling for the login view */
+
+/* App background */
+.root {
+  -fx-background-color: linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
+}
+
+/* Centered card */
+.login-card {
+  -fx-background-color: white;
+  -fx-background-radius: 14;
+  -fx-border-radius: 14;
+  -fx-padding: 24;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 18, 0.2, 0, 4);
+}
+
+.title {
+  -fx-font-size: 24;
+  -fx-font-weight: bold;
+  -fx-text-fill: #111827;
+}
+.subtitle {
+  -fx-font-size: 13;
+  -fx-text-fill: #6b7280;
+}
+
+.label {
+  -fx-font-size: 12;
+  -fx-text-fill: #4b5563;
+}
+
+.text-field, .password-field {
+  -fx-background-color: #ffffff;
+  -fx-background-radius: 8;
+  -fx-border-color: #d1d5db;
+  -fx-border-radius: 8;
+  -fx-padding: 10 12 10 12;
+}
+.text-field:focused, .password-field:focused {
+  -fx-border-color: #2563eb;
+  -fx-background-color: #ffffff;
+}
+
+.primary-btn {
+  -fx-background-color: #2563eb;
+  -fx-text-fill: white;
+  -fx-background-radius: 8;
+  -fx-padding: 10 16 10 16;
+  -fx-font-weight: bold;
+}
+.primary-btn:hover { -fx-background-color: #1d4ed8; }
+
+.footer {
+  -fx-text-fill: #6b7280;
+  -fx-font-size: 12;
+}
+
+/* Error text */
+.error {
+  -fx-text-fill: #b91c1c;
+}
+
+/* Field toast (popup below input) */
+.field-toast {
+  -fx-background-color: rgba(185, 28, 28, 0.95);
+  -fx-text-fill: white;
+  -fx-padding: 6 10 6 10;
+  -fx-background-radius: 8;
+  -fx-font-size: 12;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 12, 0.2, 0, 2);
+}
+
+/* Sidebar and dashboard styles */
+.sidebar {
+  -fx-min-width: 200;
+  -fx-background-color: #f8fafc; /* light */
+  -fx-background-insets: 0;
+  -fx-border-width: 0 1 0 0;
+  -fx-border-color: #e5e7eb;
+}
+.sidebar.collapsed { -fx-min-width: 56; -fx-pref-width: 56; -fx-max-width: 56; }
+.sidebar-header .menu-title {
+  -fx-text-fill: #111827;
+  -fx-font-weight: bold;
+}
+.menu-btn {
+  -fx-background-color: transparent;
+  -fx-text-fill: #111827;
+  -fx-alignment: CENTER_LEFT;
+  -fx-padding: 8 10 8 10;
+  -fx-background-radius: 8;
+}
+.menu-btn:hover { -fx-background-color: #e5e7eb; }
+.menu-btn:focused { -fx-background-color: #e5e7eb; }
+.menu-btn.danger { -fx-text-fill: #b91c1c; }
+
+.page-title { -fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #111827; }
+.page-subtitle { -fx-font-size: 13; -fx-text-fill: #6b7280; }
+
+/* Top bar */
+.topbar {
+  -fx-background-color: white;
+  -fx-border-color: #e5e7eb;
+  -fx-border-width: 0 0 1 0;
+}
+.topbar-title { -fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #111827; }
+
+/* Dark theme overrides */
+.theme-dark {
+  -fx-background-color: #0f172a;
+}
+.theme-dark .sidebar { -fx-background-color: #111827; -fx-border-color: #1f2937; }
+.theme-dark .topbar {
+  -fx-background-color: #0b1220;
+  -fx-border-color: #1f2937;
+}
+.theme-dark .topbar-title, .theme-dark .page-title { -fx-text-fill: #f3f4f6; }
+.theme-dark .page-subtitle { -fx-text-fill: #cbd5e1; }
+.theme-dark .menu-btn { -fx-text-fill: #e5e7eb; }
+.theme-dark .menu-btn:hover { -fx-background-color: #1f2937; }
+
+/* Profile card */
+.profile-card { -fx-padding: 8 10 8 10; }
+.avatar {
+  -fx-min-width: 32; -fx-min-height: 32; -fx-pref-width: 32; -fx-pref-height: 32; -fx-max-width: 32; -fx-max-height: 32;
+  -fx-alignment: center;
+  -fx-background-color: #2563eb;
+  -fx-background-radius: 999;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+}
+.profile-name { -fx-text-fill: #111827; -fx-font-weight: bold; }
+.theme-dark .profile-name { -fx-text-fill: #e5e7eb; }
+
+/* KPI cards */
+.kpi-card {
+  -fx-background-color: white;
+  -fx-padding: 16;
+  -fx-background-radius: 10;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0.2, 0, 2);
+  -fx-border-radius: 10;
+  -fx-border-width: 1;
+}
+.kpi-blue  { -fx-border-color: #3b82f6; }
+.kpi-amber { -fx-border-color: #f59e0b; }
+.kpi-indigo{ -fx-border-color: #6366f1; }
+.kpi-red   { -fx-border-color: #ef4444; }
+.kpi-title { -fx-font-size: 12; -fx-text-fill: #6b7280; }
+.kpi-value { -fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #111827; }
+.kpi-sub   { -fx-font-size: 11; -fx-text-fill: #9ca3af; }
+.theme-dark .kpi-card { -fx-background-color: #111827; }
+.theme-dark .kpi-title { -fx-text-fill: #9ca3af; }
+.theme-dark .kpi-value { -fx-text-fill: #e5e7eb; }
+.theme-dark .kpi-sub   { -fx-text-fill: #9ca3af; }

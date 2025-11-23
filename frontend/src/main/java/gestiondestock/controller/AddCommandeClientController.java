@@ -37,10 +37,22 @@ public class AddCommandeClientController {
     }
 
     @FXML
-    private void handleSave() {
+    private void handleSave(javafx.event.ActionEvent event) {
         // Validation
         if (clientNomField.getText().isBlank()) {
             new Alert(Alert.AlertType.WARNING, "Nom client obligatoire").showAndWait();
+            return;
+        }
+        
+        if (clientPrenomField.getText().isBlank()) {
+            new Alert(Alert.AlertType.WARNING, "Prénom client obligatoire").showAndWait();
+            return;
+        }
+
+        // Vérifier que le statut est sélectionné
+        String statut = statutCombo.getValue();
+        if (statut == null || statut.isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "Veuillez sélectionner un statut").showAndWait();
             return;
         }
 
@@ -50,16 +62,21 @@ public class AddCommandeClientController {
 
             // Client complet
             var client = new java.util.HashMap<String, String>();
-            client.put("nom", clientNomField.getText());
-            client.put("prenom", clientPrenomField.getText());
+            client.put("nom", clientNomField.getText().trim());
+            client.put("prenom", clientPrenomField.getText().trim());
             payload.put("client", client);
 
             // Autres champs
             String seuilMaxText = seuilMaxField.getText().trim();
             if (!seuilMaxText.isEmpty()) {
-                payload.put("seuilMax", Integer.parseInt(seuilMaxText));
+                try {
+                    payload.put("seuilMax", Integer.parseInt(seuilMaxText));
+                } catch (NumberFormatException e) {
+                    new Alert(Alert.AlertType.ERROR, "Seuil max doit être un nombre valide").showAndWait();
+                    return;
+                }
             }
-            payload.put("statut", statutCombo.getValue());
+            payload.put("statut", statut);
 
             var gson = new com.google.gson.Gson();
             var body = gson.toJson(payload);
@@ -72,6 +89,8 @@ public class AddCommandeClientController {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Accept", "application/json");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
 
             try (var out = conn.getOutputStream()) {
                 out.write(body.getBytes(java.nio.charset.StandardCharsets.UTF_8));
@@ -88,21 +107,41 @@ public class AddCommandeClientController {
                 close();
             } else {
                 // Lire le message d'erreur du serveur
+                String errorMsg = "Erreur serveur: " + responseCode;
                 try (var br = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getErrorStream()))) {
-                    String errorMsg = br.lines().reduce("", (a, b) -> a + b);
-                    System.err.println("❌ Erreur serveur: " + errorMsg);
-                    new Alert(Alert.AlertType.ERROR, "Erreur serveur: " + responseCode + "\n" + errorMsg).showAndWait();
+                    String serverMsg = br.lines().reduce("", (a, b) -> a + b);
+                    if (serverMsg != null && !serverMsg.isEmpty()) {
+                        errorMsg += "\n" + serverMsg;
+                    }
+                } catch (Exception e) {
+                    // Ignore si on ne peut pas lire le stream
                 }
+                System.err.println("❌ " + errorMsg);
+                new Alert(Alert.AlertType.ERROR, errorMsg).showAndWait();
             }
-        } catch (NumberFormatException e) {
-            new Alert(Alert.AlertType.ERROR, "Seuil max doit être un nombre").showAndWait();
+        } catch (java.net.ConnectException e) {
+            new Alert(Alert.AlertType.ERROR, "Impossible de se connecter au serveur. Vérifiez que le backend est démarré.").showAndWait();
+        } catch (java.net.SocketTimeoutException e) {
+            new Alert(Alert.AlertType.ERROR, "Timeout: Le serveur ne répond pas.").showAndWait();
+        } catch (java.io.IOException e) {
+            String errorMsg = e.getMessage();
+            if (errorMsg == null || errorMsg.isEmpty()) {
+                errorMsg = "Erreur de communication avec le serveur";
+            }
+            new Alert(Alert.AlertType.ERROR, "Erreur: " + errorMsg).showAndWait();
+            e.printStackTrace();
         } catch (Exception ex) {
+            String errorMsg = ex.getMessage();
+            if (errorMsg == null || errorMsg.isEmpty()) {
+                errorMsg = ex.getClass().getSimpleName();
+            }
             ex.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Impossible d'enregistrer: " + ex.getMessage()).showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Impossible d'enregistrer: " + errorMsg).showAndWait();
         }
     }
 
     private void close() {
-        ((Stage) btnCancel.getScene().getWindow()).close();
+        Stage stage = (Stage) btnCancel.getScene().getWindow();
+        stage.close();
     }
 }

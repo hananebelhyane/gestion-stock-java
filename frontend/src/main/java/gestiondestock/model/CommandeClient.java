@@ -100,7 +100,12 @@ public class CommandeClient {
 
     // ✅ Méthode helper pour afficher le nom complet du client
     public String getClientNom() {
-        return client != null ? client.getPrenom() + " " + client.getNom() : "";
+        if (client == null) {
+            return "";
+        }
+        String prenom = client.getPrenom() != null ? client.getPrenom() : "";
+        String nom = client.getNom() != null ? client.getNom() : "";
+        return (prenom + " " + nom).trim();
     }
 
     public String getDateCommande() {
