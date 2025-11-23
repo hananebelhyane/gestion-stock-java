@@ -116,26 +116,22 @@ public class ViewController {
             contentRoot.getChildren().setAll(fallback);
         }
     }
-
+    
     // Sidebar navigation handlers
     @FXML public void openDashboard(ActionEvent e) { loadContent("dashboard"); }
     @FXML public void openProducts(ActionEvent e) { loadContent("products"); }
-    @FXML public void openOrders(ActionEvent e) { loadContent("orders"); }
-    
-    // Charger la vue fournisseur
-    @FXML public void openClients(ActionEvent e) { loadContent("fournisseur-view"); }
-    
-    // ✅ MODIFICATION : Méthode pour ouvrir le menu des utilisateurs
-    @FXML public void openUsersMenu(ActionEvent e) { loadContent("users-menu"); }
-    
-    // Ancienne méthode suppliers (gardée pour compatibilité si besoin)
-    @FXML public void openSuppliers(ActionEvent e) { loadContent("users-menu"); }
-    
-    //charger la vue profile admin
-    @FXML public void openStock(ActionEvent e) { loadContent("admin-profile-view"); }
+    //had ster dyal mouad 3endakum chi wahed y9isso
+    @FXML public void openOrders(ActionEvent e) { loadContent("GestionDeCommande"); }
+    @FXML public void openGestionDeCommande(ActionEvent e) { loadContent("GestionDeCommande"); }
+    //hani kan3lemkum
+    @FXML public void openClients(ActionEvent e) { loadContent("clients"); }
+    @FXML public void openSuppliers(ActionEvent e) { loadContent("suppliers"); }
+    @FXML public void openStock(ActionEvent e) { loadContent("stock"); }
     @FXML public void openAlerts(ActionEvent e) { loadContent("alerts"); }
-    @FXML public void openSettings(ActionEvent e) { loadContent("settings"); }
-
+    @FXML public void openSettings(ActionEvent e) { loadContent("admin-profile-view"); }
+   // MODIFICATION : Méthode pour ouvrir le menu des utilisateurs
+    @FXML public void openUsersMenu(ActionEvent e) { loadContent("users-menu"); }
+  
     @FXML
     public void toggleSidebar(ActionEvent e) {
         if (sidebar == null) return;
