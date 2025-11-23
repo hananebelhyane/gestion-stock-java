@@ -124,13 +124,13 @@ public class ViewController {
     @FXML public void openOrders(ActionEvent e) { loadContent("GestionDeCommande"); }
     @FXML public void openGestionDeCommande(ActionEvent e) { loadContent("GestionDeCommande"); }
     //hani kan3lemkum
-    @FXML public void openClients(ActionEvent e) { loadContent("clients"); }
+    @FXML public void openUsersMenu(ActionEvent e) { loadContent("users-menu"); }
     @FXML public void openSuppliers(ActionEvent e) { loadContent("suppliers"); }
     @FXML public void openStock(ActionEvent e) { loadContent("stock"); }
     @FXML public void openAlerts(ActionEvent e) { loadContent("alerts"); }
     @FXML public void openSettings(ActionEvent e) { loadContent("admin-profile-view"); }
-   // MODIFICATION : Méthode pour ouvrir le menu des utilisateurs
-    @FXML public void openUsersMenu(ActionEvent e) { loadContent("users-menu"); }
+   
+   
   
     @FXML
     public void toggleSidebar(ActionEvent e) {
