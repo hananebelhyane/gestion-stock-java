@@ -1,6 +1,7 @@
 # Fichiers compilés
 target/
 *.class
+*.jar
 
 # Logs
 *.log
@@ -13,6 +14,11 @@ target/
 
 # Maven
 .mvn/
+mvnw
+mvnw.cmd
+
+# Docker volumes (données)
+mysql_data/
 
 # OS
 .DS_Store
