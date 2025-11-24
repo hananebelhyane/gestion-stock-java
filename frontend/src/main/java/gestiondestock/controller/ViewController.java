@@ -105,17 +105,19 @@ public class ViewController {
     // Sidebar navigation handlers
     @FXML public void openDashboard(ActionEvent e) { loadContent("dashboard"); }
     @FXML public void openProducts(ActionEvent e) { loadContent("products"); }
-    @FXML public void openOrders(ActionEvent e) { loadContent("orders"); }
-    
-    // Charger la vue fournisseur
-    @FXML public void openClients(ActionEvent e) { loadContent("fournisseur-view"); }
-    
-    @FXML public void openSuppliers(ActionEvent e) { loadContent("suppliers"); }
-    //charger la vue profile admin
-    @FXML public void openStock(ActionEvent e) { loadContent("admin-profile-view"); }
+    //had ster dyal mouad 3endakum chi wahed y9isso
+    @FXML public void openOrders(ActionEvent e) { loadContent("GestionDeCommande"); }
+    @FXML public void openGestionDeCommande(ActionEvent e) { loadContent("GestionDeCommande"); }
+    //hani kan3lemkum
+    @FXML public void openClients(ActionEvent e) { loadContent("clients"); }
+    //gestion des fournisseurs
+    @FXML public void openSuppliers(ActionEvent e) { loadContent("fournisseur-view"); }
+    @FXML public void openStock(ActionEvent e) { loadContent("stock"); }
     @FXML public void openAlerts(ActionEvent e) { loadContent("alerts"); }
-    @FXML public void openSettings(ActionEvent e) { loadContent("settings"); }
-
+    //profile admin
+    @FXML public void openSettings(ActionEvent e) { loadContent("admin-profile-view"); 
+    
+    }
     @FXML
     public void toggleSidebar(ActionEvent e) {
         if (sidebar == null) return;
@@ -161,7 +163,7 @@ public class ViewController {
             var stage = (javafx.stage.Stage) root.getScene().getWindow();
             Parent rootNode = javafx.fxml.FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
             javafx.scene.Scene scene = new javafx.scene.Scene(rootNode);
-            var css = getClass().getResource("/styles/login.css");
+            var css = getClass().getResource("/css/login.css");
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
             stage.setScene(scene);
         } catch (Exception ex) {
