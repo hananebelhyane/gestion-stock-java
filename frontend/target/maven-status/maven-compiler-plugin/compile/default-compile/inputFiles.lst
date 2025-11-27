@@ -1,4 +1,26 @@
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\model\Admin.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\app\Welcome.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\controller\LoginController.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\controller\ViewController.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\dto\StatistiquesVentesDTO.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\dto\ClientTopDTO.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\service\PdfExportService.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\dto\StatistiquesStockDTO.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\dto\VenteParPeriodeDTO.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\dto\EvolutionVentesDTO.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\StatistiquesController.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\dto\StatistiquesGeneralesDTO.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\ViewController.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\model\ProduitStock.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\LoginController.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\dto\StatistiquesCommandesDTO.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\model\StatistiquesVentes.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\model\StatistiquesStock.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\model\StatistiquesCommandes.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\app\Welcome.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\model\VenteParPeriode.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\service\StatistiquesServiceClient.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\model\DashboardStatistiques.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\model\Admin.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\model\EvolutionVentes.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\dto\ProduitVenduDTO.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\dto\DashboardDTO.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\model\ClientTop.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\model\ProduitVendu.java
+C:\Users\pc\gestion-stock-java\frontend\src\main\java\gestiondestock\dto\ProduitStockDTO.java
