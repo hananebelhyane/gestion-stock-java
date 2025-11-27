@@ -18,7 +18,7 @@
             fx:controller="gestiondestock.controller.StatistiquesController"
             stylesheets="@../css/styles.css">
 
-    <!-- Top: Filtre période -->
+
     <top>
         <HBox spacing="10" styleClass="top-bar" alignment="CENTER_LEFT">
             <padding>
@@ -31,14 +31,14 @@
         </HBox>
     </top>
 
-    <!-- Center: Grands chiffres et graphiques -->
+
     <center>
         <VBox spacing="20">
             <padding>
                 <Insets top="15" right="15" bottom="15" left="15"/>
             </padding>
 
-            <!-- KPIs -->
+
             <GridPane hgap="20" vgap="10">
                 <Label text="Total Produits :" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                 <Label fx:id="totalProduitsLabel" styleClass="kpi-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
@@ -53,7 +53,7 @@
                 <Label fx:id="totalClientsLabel" styleClass="kpi-value" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
             </GridPane>
 
-            <!-- Graphiques -->
+
             <HBox spacing="20">
 
                 <VBox spacing="10" HBox.hgrow="ALWAYS">
