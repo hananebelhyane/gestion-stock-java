@@ -18,7 +18,7 @@ public class gestionFournisseurs extends Application {
         Scene scene = new Scene(root);
         
         // Charger le CSS
-        String css = getClass().getResource("/css/fournisseur-style.css").toExternalForm();
+        String css = getClass().getResource("/styles/fournisseur-style.css").toExternalForm();
         scene.getStylesheets().add(css);
         
         primaryStage.setScene(scene);

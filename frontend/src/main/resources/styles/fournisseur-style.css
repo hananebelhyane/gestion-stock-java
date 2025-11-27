@@ -16,7 +16,9 @@
 .main-title {
     -fx-text-fill: #1a1a1a;
     -fx-font-weight: bold;
+    -fx-font-size: 22px;   /* <<< AJOUT ESSENTIEL */
 }
+
 
 .subtitle {
     -fx-text-fill: #6b6b6b;
