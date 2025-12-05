@@ -128,7 +128,7 @@ public class ViewController {
 
     // Sidebar navigation handlers
     @FXML public void openDashboard(ActionEvent e) { loadContent("dashboard"); }
-    @FXML public void openProducts(ActionEvent e) { loadContent("products"); }
+    @FXML public void openProducts(ActionEvent e) { loadContent("produit"); }
     //had ster dyal mouad 3endakum chi wahed y9isso
     @FXML public void openOrders(ActionEvent e) { loadContent("GestionDeCommande"); }
     @FXML public void openGestionDeCommande(ActionEvent e) { loadContent("GestionDeCommande"); }
