@@ -43,7 +43,7 @@ public class AddCommandeClientController {
             new Alert(Alert.AlertType.WARNING, "Nom client obligatoire").showAndWait();
             return;
         }
-        
+
         if (clientPrenomField.getText().isBlank()) {
             new Alert(Alert.AlertType.WARNING, "Prénom client obligatoire").showAndWait();
             return;
@@ -120,7 +120,8 @@ public class AddCommandeClientController {
                 new Alert(Alert.AlertType.ERROR, errorMsg).showAndWait();
             }
         } catch (java.net.ConnectException e) {
-            new Alert(Alert.AlertType.ERROR, "Impossible de se connecter au serveur. Vérifiez que le backend est démarré.").showAndWait();
+            new Alert(Alert.AlertType.ERROR,
+                    "Impossible de se connecter au serveur. Vérifiez que le backend est démarré.").showAndWait();
         } catch (java.net.SocketTimeoutException e) {
             new Alert(Alert.AlertType.ERROR, "Timeout: Le serveur ne répond pas.").showAndWait();
         } catch (java.io.IOException e) {

@@ -1,14 +1,20 @@
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\controller\DashboardController.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\controller\ViewGestionDeCommande.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\app\GestionDeCommande.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\controller\AddCommandeFournisseurController.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\controller\LoginController.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\ui\FieldToast.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\model\CommandeClient.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\controller\SignupController.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\model\AuthService.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\model\Session.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\model\DashboardService.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\controller\AddCommandeClientController.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\controller\ViewController.java
-C:\Users\mouad\Desktop\Gestion de stock\frontend\src\main\java\gestiondestock\model\AuthResponse.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\model\DashboardService.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\AddStockDialogController.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\app\GestionDeCommande.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\model\AuthResponse.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\StockController.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\ui\FieldToast.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\model\Produit.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\model\Session.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\model\Stock.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\DashboardController.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\model\Fournisseur.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\SignupController.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\ViewController.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\AddCommandeFournisseurController.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\LoginController.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\model\Categorie.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\AddCommandeClientController.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\model\AuthService.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\model\CommandeClient.java
+C:\Users\HP\Documents\projetjavaavecdocker\gestion-stock-java\frontend\src\main\java\gestiondestock\controller\ViewGestionDeCommande.java

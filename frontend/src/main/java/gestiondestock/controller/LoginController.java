@@ -19,10 +19,14 @@ import gestiondestock.ui.FieldToast;
 
 public class LoginController {
 
-    @FXML private TextField userusername;
-    @FXML private PasswordField usermdp;
-    @FXML private Button loginButton;
-    @FXML private Label errorLabel;
+    @FXML
+    private TextField userusername;
+    @FXML
+    private PasswordField usermdp;
+    @FXML
+    private Button loginButton;
+    @FXML
+    private Label errorLabel;
 
     private final AuthService authService = new AuthService();
 
@@ -37,10 +41,22 @@ public class LoginController {
         String password = usermdp.getText() == null ? "" : usermdp.getText();
 
         // Client-side validation
-        if (username.isEmpty()) { FieldToast.show(userusername, "Username is required"); return; }
-        if (username.length() < 3) { FieldToast.show(userusername, "Username must be at least 3 characters"); return; }
-        if (password.isEmpty()) { FieldToast.show(usermdp, "Password is required"); return; }
-        if (password.length() < 8) { FieldToast.show(usermdp, "Password must be at least 8 characters"); return; }
+        if (username.isEmpty()) {
+            FieldToast.show(userusername, "Username is required");
+            return;
+        }
+        if (username.length() < 3) {
+            FieldToast.show(userusername, "Username must be at least 3 characters");
+            return;
+        }
+        if (password.isEmpty()) {
+            FieldToast.show(usermdp, "Password is required");
+            return;
+        }
+        if (password.length() < 8) {
+            FieldToast.show(usermdp, "Password must be at least 8 characters");
+            return;
+        }
         clearError();
 
         loginButton.setDisable(true);
@@ -66,10 +82,12 @@ public class LoginController {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/layoutBar.fxml"));
             Scene scene = new Scene(root);
             var css = getClass().getResource("/styles/login.css");
-            if (css != null) scene.getStylesheets().add(css.toExternalForm());
+            if (css != null)
+                scene.getStylesheets().add(css.toExternalForm());
             // Add dashboard stylesheet so dashboard view uses its styles
             var dashCss = getClass().getResource("/styles/dashboard.css");
-            if (dashCss != null) scene.getStylesheets().add(dashCss.toExternalForm());
+            if (dashCss != null)
+                scene.getStylesheets().add(dashCss.toExternalForm());
             stage.setScene(scene);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Navigation error", "Cannot open view: " + e.getMessage());
@@ -84,8 +102,15 @@ public class LoginController {
         alert.show();
     }
 
-    private void setError(String msg) { if (errorLabel != null) errorLabel.setText(msg); }
-    private void clearError() { if (errorLabel != null) errorLabel.setText(""); }
+    private void setError(String msg) {
+        if (errorLabel != null)
+            errorLabel.setText(msg);
+    }
+
+    private void clearError() {
+        if (errorLabel != null)
+            errorLabel.setText("");
+    }
 
     @FXML
     public void goToSignup(javafx.event.ActionEvent e) {
