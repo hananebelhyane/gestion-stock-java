@@ -3,7 +3,7 @@ package gestiondestock.service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import gestiondestock.model.MagasinierModel;
+import gestiondestock.model.FournisseurModel;
 import gestiondestock.model.Session;
 
 import org.apache.hc.client5.http.classic.methods.HttpPatch;
@@ -22,15 +22,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import gestiondestock.util.LocalDateTimeAdapter;
+import gestiondestock.util.UUIDAdapter;
 
-public class MagasinierService {
-    private static final String BASE_URL = "http://localhost:8080/api/magasiniers";
+public class FournisseurService {
+    private static final String BASE_URL = "http://localhost:8080/api/fournisseurs";
     private final Gson gson;
 
-    public MagasinierService() {
+    public FournisseurService() {
         this.gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new MagasinierLocalDateTimeAdapter())
-            .registerTypeAdapter(UUID.class, new MagasinierUUIDAdapter())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .registerTypeAdapter(UUID.class, new UUIDAdapter())
             .create();
     }
 
@@ -47,12 +49,12 @@ public class MagasinierService {
     private void checkAdminRole() {
         String role = Session.get().getRole();
         if (role == null || !role.equalsIgnoreCase("ADMIN")) {
-            throw new RuntimeException("Accès refusé. Seuls les administrateurs peuvent gérer les magasiniers.");
+            throw new RuntimeException("Accès refusé. Seuls les administrateurs peuvent gérer les fournisseurs.");
         }
     }
 
-    // Récupérer tous les magasiniers actifs
-    public List<MagasinierModel> getAllActiveMagasiniers() throws Exception {
+    // Récupérer tous les fournisseurs actifs
+    public List<FournisseurModel> getAllActiveFournisseurs() throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
         
         URL url = new URL(BASE_URL);
@@ -76,11 +78,11 @@ public class MagasinierService {
         
         Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
         String dataJson = gson.toJson(result.get("data"));
-        return gson.fromJson(dataJson, new TypeToken<List<MagasinierModel>>(){}.getType());
+        return gson.fromJson(dataJson, new TypeToken<List<FournisseurModel>>(){}.getType());
     }
 
-    // Créer un magasinier
-    public MagasinierModel createMagasinier(MagasinierModel magasinier) throws Exception {
+    // Créer un fournisseur
+    public FournisseurModel createFournisseur(FournisseurModel fournisseur) throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
         
         URL url = new URL(BASE_URL);
@@ -91,15 +93,7 @@ public class MagasinierService {
         conn.setRequestProperty("Authorization", "Bearer " + getAuthToken()); // ✅ Ajout du token
         conn.setDoOutput(true);
 
-        Map<String, String> requestBody = Map.of(
-            "nom", magasinier.getNom(),
-            "prenom", magasinier.getPrenom(),
-            "username", magasinier.getUsername(),
-            "telephone", magasinier.getTelephone(),
-            "motDePasse", "default123"
-        );
-        
-        String jsonInput = gson.toJson(requestBody);
+        String jsonInput = gson.toJson(fournisseur);
         try(OutputStream os = conn.getOutputStream()) {
             os.write(jsonInput.getBytes(StandardCharsets.UTF_8));
         }
@@ -119,11 +113,11 @@ public class MagasinierService {
         
         Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
         String dataJson = gson.toJson(result.get("data"));
-        return gson.fromJson(dataJson, MagasinierModel.class);
+        return gson.fromJson(dataJson, FournisseurModel.class);
     }
 
-    // Mettre à jour un magasinier
-    public MagasinierModel updateMagasinier(UUID id, MagasinierModel magasinier) throws Exception {
+    // Mettre à jour un fournisseur
+    public FournisseurModel updateFournisseur(UUID id, FournisseurModel fournisseur) throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
         
         URL url = new URL(BASE_URL + "/" + id.toString());
@@ -134,15 +128,7 @@ public class MagasinierService {
         conn.setRequestProperty("Authorization", "Bearer " + getAuthToken()); // ✅ Ajout du token
         conn.setDoOutput(true);
 
-        Map<String, String> requestBody = Map.of(
-            "nom", magasinier.getNom(),
-            "prenom", magasinier.getPrenom(),
-            "username", magasinier.getUsername(),
-            "telephone", magasinier.getTelephone(),
-            "motDePasse", "default123"
-        );
-
-        String jsonInput = gson.toJson(requestBody);
+        String jsonInput = gson.toJson(fournisseur);
         try(OutputStream os = conn.getOutputStream()) {
             os.write(jsonInput.getBytes(StandardCharsets.UTF_8));
         }
@@ -162,11 +148,11 @@ public class MagasinierService {
         
         Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
         String dataJson = gson.toJson(result.get("data"));
-        return gson.fromJson(dataJson, MagasinierModel.class);
+        return gson.fromJson(dataJson, FournisseurModel.class);
     }
 
-    // Supprimer un magasinier
-    public void deleteMagasinier(UUID id) throws Exception {
+    // Supprimer un fournisseur
+    public void deleteFournisseur(UUID id) throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
         
         URL url = new URL(BASE_URL + "/" + id.toString());
@@ -186,8 +172,8 @@ public class MagasinierService {
         }
     }
 
-    // Rechercher des magasiniers
-    public List<MagasinierModel> searchMagasiniers(String keyword) throws Exception {
+    // Rechercher des fournisseurs
+    public List<FournisseurModel> searchFournisseurs(String keyword) throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
         
         URL url = new URL(BASE_URL + "/search?keyword=" + keyword);
@@ -211,11 +197,11 @@ public class MagasinierService {
         
         Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
         String dataJson = gson.toJson(result.get("data"));
-        return gson.fromJson(dataJson, new TypeToken<List<MagasinierModel>>(){}.getType());
+        return gson.fromJson(dataJson, new TypeToken<List<FournisseurModel>>(){}.getType());
     }
 
-    // Récupérer un magasinier par ID
-    public MagasinierModel getMagasinierById(UUID id) throws Exception {
+    // Récupérer un fournisseur par ID
+    public FournisseurModel getFournisseurById(UUID id) throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
         
         URL url = new URL(BASE_URL + "/" + id.toString());
@@ -239,11 +225,11 @@ public class MagasinierService {
         
         Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
         String dataJson = gson.toJson(result.get("data"));
-        return gson.fromJson(dataJson, MagasinierModel.class);
+        return gson.fromJson(dataJson, FournisseurModel.class);
     }
     
-    // Récupérer les magasiniers supprimés
-    public List<MagasinierModel> getDeletedMagasiniers() throws Exception {
+    // Récupérer les fournisseurs supprimés
+    public List<FournisseurModel> getDeletedFournisseurs() throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
         
         URL url = new URL(BASE_URL + "/deleted");
@@ -267,11 +253,11 @@ public class MagasinierService {
         
         Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
         String dataJson = gson.toJson(result.get("data"));
-        return gson.fromJson(dataJson, new TypeToken<List<MagasinierModel>>(){}.getType());
+        return gson.fromJson(dataJson, new TypeToken<List<FournisseurModel>>(){}.getType());
     }
     
-    // ✅ RESTAURER UN MAGASINIER avec authentification
-    public void restoreMagasinier(UUID id) throws Exception {
+    // ✅ RESTAURER UN FOURNISSEUR avec authentification
+    public void restoreFournisseur(UUID id) throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
         
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -300,7 +286,7 @@ public class MagasinierService {
                         errorBody = EntityUtils.toString(response.getEntity());
                     }
                 } catch (Exception e) {
-                    // Ignorer
+                    // Ignorer si impossible de lire le body
                 }
                 throw new Exception("Erreur HTTP: " + statusCode + 
                     (errorBody.isEmpty() ? "" : " - " + errorBody));
@@ -310,10 +296,18 @@ public class MagasinierService {
             throw new Exception("Erreur lors de la restauration: " + e.getMessage());
         } finally {
             if (response != null) {
-                try { response.close(); } catch (Exception e) { }
+                try {
+                    response.close();
+                } catch (Exception e) {
+                    // Ignorer
+                }
             }
             if (httpClient != null) {
-                try { httpClient.close(); } catch (Exception e) { }
+                try {
+                    httpClient.close();
+                } catch (Exception e) {
+                    // Ignorer
+                }
             }
         }
     }
@@ -328,48 +322,5 @@ public class MagasinierService {
         }
         in.close();
         return response.toString();
-    }
-}
-
-
-// Adaptateur pour LocalDateTime (avec nom différent pour éviter les conflits)
-class MagasinierLocalDateTimeAdapter extends com.google.gson.TypeAdapter<LocalDateTime> {
-    @Override
-    public void write(com.google.gson.stream.JsonWriter out, LocalDateTime value) throws java.io.IOException {
-        if (value == null) {
-            out.nullValue();
-        } else {
-            out.value(value.toString());
-        }
-    }
-
-    @Override
-    public LocalDateTime read(com.google.gson.stream.JsonReader in) throws java.io.IOException {
-        if (in.peek() == com.google.gson.stream.JsonToken.NULL) {
-            in.nextNull();
-            return null;
-        }
-        return LocalDateTime.parse(in.nextString());
-    }
-}
-
-// Adaptateur pour UUID (avec nom différent pour éviter les conflits)
-class MagasinierUUIDAdapter extends com.google.gson.TypeAdapter<UUID> {
-    @Override
-    public void write(com.google.gson.stream.JsonWriter out, UUID value) throws java.io.IOException {
-        if (value == null) {
-            out.nullValue();
-        } else {
-            out.value(value.toString());
-        }
-    }
-
-    @Override
-    public UUID read(com.google.gson.stream.JsonReader in) throws java.io.IOException {
-        if (in.peek() == com.google.gson.stream.JsonToken.NULL) {
-            in.nextNull();
-            return null;
-        }
-        return UUID.fromString(in.nextString());
     }
 }

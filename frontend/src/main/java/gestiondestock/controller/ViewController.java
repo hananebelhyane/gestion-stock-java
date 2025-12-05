@@ -51,6 +51,7 @@ public class ViewController {
         if (logoImage != null) {
             String[] candidates = new String[] {
                     "/assets/gs.png",
+                  
             };
             boolean set = false;
             for (String path : candidates) {
@@ -90,33 +91,41 @@ public class ViewController {
     }
 
     private void loadContent(String name) {
-        if (contentRoot == null) return;
-        String path = "/fxml/" + name + ".fxml";
-        try {
-            Parent view = FXMLLoader.load(getClass().getResource(path));
+    if (contentRoot == null) return;
+    String path = "/fxml/" + name + ".fxml";
+    try {
+        Parent view = FXMLLoader.load(getClass().getResource(path));
+        
+        // Nettoyer les CSS précédents
+        Scene scene = contentRoot.getScene();
+        if (scene != null) {
+            scene.getStylesheets().clear();
             
-            // Charger le CSS approprié
-            Scene scene = contentRoot.getScene();
-            if (scene != null) {
-                scene.getStylesheets().clear();
-                scene.getStylesheets().add(getClass().getResource("/css/login.css").toExternalForm());
-                
-                if (name.equals("dashboard")) {
-                    scene.getStylesheets().add(getClass().getResource("/css/dashboard.css").toExternalForm());
-                } else if (name.equals("client-view")) {
-                    scene.getStylesheets().add(getClass().getResource("/css/client-style.css").toExternalForm());
-                } else if (name.equals("magasinier-view")) {
-                    scene.getStylesheets().add(getClass().getResource("/css/magasinier-style.css").toExternalForm());
-                }
+            // Charger le CSS spécifique
+            String cssPath = null;
+            if (name.equals("fournisseur-view")) {
+                cssPath = "/styles/fournisseur-style.css";
+            } else if (name.equals("admin-profile-view")) {
+                cssPath = "/styles/admin-profile-style.css";
+            } else if (name.equals("dashboard")) {
+                cssPath = "/styles/dashboard.css";
             }
             
-            contentRoot.getChildren().setAll(view);
-        } catch (Exception ex) {
-            Label fallback = new Label("Failed to load " + name + ": " + ex.getMessage());
-            contentRoot.getChildren().setAll(fallback);
+            if (cssPath != null) {
+                var css = getClass().getResource(cssPath);
+                if (css != null) {
+                    scene.getStylesheets().add(css.toExternalForm());
+                }
+            }
         }
+        
+        contentRoot.getChildren().setAll(view);
+    } catch (Exception ex) {
+        Label fallback = new Label("Failed to load " + name + ": " + ex.getMessage());
+        contentRoot.getChildren().setAll(fallback);
     }
-    
+}
+
     // Sidebar navigation handlers
     @FXML public void openDashboard(ActionEvent e) { loadContent("dashboard"); }
     @FXML public void openProducts(ActionEvent e) { loadContent("products"); }
@@ -124,14 +133,16 @@ public class ViewController {
     @FXML public void openOrders(ActionEvent e) { loadContent("GestionDeCommande"); }
     @FXML public void openGestionDeCommande(ActionEvent e) { loadContent("GestionDeCommande"); }
     //hani kan3lemkum
+    @FXML public void openClients(ActionEvent e) { loadContent("clients"); }
     @FXML public void openUsersMenu(ActionEvent e) { loadContent("users-menu"); }
-    @FXML public void openSuppliers(ActionEvent e) { loadContent("suppliers"); }
+    //gestion des fournisseurs
+    @FXML public void openSuppliers(ActionEvent e) { loadContent("fournisseur-view"); }
     @FXML public void openStock(ActionEvent e) { loadContent("stock"); }
     @FXML public void openAlerts(ActionEvent e) { loadContent("alerts"); }
-    @FXML public void openSettings(ActionEvent e) { loadContent("admin-profile-view"); }
-   
-   
-  
+    //profile admin
+    @FXML public void openSettings(ActionEvent e) { loadContent("admin-profile-view"); 
+    
+    }
     @FXML
     public void toggleSidebar(ActionEvent e) {
         if (sidebar == null) return;
@@ -177,7 +188,7 @@ public class ViewController {
             var stage = (javafx.stage.Stage) root.getScene().getWindow();
             Parent rootNode = javafx.fxml.FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
             javafx.scene.Scene scene = new javafx.scene.Scene(rootNode);
-            var css = getClass().getResource("/css/login.css");
+            var css = getClass().getResource("/styles/login.css");
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
             stage.setScene(scene);
         } catch (Exception ex) {

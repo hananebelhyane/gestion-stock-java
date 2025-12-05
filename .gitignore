@@ -1,27 +1,7 @@
-# Fichiers compilés
-target/
-frontend/target/
-*.class
-
-
-# Logs
-*.log
-
-# IDE
-.idea/
-.vscode/
-*.iml
-*.iws
-
-# Maven
-.mvn/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Temporaires
-*.tmp
-*.bak
-*.swp
-*~
+target/ 
+.vscode/ 
+*.class 
+*.jar 
+.mvn/ 
+.idea/ 
+*.iml 

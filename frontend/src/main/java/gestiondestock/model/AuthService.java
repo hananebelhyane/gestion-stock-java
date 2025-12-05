@@ -15,7 +15,7 @@ public class AuthService {
     private final String baseUrl;
 
     public AuthService() {
-        this("http://localhost:8082");
+        this("http://localhost:8080");
     }
 
     public AuthService(String baseUrl) {

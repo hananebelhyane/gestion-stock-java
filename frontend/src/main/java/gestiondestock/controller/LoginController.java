@@ -65,10 +65,10 @@ public class LoginController {
             Stage stage = (Stage) loginButton.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/layoutBar.fxml"));
             Scene scene = new Scene(root);
-            var css = getClass().getResource("/css/login.css");
+            var css = getClass().getResource("/styles/login.css");
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
-            // Add dashboard stylesheet so dashboard view uses its css
-            var dashCss = getClass().getResource("/css/dashboard.css");
+            // Add dashboard stylesheet so dashboard view uses its styles
+            var dashCss = getClass().getResource("/styles/dashboard.css");
             if (dashCss != null) scene.getStylesheets().add(dashCss.toExternalForm());
             stage.setScene(scene);
         } catch (Exception e) {
@@ -93,7 +93,7 @@ public class LoginController {
             Stage stage = (Stage) loginButton.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/signup.fxml"));
             Scene scene = new Scene(root);
-            var css = getClass().getResource("/css/login.css");
+            var css = getClass().getResource("/styles/login.css");
             if (css != null) {
                 scene.getStylesheets().add(css.toExternalForm());
             }

@@ -27,40 +27,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 🔒 Désactiver CSRF pour API REST
             .csrf(csrf -> csrf.disable())
-
-            // 🌍 Activer CORS
             .cors(Customizer.withDefaults())
-
-            // 🔐 JWT = application sans session
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-            // 🔑 Règles d'autorisation
             .authorizeHttpRequests(auth -> auth
-
-                // --- ROUTES PUBLIQUES (login / register) ---
+                // Routes publiques pour l'authentification
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/admins/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/clients/register").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/magasiniers/register").permitAll()
-
-                // --- API MAGASINIERS : ADMIN uniquement ---
-                .requestMatchers("/api/magasiniers/**").hasRole("ADMIN")
-                    
-                // --- API CLIENTS : ADMIN uniquement ---
-                .requestMatchers("/api/clients/**").hasRole("ADMIN")
-
-                // --- API générale : nécessite auth ---
-                .requestMatchers("/api/**").authenticated()
-
-                // --- Routes non API : accès libre ---
-                .anyRequest().permitAll()
+                
+                // Routes FOURNISSEURS - ADMIN UNIQUEMENT
+                .requestMatchers("/api/fournisseurs/**").hasRole("ADMIN")
+                
+                // Toutes les autres routes nécessitent une authentification
+                .anyRequest().authenticated()
             )
-
-            // 🔄 Ajouter le filtre JWT avant UsernamePasswordAuthenticationFilter
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 

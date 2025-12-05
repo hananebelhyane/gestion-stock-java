@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.gestiondestock.exception;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +24,9 @@ public class GlobalExceptionHandler {
 
     /**
      * Gère les exceptions de ressource non trouvée
+     * @param ex
+     * @param request
+     * @return 
      */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
@@ -45,6 +45,9 @@ public class GlobalExceptionHandler {
 
     /**
      * Gère les exceptions de ressource dupliquée
+     * @param ex
+     * @param request
+     * @return 
      */
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateResourceException(
@@ -63,6 +66,9 @@ public class GlobalExceptionHandler {
 
     /**
      * Gère les exceptions d'état illégal
+     * @param ex
+     * @param request
+     * @return 
      */
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ErrorResponse> handleIllegalStateException(
@@ -81,6 +87,9 @@ public class GlobalExceptionHandler {
 
     /**
      * Gère les erreurs de validation des données
+     * @param ex
+     * @param request
+     * @return 
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> handleValidationExceptions(
@@ -107,6 +116,9 @@ public class GlobalExceptionHandler {
 
     /**
      * Gère toutes les autres exceptions non gérées
+     * @param ex
+     * @param request
+     * @return 
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(

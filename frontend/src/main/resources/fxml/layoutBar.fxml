@@ -6,10 +6,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="gestiondestock.controller.ViewController" fx:id="root">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gestiondestock.controller.ViewController" fx:id="root">
   <left>
-    <VBox spacing="10" styleClass="sidebar" fx:id="sidebar"
+        <VBox spacing="10" styleClass="sidebar" fx:id="sidebar"
           style="-fx-background-color: #ffffff;">
       <padding><Insets top="18" right="14" bottom="18" left="14"/></padding>
 
@@ -19,7 +18,8 @@
       </HBox>
 
       <Separator />
-       <!-- Menu -->
+
+      <!-- Menu -->
       <VBox spacing="6">
         <Button text="Main Page Dashboard" styleClass="menu-btn" onAction="#openDashboard" />
         <Button text="Gestion des Produits" styleClass="menu-btn" onAction="#openProducts" />

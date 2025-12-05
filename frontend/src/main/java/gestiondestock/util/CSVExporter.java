@@ -1,8 +1,11 @@
 package gestiondestock.util;
 
 import gestiondestock.model.ClientModel;
+import gestiondestock.model.FournisseurModel;
 import gestiondestock.model.MagasinierModel;
+import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.BufferedWriter;
@@ -15,107 +18,92 @@ public class CSVExporter {
 
     private static final String CSV_SEPARATOR = ",";
 
-    // Export pour les clients
-    public static File exportClientsToCSV(List<ClientModel> clients, Window owner, String fileName) throws IOException {
+    // Fournisseurs
+    public static File exportToCSV(List<FournisseurModel> fournisseurs, Window owner, String fileName) throws IOException {
+        if (fournisseurs == null || fournisseurs.isEmpty()) {
+            throw new IllegalArgumentException("La liste des fournisseurs est vide");
+        }
+        File file = chooseFile(owner, fileName, "Exporter les fournisseurs");
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                writer.write("ID,Nom,Prénom,Email,Téléphone,Adresse");
+                writer.newLine();
+                for (FournisseurModel fournisseur : fournisseurs) {
+                    writer.write(escapeCSV(fournisseur.getId() != null ? fournisseur.getId().toString() : "") + CSV_SEPARATOR +
+                                 escapeCSV(fournisseur.getNom()) + CSV_SEPARATOR +
+                                 escapeCSV(fournisseur.getPrenom()) + CSV_SEPARATOR +
+                                 escapeCSV(fournisseur.getEmail()) + CSV_SEPARATOR +
+                                 escapeCSV(fournisseur.getTelephone()) + CSV_SEPARATOR +
+                                 escapeCSV(fournisseur.getAdresse()));
+                    writer.newLine();
+                }
+            }
+        }
+        return file;
+    }
+
+    // Clients (ObservableList + Stage signature expected by controllers)
+    public static File exportClientsToCSV(ObservableList<ClientModel> clients, Stage owner, String fileName) throws IOException {
         if (clients == null || clients.isEmpty()) {
             throw new IllegalArgumentException("La liste des clients est vide");
         }
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Exporter les clients");
-        fileChooser.setInitialFileName(fileName);
-        
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Fichiers CSV (*.csv)", "*.csv");
-        fileChooser.getExtensionFilters().add(extFilter);
-        
-        File file = fileChooser.showSaveDialog(owner);
-        
+        File file = chooseFile(owner, fileName, "Exporter les clients");
         if (file != null) {
-            writeClientsCSV(clients, file);
-            return file;
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                writer.write("ID,Nom,Prénom,Username,Téléphone,Adresse");
+                writer.newLine();
+                for (ClientModel client : clients) {
+                    writer.write(escapeCSV(client.getId() != null ? client.getId().toString() : "") + CSV_SEPARATOR +
+                                 escapeCSV(client.getNom()) + CSV_SEPARATOR +
+                                 escapeCSV(client.getPrenom()) + CSV_SEPARATOR +
+                                 escapeCSV(client.getUsername()) + CSV_SEPARATOR +
+                                 escapeCSV(client.getTelephone()) + CSV_SEPARATOR +
+                                 escapeCSV(client.getAdresse()));
+                    writer.newLine();
+                }
+            }
         }
-        
-        return null;
+        return file;
     }
 
-    // Export pour les magasiniers
-    public static File exportMagasiniersToCSV(List<MagasinierModel> magasiniers, Window owner, String fileName) throws IOException {
+    // Magasiniers (ObservableList + Stage signature expected by controllers)
+    public static File exportMagasiniersToCSV(ObservableList<MagasinierModel> magasiniers, Stage owner, String fileName) throws IOException {
         if (magasiniers == null || magasiniers.isEmpty()) {
             throw new IllegalArgumentException("La liste des magasiniers est vide");
         }
+        File file = chooseFile(owner, fileName, "Exporter les magasiniers");
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                writer.write("ID,Nom,Prénom,Username,Téléphone");
+                writer.newLine();
+                for (MagasinierModel m : magasiniers) {
+                    writer.write(escapeCSV(m.getId() != null ? m.getId().toString() : "") + CSV_SEPARATOR +
+                                 escapeCSV(m.getNom()) + CSV_SEPARATOR +
+                                 escapeCSV(m.getPrenom()) + CSV_SEPARATOR +
+                                 escapeCSV(m.getUsername()) + CSV_SEPARATOR +
+                                 escapeCSV(m.getTelephone()));
+                    writer.newLine();
+                }
+            }
+        }
+        return file;
+    }
 
+    private static File chooseFile(Window owner, String fileName, String title) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Exporter les magasiniers");
+        fileChooser.setTitle(title);
         fileChooser.setInitialFileName(fileName);
-        
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Fichiers CSV (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
-        
-        File file = fileChooser.showSaveDialog(owner);
-        
-        if (file != null) {
-            writeMagasiniersCSV(magasiniers, file);
-            return file;
-        }
-        
-        return null;
-    }
-
-    private static void writeClientsCSV(List<ClientModel> clients, File file) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            // En-tête
-            writer.write("ID,Nom,Prénom,Username,Téléphone,Adresse");
-            writer.newLine();
-            
-            // Données
-            for (ClientModel client : clients) {
-                writer.write(toCSVLineClient(client));
-                writer.newLine();
-            }
-        }
-    }
-
-    private static void writeMagasiniersCSV(List<MagasinierModel> magasiniers, File file) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            // En-tête
-            writer.write("ID,Nom,Prénom,Username,Téléphone");
-            writer.newLine();
-            
-            // Données
-            for (MagasinierModel magasinier : magasiniers) {
-                writer.write(toCSVLineMagasinier(magasinier));
-                writer.newLine();
-            }
-        }
-    }
-
-    private static String toCSVLineClient(ClientModel client) {
-        return escapeCSV(client.getId() != null ? client.getId().toString() : "") + CSV_SEPARATOR +
-               escapeCSV(client.getNom()) + CSV_SEPARATOR +
-               escapeCSV(client.getPrenom()) + CSV_SEPARATOR +
-               escapeCSV(client.getUsername()) + CSV_SEPARATOR +
-               escapeCSV(client.getTelephone()) + CSV_SEPARATOR +
-               escapeCSV(client.getAdresse());
-    }
-
-    private static String toCSVLineMagasinier(MagasinierModel magasinier) {
-        return escapeCSV(magasinier.getId() != null ? magasinier.getId().toString() : "") + CSV_SEPARATOR +
-               escapeCSV(magasinier.getNom()) + CSV_SEPARATOR +
-               escapeCSV(magasinier.getPrenom()) + CSV_SEPARATOR +
-               escapeCSV(magasinier.getUsername()) + CSV_SEPARATOR +
-               escapeCSV(magasinier.getTelephone());
+        return fileChooser.showSaveDialog(owner);
     }
 
     private static String escapeCSV(String value) {
-        if (value == null) {
-            return "";
-        }
-        
+        if (value == null) { return ""; }
         if (value.contains(",") || value.contains("\"") || value.contains("\n") || value.contains("\r")) {
             value = value.replace("\"", "\"\"");
             return "\"" + value + "\"";
         }
-        
         return value;
     }
 }

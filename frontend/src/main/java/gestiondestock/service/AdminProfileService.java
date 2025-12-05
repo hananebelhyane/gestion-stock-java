@@ -12,7 +12,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class AdminProfileService {
-    private static final String BASE_URL = "http://localhost:8082/api/admins";
+    private static final String BASE_URL = "http://localhost:8080/api/admins";
     private final Gson gson = new Gson();
 
     // Obtenir le token de la session

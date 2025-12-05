@@ -10,8 +10,8 @@
       <padding><Insets top="48" right="24" bottom="48" left="24"/></padding>
       <!-- Card wrapper -->
       <VBox spacing="16" alignment="CENTER_LEFT" maxWidth="420" styleClass="login-card">
-        <Label text="Sign in" styleClass="title" />
-        <Label text="Please enter your credentials to continue" styleClass="subtitle" />
+        <Label text="Connexion" styleClass="title" />
+        <Label text="Veuillez entrer vos identifiants pour continuer" styleClass="subtitle" />
         <GridPane hgap="10" vgap="10">
           <columnConstraints>
             <ColumnConstraints minWidth="110"/>
@@ -21,19 +21,19 @@
             <RowConstraints minHeight="36"/>
             <RowConstraints minHeight="36"/>
           </rowConstraints>
-          <Label text="Username" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="label" />
-          <TextField fx:id="userusername" promptText="johndoe" GridPane.rowIndex="0" GridPane.columnIndex="1" />
-          <Label text="Password" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="label" />
+          <Label text="Nom d'utilisateur" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="label" />
+          <TextField fx:id="userusername" promptText="ex: johndoe" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+          <Label text="Mot de passe" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="label" />
           <PasswordField fx:id="usermdp" promptText="••••••••" onAction="#handleLogin" GridPane.rowIndex="1" GridPane.columnIndex="1" />
         </GridPane>
         <!-- Inline validation error -->
         <Label fx:id="errorLabel" styleClass="error" />
         <HBox spacing="10" alignment="CENTER_RIGHT" VBox.vgrow="NEVER" maxWidth="Infinity">
-          <Hyperlink text="Create account" onAction="#goToSignup" />
+          <Hyperlink text="Créer un compte" onAction="#goToSignup" />
           <Pane HBox.hgrow="ALWAYS" />
           <Button fx:id="loginButton" text="Login" onAction="#handleLogin" styleClass="primary-btn" />
         </HBox>
-        <Label text="By continuing you agree to the terms." styleClass="footer" />
+        <Label text="En continuant, vous acceptez les conditions d'utilisation." styleClass="footer" />
       </VBox>
     </VBox>
   </children>

@@ -9,8 +9,8 @@
     <VBox spacing="16" alignment="CENTER">
       <padding><Insets top="48" right="24" bottom="48" left="24"/></padding>
       <VBox spacing="16" alignment="CENTER_LEFT" maxWidth="460" styleClass="login-card">
-        <Label text="Create account" styleClass="title" />
-        <Label text="Fill the form to register" styleClass="subtitle" />
+        <Label text="Créer un compte" styleClass="title" />
+        <Label text="Remplissez le formulaire pour vous inscrire" styleClass="subtitle" />
 
         <GridPane hgap="10" vgap="10">
           <columnConstraints>
@@ -24,25 +24,25 @@
             <RowConstraints minHeight="36"/>
           </rowConstraints>
 
-          <Label text="Username" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="label" />
-          <TextField fx:id="username" promptText="johndoe" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+          <Label text="Nom d'utilisateur" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="label" />
+          <TextField fx:id="username" promptText="ex: johndoe" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
-          <Label text="Email " GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="label" />
-          <TextField fx:id="email" promptText="john@example.com" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+          <Label text="Email" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="label" />
+          <TextField fx:id="email" promptText="ex: john@example.com" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 
-          <Label text="Password" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="label" />
+          <Label text="Mot de passe" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="label" />
           <PasswordField fx:id="password" promptText="••••••••" GridPane.rowIndex="2" GridPane.columnIndex="1" />
 
-          <Label text="Confirm Password" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="label" />
+          <Label text="Confirmer le mot de passe" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="label" />
           <PasswordField fx:id="confirm" promptText="••••••••" GridPane.rowIndex="3" GridPane.columnIndex="1" />
         </GridPane>
 
         <Label fx:id="errorLabel" textFill="#b91c1c" />
 
         <HBox spacing="10" alignment="CENTER_RIGHT" VBox.vgrow="NEVER" maxWidth="Infinity">
-          <Hyperlink text="Back to login" onAction="#goToLogin" />
+          <Hyperlink text="Retour à la connexion" onAction="#goToLogin" />
           <Pane HBox.hgrow="ALWAYS" />
-          <Button fx:id="signupButton" text="Sign Up" onAction="#handleSignup" styleClass="primary-btn" />
+          <Button fx:id="signupButton" text="S'inscrire" onAction="#handleSignup" styleClass="primary-btn" />
         </HBox>
       </VBox>
     </VBox>

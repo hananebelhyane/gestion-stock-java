@@ -22,9 +22,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import gestiondestock.util.LocalDateTimeAdapter;
+import gestiondestock.util.UUIDAdapter;
 
 public class ClientService {
-    private static final String BASE_URL = "http://localhost:8082/api/clients";
+    private static final String BASE_URL = "http://localhost:8080/api/clients";
     private final Gson gson;
 
     public ClientService() {
@@ -339,47 +341,5 @@ public class ClientService {
         }
         in.close();
         return response.toString();
-    }
-}
-
-// Adaptateur pour LocalDateTime
-class LocalDateTimeAdapter extends com.google.gson.TypeAdapter<LocalDateTime> {
-    @Override
-    public void write(com.google.gson.stream.JsonWriter out, LocalDateTime value) throws java.io.IOException {
-        if (value == null) {
-            out.nullValue();
-        } else {
-            out.value(value.toString());
-        }
-    }
-
-    @Override
-    public LocalDateTime read(com.google.gson.stream.JsonReader in) throws java.io.IOException {
-        if (in.peek() == com.google.gson.stream.JsonToken.NULL) {
-            in.nextNull();
-            return null;
-        }
-        return LocalDateTime.parse(in.nextString());
-    }
-}
-
-// Adaptateur pour UUID
-class UUIDAdapter extends com.google.gson.TypeAdapter<UUID> {
-    @Override
-    public void write(com.google.gson.stream.JsonWriter out, UUID value) throws java.io.IOException {
-        if (value == null) {
-            out.nullValue();
-        } else {
-            out.value(value.toString());
-        }
-    }
-
-    @Override
-    public UUID read(com.google.gson.stream.JsonReader in) throws java.io.IOException {
-        if (in.peek() == com.google.gson.stream.JsonToken.NULL) {
-            in.nextNull();
-            return null;
-        }
-        return UUID.fromString(in.nextString());
     }
 }

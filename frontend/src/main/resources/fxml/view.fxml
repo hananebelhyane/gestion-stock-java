@@ -10,7 +10,7 @@
     <VBox alignment="CENTER" spacing="16">
       <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
       <Label text="Welcome" fx:id="WelcomeLabel" style="-fx-font-size: 28; -fx-font-weight: bold;"/>
-      <Label text="This is a simple welcome page." style="-fx-font-size: 14; -fx-text-fill: #555;"/>
+      <Label text="This is a simple welcome page from Bastard." style="-fx-font-size: 14; -fx-text-fill: #555;"/>
     </VBox>
   </children>
 </StackPane>
