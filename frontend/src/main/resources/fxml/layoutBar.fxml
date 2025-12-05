@@ -27,6 +27,7 @@
         <Button text="Gestion Des Commande" styleClass="menu-btn" onAction="#openGestionDeCommande" />
         <Button text="Gestion des Fournisseurs" styleClass="menu-btn" onAction="#openSuppliers" />
         <Button text="Gestion des Utilisateurs" styleClass="menu-btn" onAction="#openUsersMenu" />
+        <Button text="Statistiques" styleClass="menu-btn" onAction="#openStatistics" />
         <Button text="Profil Admin" styleClass="menu-btn" onAction="#openSettings" />
       </VBox>
       

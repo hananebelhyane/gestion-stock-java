@@ -135,6 +135,7 @@ public class ViewController {
     //hani kan3lemkum
     @FXML public void openClients(ActionEvent e) { loadContent("clients"); }
     @FXML public void openUsersMenu(ActionEvent e) { loadContent("users-menu"); }
+    @FXML public void openStatistics(ActionEvent e) { loadContent("statistiques"); }
     //gestion des fournisseurs
     @FXML public void openSuppliers(ActionEvent e) { loadContent("fournisseur-view"); }
     @FXML public void openStock(ActionEvent e) { loadContent("stock"); }

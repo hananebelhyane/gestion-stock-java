@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gestiondestock.controller.StatistiquesController"
+            stylesheets="@../css/styles.css">
+
+
+    <top>
+        <HBox spacing="10" styleClass="top-bar" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Période : " />
+            <ComboBox fx:id="periodComboBox" prefWidth="180"/>
+            <Button text="Actualiser" onAction="#handleRefresh"/>
+            <Button text="Exporter PDF" onAction="#handleExport"/>
+        </HBox>
+    </top>
+
+
+    <center>
+        <VBox spacing="20">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+
+            <GridPane hgap="20" vgap="10">
+                <Label text="Total Produits :" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label fx:id="totalProduitsLabel" styleClass="kpi-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <Label text="Total Ventes :" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label fx:id="totalVentesLabel" styleClass="kpi-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label text="Total Commandes :" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label fx:id="totalCommandesLabel" styleClass="kpi-value" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Label text="Total Clients :" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label fx:id="totalClientsLabel" styleClass="kpi-value" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            </GridPane>
+
+
+            <HBox spacing="20">
+
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="Évolution des ventes" styleClass="chart-title"/>
+                    <LineChart fx:id="ventesLineChart" title="" animated="false">
+                        <xAxis>
+                            <CategoryAxis label="Période"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Montant (DH)"/>
+                        </yAxis>
+                    </LineChart>
+                </VBox>
+
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="Top Produits" styleClass="chart-title"/>
+                    <BarChart fx:id="produitsBarChart" title="" animated="false">
+                        <xAxis>
+                            <CategoryAxis label="Produit"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Quantité vendue"/>
+                        </yAxis>
+                    </BarChart>
+                </VBox>
+
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="Top Clients" styleClass="chart-title"/>
+                    <PieChart fx:id="categoriesPieChart" title=""/>
+                </VBox>
+
+            </HBox>
+
+        </VBox>
+    </center>
+</BorderPane>

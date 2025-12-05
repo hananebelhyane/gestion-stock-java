@@ -37,41 +37,48 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- JavaFX dependencies -->
+    <!-- JavaFX dependencies (Windows classifiers) -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
       <version>25.0.1</version>
+      <classifier>win</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-graphics</artifactId>
       <version>25.0.1</version>
+      <classifier>win</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
       <version>25.0.1</version>
+      <classifier>win</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>25.0.1</version>
+      <classifier>win</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-swing</artifactId>
       <version>25.0.1</version>
+      <classifier>win</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-web</artifactId>
       <version>25.0.1</version>
+      <classifier>win</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-media</artifactId>
       <version>25.0.1</version>
+      <classifier>win</classifier>
     </dependency>
 
     <!-- Gluon Charm Glisten -->
@@ -81,19 +88,50 @@
       <version>6.2.0</version>
     </dependency>
 
-    <!-- Gson pour JSON -->
+    <!-- Gson for JSON -->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.10.1</version>
     </dependency>
-    <!-- ajout de mon pom pour fixer le probleme de restaurer un fournisseur -->
+
+    <!-- HTTP client -->
     <dependency>
-    <groupId>org.apache.httpcomponents.client5</groupId>
-    <artifactId>httpclient5</artifactId>
-    <version>5.2.1</version>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
+      <version>5.2.1</version>
     </dependency>
-  </dependencies> 
+
+    <!-- Jackson for statistics service -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.15.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.15.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>2.15.2</version>
+    </dependency>
+
+    <!-- iText 7 for PDF generation -->
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>kernel</artifactId>
+      <version>7.2.5</version>
+    </dependency>
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>layout</artifactId>
+      <version>7.2.5</version>
+    </dependency>
+
+  </dependencies>
 
   <!-- Build configuration -->
   <build>
@@ -127,6 +165,10 @@
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.8.2</version>
         </plugin>
+
+
+        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.7.1</version>
