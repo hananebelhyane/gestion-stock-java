@@ -33,8 +33,8 @@ public class CommandeFournisseur {
     @Column(name = "commande_date")
     private LocalDateTime commandeDate = LocalDateTime.now();
 
-    @Enumerated(EnumType.STRING)
     @JsonProperty("statut")
+    @Convert(converter = com.gestiondestock.entity.converter.CommandeFournisseurStatutConverter.class)
     private StatutCommande statut = StatutCommande.en_attente;
 
     public enum StatutCommande {

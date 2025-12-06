@@ -37,8 +37,8 @@ public class CommandeClient {
     private LocalDateTime dateCommande = LocalDateTime.now();
 
     @JsonProperty("statut")
-    @Enumerated(EnumType.STRING)
     @Column(name = "statut")
+    @Convert(converter = com.gestiondestock.entity.converter.CommandeClientStatutConverter.class)
     private StatutCommande statut = StatutCommande.en_attente;
 
     @JsonProperty("seuilMax")
