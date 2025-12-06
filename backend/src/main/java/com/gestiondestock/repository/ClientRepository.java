@@ -16,6 +16,9 @@ public interface ClientRepository extends JpaRepository<Client, UUID> {
     @Query("SELECT c FROM Client c WHERE c.deleted_at IS NULL")
     List<Client> findAllActive();
 
+    @Query("SELECT c FROM Client c WHERE c.deleted_at IS NOT NULL")
+    List<Client> findAllDeleted();
+
     // Compter tous les clients
     long count();
 
@@ -26,6 +29,15 @@ public interface ClientRepository extends JpaRepository<Client, UUID> {
     // Liste des Clients actifs seulement
     @Query("SELECT c FROM Client c WHERE c.deleted_at IS NULL")
     List<Client> findClientsActifs();
+
+    @Query("SELECT c FROM Client c WHERE c.deleted_at IS NULL AND (LOWER(c.nom) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(c.prenom) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(c.username) LIKE LOWER(CONCAT('%', :keyword, '%')))" )
+    List<Client> searchByNomOrPrenomOrUsername(String keyword);
+
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Client c WHERE c.username = :username AND c.deleted_at IS NULL")
+    boolean existsByUsernameAndNotDeleted(String username);
+
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Client c WHERE c.telephone = :telephone AND c.deleted_at IS NULL")
+    boolean existsByTelephoneAndNotDeleted(String telephone);
 
     // Top clients par montant d'achats
     @Query("SELECT c.id, c.nom, c.prenom, SUM(lc.montantTotal) as totalAchats " +

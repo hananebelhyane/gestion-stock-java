@@ -82,6 +82,16 @@ public class ProduitDAO {
             throw new IOException("HTTP " + resp.statusCode() + " - " + resp.body());
     }
 
+    public static void deleteForce(String id) throws IOException, InterruptedException {
+        HttpRequest req = baseRequest(BASE_URL + "/" + id + "?force=true")
+            .DELETE()
+            .build();
+
+        HttpResponse<String> resp = CLIENT.send(req, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        if (resp.statusCode() != 204 && resp.statusCode() != 200)
+            throw new IOException("HTTP " + resp.statusCode() + " - " + resp.body());
+    }
+
     public static void exportToCSV(String filename) throws IOException, InterruptedException {
         List<Produit> produits = getAll();
         try (FileWriter writer = new FileWriter(filename)) {

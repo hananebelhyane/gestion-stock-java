@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface CommandeFournisseurRepository extends JpaRepository<CommandeFournisseur, UUID> {
-
+    java.util.List<CommandeFournisseur> findByProduitId(UUID produitId);
 }

@@ -21,8 +21,9 @@ public interface AlerteStockRepository extends JpaRepository<AlerteStock, UUID> 
     Long countByStatut(AlerteStock.StatutAlerte statut);
 
     // dernieres alertes
-    @Query("SELECT as FROM AlerteStock  as   ORDER BY as.dateAlerte DESC")
+    @Query("SELECT a FROM AlerteStock a ORDER BY a.dateAlerte DESC")
+    List<AlerteStock> findDernieresAlertes();
 
-    List<AlerteStock>  findDernieresAlertes();
+    java.util.List<AlerteStock> findByProduitId(UUID produitId);
 
 }

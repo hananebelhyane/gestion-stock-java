@@ -28,4 +28,6 @@ public interface EntreeStockRepository extends JpaRepository<EntreeStock, UUID> 
 
 
 
+
+    java.util.List<EntreeStock> findByCommandefournisseurId(UUID commandeFournisseurId);
 }

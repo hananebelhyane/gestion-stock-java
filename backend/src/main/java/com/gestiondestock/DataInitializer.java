@@ -7,9 +7,13 @@ import com.gestiondestock.entity.CommandeFournisseur;
 import com.gestiondestock.entity.Produit;
 import com.gestiondestock.entity.Stock;
 import com.gestiondestock.entity.Magasinier;
+import com.gestiondestock.entity.Categorie;
+import com.gestiondestock.entity.Fournisseur;
 import com.gestiondestock.repository.AdminRepository;
 import com.gestiondestock.repository.ClientRepository;
 import com.gestiondestock.repository.MagasinierRepository;
+import com.gestiondestock.repository.CategorieRepository;
+import com.gestiondestock.repository.FournisseurRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -29,14 +33,23 @@ public class DataInitializer implements CommandLineRunner {
     private final ClientRepository clientRepository;
     private final MagasinierRepository magasinierRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CategorieRepository categorieRepository;
+    private final FournisseurRepository fournisseurRepository;
     @PersistenceContext
     private EntityManager em;
 
-    public DataInitializer(AdminRepository adminRepository, ClientRepository clientRepository, MagasinierRepository magasinierRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(AdminRepository adminRepository,
+                           ClientRepository clientRepository,
+                           MagasinierRepository magasinierRepository,
+                           PasswordEncoder passwordEncoder,
+                           CategorieRepository categorieRepository,
+                           FournisseurRepository fournisseurRepository) {
         this.adminRepository = adminRepository;
         this.clientRepository = clientRepository;
         this.magasinierRepository = magasinierRepository;
         this.passwordEncoder = passwordEncoder;
+        this.categorieRepository = categorieRepository;
+        this.fournisseurRepository = fournisseurRepository;
     }
 
     @Override
@@ -84,6 +97,24 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Seeded magasinier user: " + magasinierUsername + " / magasinier123");
         }
 
+        // Seed Categories used by frontend combos
+        ensureCategorie("Électronique");
+        ensureCategorie("Informatique");
+        ensureCategorie("Mobilier");
+        ensureCategorie("Bureautique");
+        ensureCategorie("Alimentaire");
+        ensureCategorie("Vêtements");
+        ensureCategorie("Autre");
+
+        // Seed Fournisseurs used by frontend combos
+        ensureFournisseur("TechCorp", "techcorp@example.com", "+212 600-000000", "Casablanca");
+        ensureFournisseur("PhoneDistri", "phonedistri@example.com", "+212 601-000000", "Rabat");
+        ensureFournisseur("OfficePlus", "officeplus@example.com", "+212 602-000000", "Marrakech");
+        ensureFournisseur("SoundTech", "soundtech@example.com", "+212 603-000000", "Fes");
+        ensureFournisseur("FurnitureCo", "furnitureco@example.com", "+212 604-000000", "Tangier");
+        ensureFournisseur("GeneralSupplies", "generalsupplies@example.com", "+212 605-000000", "Agadir");
+        ensureFournisseur("Autre", "autre@example.com", "+212 606-000000", "Oujda");
+
         // If there are already commandes, assume demo dataset exists
         long cmdCount = ((Number) em.createQuery("select count(c) from CommandeClient c").getSingleResult()).longValue();
         if (cmdCount > 0) {
@@ -111,6 +142,16 @@ public class DataInitializer implements CommandLineRunner {
         p4.setDescription("Aluminum");
         p4.setPrixUnitaire(18.0);
         em.persist(p4);
+        Produit p5 = new Produit();
+        p5.setNom("Wireless Mouse");
+        p5.setDescription("Ergonomic design");
+        p5.setPrixUnitaire(15.0);
+        em.persist(p5);
+        Produit p6 = new Produit();
+        p6.setNom("Keyboard");
+        p6.setDescription("Mechanical RGB");
+        p6.setPrixUnitaire(45.0);
+        em.persist(p6);
 
         // Seed Stock (one row per product)
         Stock s1 = new Stock();
@@ -133,6 +174,16 @@ public class DataInitializer implements CommandLineRunner {
         s4.setQuantiteDisponible(40);
         s4.setSeuilAlerte(10);
         em.persist(s4);
+        Stock s5 = new Stock();
+        s5.setProduit(p5);
+        s5.setQuantiteDisponible(75);
+        s5.setSeuilAlerte(15);
+        em.persist(s5);
+        Stock s6 = new Stock();
+        s6.setProduit(p6);
+        s6.setQuantiteDisponible(30);
+        s6.setSeuilAlerte(10);
+        em.persist(s6);
 
         // Additional clients for KPIs
         Client cNew1 = ensureClient("alice", "Alice", "Martin", "2222222222", "alice123");
@@ -153,6 +204,27 @@ public class DataInitializer implements CommandLineRunner {
         em.persist(newCommandeFournisseur(p1, CommandeFournisseur.StatutCommande.livree, LocalDateTime.now().minusDays(5)));
 
         System.out.println("Demo data seeded: products, stock, clients, orders, supplier orders");
+    }
+
+    private void ensureCategorie(String nom) {
+        categorieRepository.findFirstByNomIgnoreCase(nom).orElseGet(() -> {
+            Categorie c = new Categorie();
+            c.setNom(nom);
+            c.setDescription(nom);
+            return categorieRepository.save(c);
+        });
+    }
+
+    private void ensureFournisseur(String nom, String email, String telephone, String adresse) {
+        fournisseurRepository.findFirstByNomIgnoreCase(nom).orElseGet(() -> {
+            Fournisseur f = new Fournisseur();
+            f.setNom(nom);
+            f.setPrenom("");
+            f.setEmail(email);
+            f.setTelephone(telephone);
+            f.setAdresse(adresse);
+            return fournisseurRepository.save(f);
+        });
     }
 
     private Client ensureClient(String username, String nom, String prenom, String telephone, String rawPassword) {

@@ -24,6 +24,10 @@ public class ProduitService {
         ProduitDAO.delete(id);
     }
 
+    public void deleteProduitForce(String id) throws IOException, InterruptedException {
+        ProduitDAO.deleteForce(id);
+    }
+
     public void exportProduits(String filename) throws IOException, InterruptedException {
         ProduitDAO.exportToCSV(filename);
     }

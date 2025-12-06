@@ -16,4 +16,5 @@ public interface ProduitService {
     List<Produit> getAllProduits();
 
     void deleteProduit(UUID id);
+    void deleteProduit(UUID id, boolean force);
 }

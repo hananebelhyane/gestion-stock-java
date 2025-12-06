@@ -172,7 +172,35 @@ public class ProduitController implements Initializable {
                     showAlert("Succès", "Produit supprimé avec succès!", Alert.AlertType.INFORMATION);
                     refreshTable();
                 });
-                task.setOnFailed(ev -> showAlert("Erreur", "Erreur suppression: " + task.getException().getMessage(), Alert.AlertType.ERROR));
+                task.setOnFailed(ev -> {
+                    String msg = task.getException() != null ? task.getException().getMessage() : "";
+                    if (msg.contains("stock disponible > 0") || msg.contains("référencé par des commandes") || msg.contains("HTTP 400")) {
+                        Alert confirmForce = new Alert(Alert.AlertType.CONFIRMATION,
+                                "Ce produit est lié au stock ou à des commandes. Forcer la suppression ?\n(Le stock associé sera supprimé)",
+                                ButtonType.OK, ButtonType.CANCEL);
+                        confirmForce.showAndWait().ifPresent(resp -> {
+                            if (resp == ButtonType.OK) {
+                                javafx.concurrent.Task<Void> forceTask = new javafx.concurrent.Task<>() {
+                                    @Override
+                                    protected Void call() throws Exception {
+                                        produitService.deleteProduitForce(produit.getId());
+                                        return null;
+                                    }
+                                };
+                                forceTask.setOnSucceeded(e2 -> {
+                                    showAlert("Succès", "Produit supprimé (force) avec succès!", Alert.AlertType.INFORMATION);
+                                    refreshTable();
+                                });
+                                forceTask.setOnFailed(e2 -> showAlert("Erreur", "Échec de la suppression forcée: " + forceTask.getException().getMessage(), Alert.AlertType.ERROR));
+                                new Thread(forceTask).start();
+                            } else {
+                                showAlert("Info", "Suppression annulée", Alert.AlertType.INFORMATION);
+                            }
+                        });
+                    } else {
+                        showAlert("Erreur", "Erreur suppression: " + msg, Alert.AlertType.ERROR);
+                    }
+                });
                 new Thread(task).start();
             }
         });

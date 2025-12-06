@@ -4,6 +4,7 @@ package com.gestiondestock.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -82,6 +83,20 @@ public class GlobalExceptionHandler {
                 request.getDescription(false)
         );
         
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(
+            DataIntegrityViolationException ex, WebRequest request) {
+        log.error("Violation d'intégrité: {}", ex.getMessage());
+
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Opération impossible: contrainte de référence violée",
+                LocalDateTime.now(),
+                request.getDescription(false)
+        );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 

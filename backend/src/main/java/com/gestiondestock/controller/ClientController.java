@@ -20,6 +20,14 @@ public class ClientController {
         return clientService.registerClient(client);
     }
 
+    @PostMapping
+    public ResponseEntity<?> createClient(@RequestBody Client client) {
+        Client saved = clientService.createClient(client);
+        java.util.Map<String, Object> body = new java.util.HashMap<>();
+        body.put("data", saved);
+        return ResponseEntity.status(201).body(body);
+    }
+
     @GetMapping
     public ResponseEntity<?> getAllActiveClients() {
         try {
@@ -34,5 +42,53 @@ public class ClientController {
             body.put("error", e.getMessage());
             return ResponseEntity.ok(body);
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getClient(@PathVariable java.util.UUID id) {
+        Client client = clientService.getClientById(id);
+        java.util.Map<String, Object> body = new java.util.HashMap<>();
+        body.put("data", client);
+        return ResponseEntity.ok(body);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateClient(@PathVariable java.util.UUID id, @RequestBody Client client) {
+        Client updated = clientService.updateClient(id, client);
+        java.util.Map<String, Object> body = new java.util.HashMap<>();
+        body.put("data", updated);
+        return ResponseEntity.ok(body);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteClient(@PathVariable java.util.UUID id,
+                                          @RequestParam(required = false) java.util.UUID deleted_by) {
+        java.util.UUID userId = deleted_by != null ? deleted_by : java.util.UUID.randomUUID();
+        clientService.deleteClient(id, userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchClients(@RequestParam String keyword) {
+        java.util.List<Client> clients = clientService.searchClients(keyword);
+        java.util.Map<String, Object> body = new java.util.HashMap<>();
+        body.put("data", clients);
+        return ResponseEntity.ok(body);
+    }
+
+    @GetMapping("/deleted")
+    public ResponseEntity<?> getDeletedClients() {
+        java.util.List<Client> clients = clientService.getDeletedClients();
+        java.util.Map<String, Object> body = new java.util.HashMap<>();
+        body.put("data", clients);
+        return ResponseEntity.ok(body);
+    }
+
+    @PatchMapping("/{id}/restore")
+    public ResponseEntity<?> restoreClient(@PathVariable java.util.UUID id) {
+        Client restored = clientService.restoreClient(id);
+        java.util.Map<String, Object> body = new java.util.HashMap<>();
+        body.put("data", restored);
+        return ResponseEntity.ok(body);
     }
 }

@@ -2,6 +2,7 @@ package gestiondestock.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import gestiondestock.model.Stock;
 import gestiondestock.model.Produit;
 import gestiondestock.model.Session;
@@ -9,6 +10,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.scene.control.ListCell;
+import javafx.util.StringConverter;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -31,7 +34,8 @@ public class AddStockDialogController {
     private Button btnAnnuler;
 
     private final HttpClient client = HttpClient.newHttpClient();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     // Endpoints API
     private static final String BASE_URL = "http://localhost:8080/api/stock";
@@ -45,6 +49,7 @@ public class AddStockDialogController {
 
     @FXML
     public void initialize() {
+        setupProduitCombo();
         loadProduits();
     }
 
@@ -70,6 +75,40 @@ public class AddStockDialogController {
                 Platform.runLater(() -> showError("Erreur lors du chargement des produits : " + e.getMessage()));
             }
         }).start();
+    }
+
+    private void setupProduitCombo() {
+        cbProduits.setCellFactory(list -> new ListCell<Produit>() {
+            @Override
+            protected void updateItem(Produit item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.getNom());
+            }
+        });
+        cbProduits.setButtonCell(new ListCell<Produit>() {
+            @Override
+            protected void updateItem(Produit item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.getNom());
+            }
+        });
+        cbProduits.setConverter(new StringConverter<Produit>() {
+            @Override
+            public String toString(Produit produit) {
+                return produit != null ? produit.getNom() : "";
+            }
+
+            @Override
+            public Produit fromString(String string) {
+                if (string == null) return null;
+                for (Produit p : cbProduits.getItems()) {
+                    if (p.getNom() != null && p.getNom().equals(string)) {
+                        return p;
+                    }
+                }
+                return null;
+            }
+        });
     }
 
     @FXML

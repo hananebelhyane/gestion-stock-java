@@ -40,7 +40,7 @@ public class ProduitController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduit(@PathVariable UUID id) {
-        produitService.deleteProduit(id);
+    public void deleteProduit(@PathVariable UUID id, @RequestParam(name = "force", required = false, defaultValue = "false") boolean force) {
+        produitService.deleteProduit(id, force);
     }
 }

@@ -11,7 +11,5 @@ public interface CategorieRepository extends JpaRepository<Categorie, UUID> {
 
     //COMPTER LES CATEGORIES
     long count();
-
-
-
+    java.util.Optional<Categorie> findFirstByNomIgnoreCase(String nom);
 }

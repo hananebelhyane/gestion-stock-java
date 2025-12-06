@@ -37,4 +37,5 @@ public interface FournisseurRepository extends JpaRepository<Fournisseur, UUID> 
     // Vérifier si un téléphone existe déjà (pour les fournisseurs actifs)
     @Query("SELECT COUNT(f) > 0 FROM Fournisseur f WHERE f.telephone = :telephone AND f.deleted_at IS NULL")
     boolean existsByTelephoneAndNotDeleted(String telephone);
+    Optional<Fournisseur> findFirstByNomIgnoreCase(String nom);
 }

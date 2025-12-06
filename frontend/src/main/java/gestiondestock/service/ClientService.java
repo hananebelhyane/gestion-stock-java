@@ -116,7 +116,9 @@ public class ClientService {
             throw new Exception("Accès refusé. Vous n'avez pas les permissions nécessaires.");
         }
         if (responseCode != 200 && responseCode != 201) {
-            throw new Exception("Erreur HTTP: " + responseCode);
+            String err = readErrorResponse(conn);
+            String msg = extractMessage(err);
+            throw new Exception(msg != null ? msg : ("Erreur HTTP: " + responseCode));
         }
 
         String response = readResponse(conn);
@@ -160,7 +162,9 @@ public class ClientService {
             throw new Exception("Accès refusé. Vous n'avez pas les permissions nécessaires.");
         }
         if (responseCode != 200) {
-            throw new Exception("Erreur HTTP: " + responseCode);
+            String err = readErrorResponse(conn);
+            String msg = extractMessage(err);
+            throw new Exception(msg != null ? msg : ("Erreur HTTP: " + responseCode));
         }
 
         String response = readResponse(conn);
@@ -187,7 +191,9 @@ public class ClientService {
             throw new Exception("Accès refusé. Vous n'avez pas les permissions nécessaires.");
         }
         if (responseCode != 200 && responseCode != 204) {
-            throw new Exception("Erreur HTTP: " + responseCode);
+            String err = readErrorResponse(conn);
+            String msg = extractMessage(err);
+            throw new Exception(msg != null ? msg : ("Erreur HTTP: " + responseCode));
         }
     }
 
@@ -341,5 +347,32 @@ public class ClientService {
         }
         in.close();
         return response.toString();
+    }
+
+    private String readErrorResponse(HttpURLConnection conn) {
+        try {
+            if (conn.getErrorStream() == null) return null;
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null) {
+                response.append(line);
+            }
+            in.close();
+            return response.toString();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private String extractMessage(String json) {
+        try {
+            if (json == null || json.isEmpty()) return null;
+            Map<String, Object> obj = gson.fromJson(json, new TypeToken<Map<String, Object>>(){}.getType());
+            Object msg = obj.get("message");
+            return msg != null ? msg.toString() : null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
