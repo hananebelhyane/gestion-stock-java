@@ -15,7 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -31,15 +30,9 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Routes publiques pour l'authentification
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/admins/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/clients/register").permitAll()
-                
-                // Routes FOURNISSEURS - ADMIN UNIQUEMENT
-                .requestMatchers("/api/fournisseurs/**").hasRole("ADMIN")
-                
-                // Toutes les autres routes nécessitent une authentification
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

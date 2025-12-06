@@ -46,9 +46,9 @@ public interface LigneCommandeRepository extends JpaRepository<LigneCommande, Lo
 
 
         //les lignes de commande par produit donné
-        List<LigneCommande> findByProduitId(UUID produitId);
-    //Cherche toutes les lignes de commande (LigneCommande) où le produit associé (Produit) a l’ID donné.
-    //produitId → paramètre de recherche.
+    List<LigneCommande> findByProduitId(UUID produitId);
 
-
+    @Query("SELECT lc FROM LigneCommande lc JOIN lc.commande c " +
+            "WHERE c.statut = 'confirmee' AND c.dateCommande BETWEEN :debut AND :fin")
+    List<LigneCommande> findByPeriode(@Param("debut") LocalDateTime debut, @Param("fin") LocalDateTime fin);
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 -- =====================================================
 -- CRÉATION DE LA BASE DE DONNÉES
 -- =====================================================
@@ -8,6 +9,10 @@
 
 -- Activer l'extension UUID
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+=======
+CREATE DATABASE IF NOT EXISTS gestionstock;
+USE gestionstock;
+>>>>>>> origin/meryem2
 
 -- =====================================================
 -- TABLE ADMIN (utilise BIGSERIAL pour auto-increment)
@@ -126,11 +131,19 @@ CREATE TYPE statut_commande_enum AS ENUM ('en_attente', 'confirmee', 'annulee');
 -- TABLE COMMANDE_CLIENT
 -- =====================================================
 CREATE TABLE COMMANDE_CLIENT (
+<<<<<<< HEAD
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     client_id UUID NOT NULL,
     date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     statut statut_commande_enum DEFAULT 'en_attente',
     seuil_max INTEGER,
+=======
+    id BINARY(16) PRIMARY KEY,
+    client_id BINARY(16) NOT NULL,
+    date_commande DATETIME DEFAULT CURRENT_TIMESTAMP,
+    statut ENUM('en_attente', 'confirmee', 'annulee') DEFAULT 'en_attente',
+    seuil_max INT,
+>>>>>>> origin/meryem2
     FOREIGN KEY (client_id) REFERENCES CLIENT(id) ON DELETE CASCADE
 );
 
@@ -157,12 +170,25 @@ CREATE TYPE statut_fournisseur_enum AS ENUM ('EN_ATTENTE', 'LIVREE', 'ANNULEE');
 -- TABLE COMMANDE_FOURNISSEUR
 -- =====================================================
 CREATE TABLE COMMANDE_FOURNISSEUR (
+<<<<<<< HEAD
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     produit_id UUID,
     commande_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     statut statut_fournisseur_enum DEFAULT 'EN_ATTENTE',
+=======
+    id BINARY(16) PRIMARY KEY,
+    produit_id BINARY(16),
+    commande_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    statut ENUM('en_attente', 'livree', 'annulee') DEFAULT 'en_attente',
+>>>>>>> origin/meryem2
     FOREIGN KEY (produit_id) REFERENCES PRODUIT(id) ON DELETE CASCADE
 );
+
+-- Migration (exécuter après modification si tables déjà existantes):
+-- ALTER TABLE COMMANDE_CLIENT MODIFY statut ENUM('en_attente','confirmee','annulee') DEFAULT 'en_attente';
+-- ALTER TABLE COMMANDE_FOURNISSEUR MODIFY statut ENUM('en_attente','livree','annulee') DEFAULT 'en_attente';
+-- UPDATE COMMANDE_CLIENT SET statut = LOWER(statut);
+-- UPDATE COMMANDE_FOURNISSEUR SET statut = LOWER(statut);
 
 -- =====================================================
 -- TABLE ENTREE_STOCK
@@ -224,6 +250,7 @@ CREATE INDEX idx_ligne_commande_produit ON LIGNE_COMMANDE(produit_id);
 -- =====================================================
 
 -- Insérer un admin par défaut
+<<<<<<< HEAD
 INSERT INTO ADMIN (nom, prenom, email, username, telephone, motDePasse)
 VALUES ('Admin', 'System', 'admin@gestionstock.com', 'admin', '0000000000', 'admin123');
 
@@ -240,3 +267,7 @@ BEGIN
     RAISE NOTICE 'Base de données gestionStock créée avec succès!';
     RAISE NOTICE 'Admin par défaut: username=admin, password=admin123';
 END $$;
+=======
+INSERT INTO ADMIN (nom, prenom, email, username, telephone, mot_de_passe) 
+VALUES ('Admin', 'System', 'admin@gestionstock.com', 'admin', '0000000000', 'admin123');
+>>>>>>> origin/meryem2

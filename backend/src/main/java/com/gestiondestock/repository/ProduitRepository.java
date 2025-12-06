@@ -14,7 +14,7 @@ public interface ProduitRepository extends JpaRepository<Produit, UUID> {
     // Nombre total de produits dans le stock
     long count();
 
-    // Trouver les produits par catégorie
+    // Trouver les produits par catgorie
     List<Produit> findByCategorieId(UUID categorieId);
 
     // La valeur totale de stock: la somme totale de la valeur de tous les produits actuellement en stock

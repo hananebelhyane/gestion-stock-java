@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.UUID;
 
@@ -19,8 +20,9 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "produit_id", nullable = true)
+    @JsonIgnoreProperties({"categorie", "fournisseur"})
     private Produit produit;
 
     private Integer quantiteDisponible;

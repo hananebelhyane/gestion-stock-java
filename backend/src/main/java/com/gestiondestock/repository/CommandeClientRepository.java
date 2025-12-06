@@ -1,6 +1,7 @@
 package com.gestiondestock.repository;
 
 import com.gestiondestock.entity.CommandeClient;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,8 +33,4 @@ public interface CommandeClientRepository extends JpaRepository<CommandeClient, 
 
     //TOUTES LES COMMANDES CONFIRMÉES
     List<CommandeClient> findByStatut(CommandeClient.StatutCommande statut);
-
-
-
-
 }

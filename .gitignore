@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 target/ 
 .vscode/ 
 *.class 
@@ -5,3 +6,36 @@ target/
 .mvn/ 
 .idea/ 
 *.iml 
+=======
+# Fichiers compilés
+target/
+*.class
+*.jar
+
+# Logs
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Docker volumes (données)
+mysql_data/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporaires
+*.tmp
+*.bak
+*.swp
+*~
+>>>>>>> origin/meryem2
