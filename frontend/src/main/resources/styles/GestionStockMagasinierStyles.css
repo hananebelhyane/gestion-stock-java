@@ -1,0 +1,511 @@
+/* ============================================
+   CONTENEUR PRINCIPAL
+   ============================================ */
+.root-container {
+    -fx-background-color: #f5f5f5;
+}
+
+/* ============================================
+   EN-TÊTE
+   ============================================ */
+.page-header {
+    -fx-background-color: #f5f5f5;
+    -fx-padding: 0;
+}
+
+.main-title {
+    -fx-text-fill: #1a1a1a;
+    -fx-font-weight: bold;
+    -fx-font-size: 22px;
+}
+
+.subtitle {
+    -fx-text-fill: #6b6b6b;
+    -fx-padding: 5 0 0 0;
+}
+
+/* ============================================
+   CARTES STATISTIQUES
+   ============================================ */
+.stats-container {
+    -fx-background-color: transparent;
+}
+
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0, 0, 2);
+    -fx-padding: 25 30 25 30;
+    -fx-spacing: 8;
+    -fx-alignment: CENTER;
+}
+
+.stat-entree {
+    -fx-border-color: #28a745;
+    -fx-border-width: 0 0 3 0;
+    -fx-border-radius: 0 0 12 12;
+}
+
+.stat-sortie {
+    -fx-border-color: #dc3545;
+    -fx-border-width: 0 0 3 0;
+    -fx-border-radius: 0 0 12 12;
+}
+
+.stat-alerte {
+    -fx-border-color: #ffc107;
+    -fx-border-width: 0 0 3 0;
+    -fx-border-radius: 0 0 12 12;
+}
+
+.stat-mouvements {
+    -fx-border-color: #007bff;
+    -fx-border-width: 0 0 3 0;
+    -fx-border-radius: 0 0 12 12;
+}
+
+.stat-icon {
+    -fx-font-size: 32;
+}
+
+.stat-value {
+    -fx-font-size: 36;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a1a1a;
+}
+
+.stat-label {
+    -fx-font-size: 13;
+    -fx-text-fill: #666666;
+}
+
+/* ============================================
+   BOUTONS ACTIONS PRINCIPAUX (NOIR) - CORRIGÉ
+   ============================================ */
+.actions-container {
+    -fx-background-color: transparent;
+}
+
+/* Style uniforme pour TOUS les boutons principaux (noir) */
+.btn-action,
+.btn-secondary {
+    -fx-background-color: #000000;
+    -fx-text-fill: white;
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 12 20 12 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 4, 0, 0, 2);
+}
+
+.btn-action:hover,
+.btn-secondary:hover {
+    -fx-background-color: #2a2a2a;
+}
+
+/* Forcer le texte blanc dans les boutons noirs (y compris les Labels dans graphic) */
+.btn-action .label,
+.btn-secondary .label {
+    -fx-text-fill: white;
+}
+
+.btn-action:hover .label,
+.btn-secondary:hover .label {
+    -fx-text-fill: white;
+}
+
+/* Petit bouton d'action dans tableau (+ Entrée) - CORRIGÉ */
+.btn-action-entree {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-padding: 8 16;
+    -fx-font-size: 12;
+    -fx-font-weight: 600;
+    -fx-pref-width: 90;
+    -fx-min-width: 90;
+    -fx-max-width: 90;
+}
+
+.btn-action-entree:hover {
+    -fx-background-color: #218838;
+}
+
+/* ============================================
+   ONGLETS
+   ============================================ */
+.main-tabs {
+    -fx-background-color: transparent;
+}
+
+.main-tabs .tab-pane {
+    -fx-background-color: transparent;
+}
+
+.main-tabs .tab-header-area {
+    -fx-padding: 0 0 20 0;
+}
+
+.main-tabs .tab {
+    -fx-background-color: white;
+    -fx-background-radius: 8 8 0 0;
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-border-width: 0 0 2 0;
+    -fx-padding: 12 24 12 24;
+}
+
+.main-tabs .tab:selected {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #000000 transparent;
+    -fx-border-width: 0 0 3 0;
+}
+
+.main-tabs .tab .tab-label {
+    -fx-text-fill: #666666;
+    -fx-font-size: 14;
+    -fx-font-weight: 600;
+}
+
+.main-tabs .tab:selected .tab-label {
+    -fx-text-fill: #000000;
+}
+
+/* ============================================
+   CARTE DE CONTENU
+   ============================================ */
+.content-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0, 0, 2);
+}
+
+.section-title {
+    -fx-text-fill: #1a1a1a;
+    -fx-font-weight: bold;
+}
+
+/* ============================================
+   BARRE DE FILTRES
+   ============================================ */
+.filter-bar {
+    -fx-padding: 0 0 20 0;
+    -fx-border-color: transparent transparent #f0f0f0 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.filter-combo {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 15;
+}
+
+.filter-combo:focused {
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
+}
+
+.btn-filter {
+    -fx-background-color: #000000;
+    -fx-text-fill: white;
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 12 20 12 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 4, 0, 0, 2);
+}
+
+.btn-filter:hover {
+    -fx-background-color: #2a2a2a;
+}
+
+.btn-reset {
+    -fx-background-color: #6c757d;
+    -fx-text-fill: white;
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 12 20 12 20;
+}
+
+.btn-reset:hover {
+    -fx-background-color: #5a6268;
+}
+
+/* ============================================
+   TABLEAU
+   ============================================ */
+.data-table {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.data-table .table-view {
+    -fx-background-color: white;
+}
+
+.data-table .column-header-background {
+    -fx-background-color: white;
+}
+
+.data-table .filler {
+    -fx-background-color: white;
+}
+
+.data-table .column-header {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f0f0f0 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 16 10 16 10;
+}
+
+.data-table .column-header .label {
+    -fx-text-fill: #4a4a4a;
+    -fx-font-size: 14;
+    -fx-font-weight: 600;
+}
+
+.data-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f8f8f8 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0;
+}
+
+.data-table .table-row-cell:hover {
+    -fx-background-color: #fafafa;
+}
+
+.data-table .table-row-cell:selected {
+    -fx-background-color: #f0f7ff;
+}
+
+.data-table .table-cell {
+    -fx-border-color: transparent;
+    -fx-padding: 16 10 16 10;
+    -fx-text-fill: #2a2a2a;
+    -fx-font-size: 14;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.data-table .table-row-cell:selected .table-cell {
+    -fx-text-fill: #2a2a2a;
+}
+
+/* ============================================
+   BADGES DE NIVEAU (CRITIQUE, etc.) - CORRIGÉ
+   ============================================ */
+.niveau-badge {
+    -fx-background-radius: 6;
+    -fx-padding: 6 12;
+    -fx-font-size: 12;
+    -fx-font-weight: 600;
+    -fx-text-fill: white;
+    -fx-alignment: CENTER;
+    -fx-pref-width: 100;
+    -fx-min-width: 100;
+    -fx-max-width: 100;
+}
+
+.niveau-critique {
+    -fx-background-color: #ff6b35;
+}
+
+.niveau-faible {
+    -fx-background-color: #ffc107;
+    -fx-text-fill: #333;
+}
+
+.niveau-normal {
+    -fx-background-color: #28a745;
+}
+
+/* Classes pour les quantités colorées */
+.qte-rupture {
+    -fx-text-fill: #dc3545;
+    -fx-font-weight: bold;
+}
+
+.qte-critique {
+    -fx-text-fill: #ff6b35;
+    -fx-font-weight: bold;
+}
+
+.qte-faible {
+    -fx-text-fill: #ffc107;
+    -fx-font-weight: bold;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+.data-table .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8;
+}
+
+.data-table .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.data-table .scroll-bar:vertical .thumb {
+    -fx-background-color: #d0d0d0;
+    -fx-background-radius: 4;
+}
+
+.data-table .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #b0b0b0;
+}
+
+.data-table .scroll-bar:vertical .increment-button,
+.data-table .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-pref-height: 0;
+}
+
+/* ============================================
+   DIALOGUES
+   ============================================ */
+.dialog-container {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+}
+
+.dialog-icon {
+    -fx-font-size: 32;
+}
+
+.dialog-title {
+    -fx-text-fill: #1a1a1a;
+    -fx-font-weight: bold;
+}
+
+.dialog-subtitle {
+    -fx-text-fill: #666666;
+    -fx-padding: 3 0 0 0;
+}
+
+/* ============================================
+   FORMULAIRES
+   ============================================ */
+.form-label {
+    -fx-text-fill: #2a2a2a;
+    -fx-font-weight: 600;
+}
+
+.form-input {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-padding: 12 15;
+    -fx-font-size: 14;
+}
+
+.form-input:focused {
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
+}
+
+.form-textarea {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-padding: 12 15;
+    -fx-font-size: 14;
+}
+
+.form-textarea:focused {
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
+}
+
+.info-label {
+    -fx-text-fill: #666666;
+    -fx-font-size: 13;
+}
+
+.hint-label {
+    -fx-text-fill: #999999;
+    -fx-font-size: 12;
+    -fx-font-style: italic;
+}
+
+.warning-label {
+    -fx-text-fill: #dc3545;
+    -fx-font-size: 13;
+    -fx-font-weight: bold;
+}
+
+/* ============================================
+   BOUTONS DIALOGUE
+   ============================================ */
+.btn-cancel {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #666666;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-padding: 12 20;
+}
+
+.btn-cancel:hover {
+    -fx-background-color: #fafafa;
+    -fx-border-color: #c0c0c0;
+}
+
+.btn-save {
+    -fx-background-color: #000000;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 12 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 4, 0, 0, 2);
+}
+
+.btn-save:hover {
+    -fx-background-color: #2a2a2a;
+}
+
+/* ============================================
+   PLACEHOLDER
+   ============================================ */
+.data-table .placeholder .label {
+    -fx-text-fill: #999999;
+    -fx-font-size: 14;
+}
+
+/* ============================================
+   BOUTONS D'ACTION (Éditer/Supprimer)
+   ============================================ */
+.action-btn {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 14;
+    -fx-min-width: 40;
+    -fx-min-height: 35;
+}
+
+.action-btn:hover {
+    -fx-background-color: #fafafa;
+    -fx-border-color: #c0c0c0;
+}

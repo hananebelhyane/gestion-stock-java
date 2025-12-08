@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="gestiondestock.controller.AddProduitController"
+      spacing="15" style="-fx-background-color: white; -fx-padding: 20;">
+  <Label text="Ajouter un Produit" styleClass="page-title"/>
+  <VBox spacing="10" styleClass="card">
+    <VBox spacing="5">
+      <Label text="Nom du produit:"/>
+      <TextField fx:id="nomField" promptText="Saisir le nom du produit"/>
+    </VBox>
+    <VBox spacing="5">
+      <Label text="Prix (DH):"/>
+      <TextField fx:id="prixField" promptText="0.00"/>
+    </VBox>
+    <VBox spacing="5">
+      <Label text="Catégorie:"/>
+      <ComboBox fx:id="categorieCombo" promptText="Sélectionner une catégorie"/>
+    </VBox>
+    <VBox spacing="5">
+      <Label text="Fournisseur:"/>
+      <ComboBox fx:id="fournisseurCombo" promptText="Sélectionner un fournisseur"/>
+    </VBox>
+    <VBox spacing="5">
+      <Label text="Description:"/>
+      <TextArea fx:id="descriptionArea" promptText="Description du produit..." prefRowCount="3"/>
+    </VBox>
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+      <Button text="Annuler" onAction="#handleCancel" style="-fx-background-color: black; -fx-text-fill: white;"/>
+      <Button text="Ajouter le Produit" onAction="#handleAddProduit" style="-fx-background-color: black; -fx-text-fill: white;"/>
+    </HBox>
+  </VBox>
+</VBox>

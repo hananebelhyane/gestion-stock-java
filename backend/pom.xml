@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.5.7</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.java</groupId>
+	<artifactId>gestion-stock</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>backend</name>
+	<description>Application de gestion de stock avec Spring Boot</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>21</java.version>
+                <!-- Valeur utilisée par maven-compiler-plugin pour générer du bytecode compatible.
+                Utiliser <release> (ou ici maven.compiler.release) garantit la compatibilité. -->
+                <maven.compiler.release>21</maven.compiler.release>
+                <!-- Version de Lombok à utiliser pour l'annotation processing (génération des getters/setters). -->
+                <lombok.version>1.18.42</lombok.version>
+                <!-- Version explicite du driver MySQL Connector/J (évite d'hériter d'une version indésirable). -->
+                <mysql.connector.version>9.5.0</mysql.connector.version>
+	</properties>
+	<dependencies>
+		<!-- Spring Boot Data JPA pour la gestion de la base de données -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		
+		<!-- Spring Boot Security pour la sécurité de l'application -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		
+		<!-- Spring Boot Web pour créer des API REST -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
+		<!-- ==================== NOUVEAU : VALIDATION ==================== -->
+		<!-- Pour valider les données avec @NotBlank, @Email, @Pattern, etc. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<!-- ============================================================== -->
+		
+		<!-- Spring Session JDBC pour la gestion des sessions 
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-jdbc</artifactId>
+		</dependency>-->
+		
+		<!-- Spring Boot DevTools pour le rechargement automatique -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		
+		<!-- MySQL Connector pour se connecter à MySQL -->
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+                        <version>${mysql.connector.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<!-- Lombok pour générer automatiquement les getters/setters -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+                        <scope>provided</scope>
+		</dependency>
+		
+		<!-- Spring Boot Test pour les tests unitaires -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Spring Security Test pour tester la sécurité -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+                <!--  AJOUT NÉCESSAIRE POUR JWT - NE PAS SUPPRIMER  -->
+                <dependency>
+                  <groupId>com.auth0</groupId>
+                  <artifactId>java-jwt</artifactId>
+                  <version>4.5.0</version>
+                        <type>jar</type>
+                </dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<!-- Plugin Maven Compiler -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+                                <!--Rôle du <configuration>:Activer Lombok pendant la compilation Si tu le supprimes Lombok ne marche plus → erreurs de compilation-->
+				<configuration>
+                                        <!-- Utilise la propriété maven.compiler.release pour définir la cible Java. -->
+                                        <release>${maven.compiler.release}</release>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+                                                        <version>${lombok.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			
+			<!-- Plugin Spring Boot Maven -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+                                <!--Rôle du <configuration>:Empêcher Lombok d'être inclus dans le jar, Si tu le supprimes Erreurs lors du packaging ou exécution-->
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

@@ -1,0 +1,137 @@
+/* Root background similar to test.fxml */
+.root {
+  background-color: #EAEEF4; /* fallback */
+  -fx-background-color: #EAEEF4;
+}
+
+/* Top bar */
+.topbar {
+  background-color: #EAEEF4; /* fallback */
+  -fx-background-color: #EAEEF4;
+  -fx-spacing: 8;
+}
+.search {
+  -fx-background-radius: 20;
+  padding: 6 12 6 12; /* fallback */
+  -fx-padding: 6 12 6 12;
+}
+.icon-btn {
+  background-color: transparent; /* fallback */
+  -fx-background-color: transparent;
+  font-size: 16px; /* fallback */
+  -fx-font-size: 16px;
+}
+.welcome {
+  -fx-text-fill: #666;
+}
+.crumb { -fx-text-fill: #7a7a7a; }
+.crumb-sep { -fx-text-fill: #aaaaaa; }
+.crumb-active { -fx-text-fill: #222; font-weight: bold; -fx-font-weight: bold; }
+
+/* Sidebar similar to the dark panel */
+.sidebar {
+  background-color: #353A56; /* fallback */
+  -fx-background-color: #353A56;
+  border-width: 2; /* fallback */
+  -fx-border-width: 2;
+  border-radius: 20; /* fallback */
+  -fx-border-radius: 20;
+  -fx-background-radius: 20;
+  border-color: #353A56; /* fallback */
+  -fx-border-color: #353A56;
+}
+.section {
+  -fx-text-fill: #cfd3e1;
+  font-weight: bold; /* fallback */
+  -fx-font-weight: bold;
+}
+.side-button {
+  background-color: #353A56; /* fallback */
+  -fx-background-color: #353A56;
+  -fx-text-fill: #c6b6b6;
+  -fx-background-radius: 50;
+  border-radius: 50; /* fallback */
+  -fx-border-radius: 50;
+  padding: 8 14 8 14; /* fallback */
+  -fx-padding: 8 14 8 14;
+}
+.side-button.active {
+  background-color: #141313; /* fallback */
+  -fx-background-color: #141313;
+  -fx-text-fill: white;
+}
+.side-button.ghost {
+  background-color: transparent; /* fallback */
+  -fx-background-color: transparent;
+  -fx-text-fill: #d0d3df;
+}
+.side-link { -fx-text-fill: #c6b6b6; }
+.profile-name { -fx-text-fill: #f0f2f8; }
+.profile-email { -fx-text-fill: #a9b0c9; }
+
+/* Outline container */
+.outline-container {
+  background-color: transparent; /* fallback */
+  -fx-background-color: transparent;
+  -fx-border-color: #d1d5db;
+  -fx-border-width: 1;
+  -fx-border-radius: 12;
+  -fx-background-radius: 12;
+  -fx-padding: 16;
+}
+
+/* Chart section spacing */
+.chart-section { -fx-padding: 12 16 16 16; }
+
+/* Brand color override for orders chart */
+.orders-chart.brand-blue .chart-series-line { -fx-stroke: #1d4ed8; -fx-stroke-width: 2.5px; }
+.orders-chart.brand-blue .chart-line-symbol { -fx-background-color: #1d4ed8, white; -fx-background-radius: 999; -fx-padding: 3; }
+
+/* Axis label font sizes */
+.orders-chart .axis .axis-label { -fx-font-size: 14px; -fx-font-weight: 600; }
+
+/* Hide legend when class applied */
+.orders-chart.hide-legend { -fx-legend-visible: false; }
+
+/* Plot and grid lines aesthetics */
+.orders-chart .chart-plot-background { -fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 12; }
+.orders-chart .chart-horizontal-grid-lines, .orders-chart .chart-vertical-grid-lines { -fx-stroke: #e5e7eb; }
+.theme-dark .orders-chart .chart-plot-background { -fx-background-color: rgba(17,24,39,0.9); }
+.theme-dark .orders-chart .chart-horizontal-grid-lines, .theme-dark .orders-chart .chart-vertical-grid-lines { -fx-stroke: #374151; }
+
+/* Activities and alerts items styling */
+.activities { -fx-spacing: 8; }
+.activities .item { -fx-padding: 8; -fx-background-color: #f9fafb; -fx-background-radius: 8; }
+.activities .item .date { -fx-text-fill: #6b7280; -fx-font-size: 12px; }
+.activities .item .title { -fx-font-weight: bold; -fx-text-fill: #111827; }
+.activities .item .badge.entry { -fx-background-color: #10b981; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 2 6 2 6; }
+.activities .item .badge.removal { -fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 2 6 2 6; }
+
+.alerts { -fx-spacing: 8; }
+.alerts .item { -fx-padding: 8; -fx-background-color: #fff7ed; -fx-background-radius: 8; }
+.alerts .item .date { -fx-text-fill: #92400e; -fx-font-size: 12px; }
+.alerts .item .title { -fx-font-weight: bold; -fx-text-fill: #7c2d12; }
+.orders-chart .chart-plot-background {
+  -fx-background-color: rgba(255,255,255,0.9);
+  -fx-background-radius: 12;
+}
+.orders-chart .chart-horizontal-grid-lines,
+.orders-chart .chart-vertical-grid-lines {
+  -fx-stroke: #e5e7eb;
+}
+.orders-chart .chart-series-line {
+  -fx-stroke: #2563eb;
+  -fx-stroke-width: 2px;
+}
+.orders-chart .chart-line-symbol {
+  -fx-background-color: #2563eb, white;
+  -fx-background-insets: 0, 2;
+  -fx-background-radius: 6px, 4px;
+}
+.theme-dark .orders-chart .chart-plot-background {
+  -fx-background-color: rgba(17,24,39,0.9);
+}
+.theme-dark .orders-chart .chart-horizontal-grid-lines,
+.theme-dark .orders-chart .chart-vertical-grid-lines { -fx-stroke: #374151; }
+.theme-dark .orders-chart .chart-series-line { -fx-stroke: #60a5fa; }
+.theme-dark .orders-chart .chart-line-symbol { -fx-background-color: #60a5fa, #0f172a; }

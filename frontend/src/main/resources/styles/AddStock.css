@@ -1,0 +1,74 @@
+/* ========= FORMULAIRE ========= */
+
+.dialog-container {
+    -fx-background-color: #ffffff;
+}
+
+/* ----- LABELS alignés à gauche ----- */
+.form-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* INPUTS : état normal */
+.form-input,
+.text-field,
+.combo-box {
+    -fx-padding: 8px;
+    -fx-background-color: white;
+    -fx-border-color: #c7c7c7;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-size: 14px;
+}
+
+/* HOVER : seulement la bordure devient noire */
+.form-input:hover,
+.text-field:hover,
+.combo-box:hover {
+    -fx-border-color: black;
+    -fx-background-color: white;
+    /* garde fond blanc */
+    -fx-text-fill: black;
+}
+
+/* assure que le texte reste noir */
+.form-input:hover .text,
+.text-field:hover .text,
+.combo-box:hover .text {
+    -fx-fill: black;
+}
+
+/* ========= BOUTONS ========= */
+
+.button {
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+}
+
+/* ----- ENREGISTRER (NOIR) ----- */
+.btn-primary {
+    -fx-background-color: #000;
+    -fx-text-fill: white;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #2b2b2b;
+}
+
+/* ----- ANNULER (BLANC + BORDURE NOIRE) ----- */
+.btn-cancel {
+    -fx-background-color: #fff;
+    -fx-text-fill: #000;
+    -fx-border-color: #000;
+    -fx-border-width: 1.5px;
+}
+
+.btn-cancel:hover {
+    -fx-background-color: #ececec;
+}

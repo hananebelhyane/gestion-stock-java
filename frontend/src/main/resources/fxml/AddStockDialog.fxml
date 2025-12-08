@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="gestiondestock.controller.AddStockDialogController"
+      spacing="20"
+      styleClass="dialog-container"
+      stylesheets="/styles/AddStock.css"
+>
+
+    <padding>
+        <Insets top="25" right="30" bottom="25" left="30"/>
+    </padding>
+
+    <!-- Titre -->
+    <Label text="Ajouter un nouveau stock" styleClass="dialog-title">
+        <font>
+            <Font name="System Bold" size="24"/>
+        </font>
+    </Label>
+
+    <Separator/>
+
+ <GridPane hgap="15" vgap="15">
+    <columnConstraints>
+        <ColumnConstraints halignment="LEFT" minWidth="120"/>
+        <ColumnConstraints halignment="LEFT" hgrow="ALWAYS"/>
+    </columnConstraints>
+
+    <!-- PRODUIT -->
+    <Label text="Produit *" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+    <ComboBox fx:id="cbProduits" GridPane.rowIndex="0" GridPane.columnIndex="1"
+              styleClass="form-input" prefWidth="250"/>
+
+    <!-- QUANTITÉ -->
+    <Label text="Quantité *" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+    <TextField fx:id="txtQuantite" GridPane.rowIndex="1" GridPane.columnIndex="1"
+               styleClass="form-input" prefWidth="250"/>
+
+    <!-- SEUIL -->
+    <Label text="Seuil d'alerte *" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+    <TextField fx:id="txtSeuil" GridPane.rowIndex="2" GridPane.columnIndex="1"
+               styleClass="form-input" prefWidth="250"/>
+</GridPane>
+
+
+
+    <!-- Boutons -->
+    <HBox spacing="12" alignment="CENTER_RIGHT">
+        <Button fx:id="btnAnnuler" text="Annuler"
+                onAction="#handleAnnuler"
+                styleClass="btn-cancel"
+                minWidth="120"/>
+        <Button fx:id="btnAjouter"  text="Enregistrer"
+                onAction="#handleAjouter"
+                styleClass="btn-primary"
+                minWidth="120"
+                defaultButton="true"/>
+    </HBox>
+
+</VBox>

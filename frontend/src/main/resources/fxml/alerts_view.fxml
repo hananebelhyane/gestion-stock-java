@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="gestiondestock.controller.AlertsController"
+      styleClass="root-container"
+      stylesheets="@/styles/AlertsStyles.css"
+      spacing="0">
+
+    <!-- HEADER -->
+    <VBox styleClass="page-header">
+        <Label text="Notifications et Alertes" styleClass="main-title">
+            <font><Font name="System Bold" size="32"/></font>
+        </Label>
+        <Label text="Surveillez les alertes de stock en temps réel" styleClass="subtitle">
+            <font><Font size="14"/></font>
+        </Label>
+        <VBox.margin>
+            <Insets top="40" bottom="30" left="40" right="40"/>
+        </VBox.margin>
+    </VBox>
+
+    <!-- STATISTIQUES -->
+    <HBox styleClass="stats-container" spacing="20" alignment="CENTER">
+        <VBox styleClass="stat-card stat-total" alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label text="🔔" styleClass="stat-icon"/>
+            <Label fx:id="lblTotalAlertes" text="0" styleClass="stat-value"/>
+            <Label text="Alertes actives" styleClass="stat-label"/>
+        </VBox>
+        
+        <VBox styleClass="stat-card stat-rupture" alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label text="🚨" styleClass="stat-icon"/>
+            <Label fx:id="lblAlertesRupture" text="0" styleClass="stat-value"/>
+            <Label text="Ruptures" styleClass="stat-label"/>
+        </VBox>
+        
+        <VBox styleClass="stat-card stat-critique" alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label text="⚠️" styleClass="stat-icon"/>
+            <Label fx:id="lblAlertesCritiques" text="0" styleClass="stat-value"/>
+            <Label text="Critiques" styleClass="stat-label"/>
+        </VBox>
+        
+        <VBox styleClass="stat-card stat-faible" alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label text="⚡" styleClass="stat-icon"/>
+            <Label fx:id="lblAlertesFaibles" text="0" styleClass="stat-value"/>
+            <Label text="Faibles" styleClass="stat-label"/>
+        </VBox>
+        
+        <padding><Insets top="0" bottom="30" left="40" right="40"/></padding>
+    </HBox>
+
+    <!-- CARTE PRINCIPALE -->
+    <VBox styleClass="content-card" VBox.vgrow="ALWAYS">
+        
+        <!-- BARRE DE FILTRES ET ACTIONS -->
+        <HBox styleClass="toolbar" spacing="15" alignment="CENTER_LEFT">
+            <!-- Filtres -->
+            <Label text="Niveau :">
+                <font><Font size="14" name="System Bold"/></font>
+            </Label>
+            <ComboBox fx:id="cbFiltreNiveau" prefWidth="150" styleClass="filter-combo"/>
+            
+            <Label text="Statut :">
+                <font><Font size="14" name="System Bold"/></font>
+            </Label>
+            <ComboBox fx:id="cbFiltreStatut" prefWidth="150" styleClass="filter-combo"/>
+            
+            <Button fx:id="btnFiltrer" text="🔍 Filtrer" 
+                    onAction="#handleFiltrer" styleClass="btn-action">
+                <font><Font size="13"/></font>
+            </Button>
+            
+            <Button fx:id="btnReset" text="🔄 Réinitialiser" 
+                    onAction="#handleReset" styleClass="btn-secondary">
+                <font><Font size="13"/></font>
+            </Button>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <!-- Auto-refresh -->
+            <CheckBox fx:id="chkAutoRefresh" text="Actualisation auto (30s)" 
+                      selected="true" styleClass="auto-refresh-checkbox">
+                <font><Font size="13"/></font>
+            </CheckBox>
+            
+            <Separator orientation="VERTICAL" prefHeight="30"/>
+            
+            <!-- Actions -->
+            <Button fx:id="btnRafraichir" text="🔄 Rafraîchir" 
+                    onAction="#handleRafraichir" styleClass="btn-action">
+                <font><Font size="13"/></font>
+            </Button>
+            <Button fx:id="btnGenererAlertes" text="🔔 Générer Alertes" 
+                    onAction="#handleGenererAlertes" styleClass="btn-action">
+                <font><Font size="13"/></font>
+            </Button>
+        </HBox>
+
+        <!-- TABLEAU DES ALERTES -->
+        <TableView fx:id="tableAlertes" VBox.vgrow="ALWAYS" styleClass="data-table">
+            <columns>
+                <TableColumn fx:id="colNiveau" text="Niveau" prefWidth="120"/>
+                <TableColumn fx:id="colProduit" text="Produit" prefWidth="200"/>
+                <TableColumn fx:id="colMessage" text="Message" prefWidth="400"/>
+                <TableColumn fx:id="colDate" text="Date/Heure" prefWidth="150"/>
+                <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+                <TableColumn fx:id="colActions" text="Actions" prefWidth="180"/>
+            </columns>
+        </TableView>
+        
+        <VBox.margin>
+            <Insets top="0" bottom="40" left="40" right="40"/>
+        </VBox.margin>
+    </VBox>
+
+</VBox>

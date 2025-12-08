@@ -1,0 +1,231 @@
+/* ========================================
+   DESIGN PROFESSIONNEL SOBRE - DASHBOARD
+   Palette: Bleu Marine + Gris uniquement
+======================================== */
+
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-background-color: #f8fafc;
+}
+
+/* ========== BARRE SUPÉRIEURE ========== */
+.top-bar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 15 20 15 20;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.top-bar Label {
+    -fx-text-fill: #334155;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.top-bar ComboBox {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 6 12 6 12;
+    -fx-font-size: 13px;
+}
+
+.top-bar ComboBox:hover {
+    -fx-border-color: #64748b;
+}
+
+.top-bar Button {
+    -fx-background-color: #334155;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-padding: 8 16 8 16;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.top-bar Button:hover {
+    -fx-background-color: #1e293b;
+}
+
+/* ========== INDICATEURS KPI ========== */
+GridPane {
+    -fx-background-color: #ffffff;
+    -fx-padding: 25;
+    -fx-background-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 6, 0, 0, 1);
+}
+
+GridPane Label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #64748b;
+}
+
+.kpi-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1e293b;
+}
+
+/* ========== TITRES DES GRAPHIQUES ========== */
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1e293b;
+    -fx-padding: 0 0 10 0;
+}
+
+/* ========== GRAPHIQUES - STYLE GÉNÉRAL ========== */
+.chart {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20;
+    -fx-background-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 6, 0, 0, 1);
+}
+
+.chart-plot-background {
+    -fx-background-color: #ffffff;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-padding: 15 0 0 0;
+}
+
+.chart-legend-item-symbol {
+    -fx-padding: 6;
+}
+
+.chart-legend-item {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 12px;
+}
+
+/* ========== LINE CHART (Évolution des ventes) ========== */
+.chart-series-line {
+    -fx-stroke: #475569;
+    -fx-stroke-width: 2px;
+}
+
+.chart-line-symbol {
+    -fx-background-color: #475569;
+    -fx-background-radius: 3px;
+    -fx-padding: 3px;
+}
+
+.chart-line-symbol:hover {
+    -fx-background-color: #334155;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+/* ========== BAR CHART (Top Produits) - TONS DE GRIS/BLEU ========== */
+.chart-bar {
+    -fx-bar-fill: #64748b;
+}
+
+.default-color0.chart-bar {
+    -fx-bar-fill: #334155;
+}
+
+.default-color1.chart-bar {
+    -fx-bar-fill: #475569;
+}
+
+.default-color2.chart-bar {
+    -fx-bar-fill: #64748b;
+}
+
+.default-color3.chart-bar {
+    -fx-bar-fill: #94a3b8;
+}
+
+.default-color4.chart-bar {
+    -fx-bar-fill: #cbd5e1;
+}
+
+/* ========== PIE CHART (Top Clients) - TONS DE GRIS/BLEU ========== */
+.chart-pie {
+    -fx-border-width: 0;
+}
+
+.chart-pie-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-fill: #334155;
+}
+
+.chart-pie-label-line {
+    -fx-stroke: #cbd5e1;
+    -fx-stroke-width: 1;
+}
+
+.default-color0.chart-pie {
+    -fx-pie-color: #334155;
+}
+
+.default-color1.chart-pie {
+    -fx-pie-color: #475569;
+}
+
+.default-color2.chart-pie {
+    -fx-pie-color: #64748b;
+}
+
+.default-color3.chart-pie {
+    -fx-pie-color: #94a3b8;
+}
+
+.default-color4.chart-pie {
+    -fx-pie-color: #cbd5e1;
+}
+
+/* ========== AXES DES GRAPHIQUES ========== */
+.axis {
+    -fx-tick-label-fill: #64748b;
+    -fx-font-size: 11px;
+}
+
+.axis-label {
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.axis-tick-mark,
+.axis-minor-tick-mark {
+    -fx-stroke: #e2e8f0;
+}
+
+/* ========== GRID LINES ========== */
+.chart-horizontal-grid-lines,
+.chart-vertical-grid-lines {
+    -fx-stroke: #f1f5f9;
+    -fx-stroke-width: 0.5;
+}
+
+/* ========== CONTENEUR PRINCIPAL ========== */
+VBox {
+    -fx-spacing: 20;
+}
+
+HBox {
+    -fx-spacing: 20;
+}
+
+/* ========== SCROLLBAR ========== */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #cbd5e1;
+    -fx-background-radius: 4;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #94a3b8;
+}

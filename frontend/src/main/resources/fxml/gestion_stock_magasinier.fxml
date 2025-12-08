@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="gestiondestock.controller.GestionStockMagasinierController"
+      styleClass="root-container"
+      stylesheets="@/styles/GestionStockMagasinierStyles.css"
+      spacing="0">
+
+    <!-- HEADER -->
+    <VBox styleClass="page-header">
+        <Label text="Gestion de Stock - Magasinier" styleClass="main-title">
+            <font><Font name="System Bold" size="32"/></font>
+        </Label>
+        <Label text="Gérez les entrées, sorties et alertes de stock" styleClass="subtitle">
+            <font><Font size="14"/></font>
+        </Label>
+        <VBox.margin>
+            <Insets top="40" bottom="30" left="40" right="40"/>
+        </VBox.margin>
+    </VBox>
+
+    <!-- STATISTIQUES -->
+    <HBox styleClass="stats-container" spacing="20" alignment="CENTER">
+        <VBox styleClass="stat-card stat-entree" alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label text="📥" styleClass="stat-icon"/>
+            <Label fx:id="lblTotalEntrees" text="0" styleClass="stat-value"/>
+            <Label text="Entrées du jour" styleClass="stat-label"/>
+        </VBox>
+        
+        <VBox styleClass="stat-card stat-sortie" alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label text="📤" styleClass="stat-icon"/>
+            <Label fx:id="lblTotalSorties" text="0" styleClass="stat-value"/>
+            <Label text="Sorties du jour" styleClass="stat-label"/>
+        </VBox>
+        
+        <VBox styleClass="stat-card stat-alerte" alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label text="⚠️" styleClass="stat-icon"/>
+            <Label fx:id="lblProduitsAlerte" text="0" styleClass="stat-value"/>
+            <Label text="Produits en alerte" styleClass="stat-label"/>
+        </VBox>
+        
+        <VBox styleClass="stat-card stat-mouvements" alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label text="📊" styleClass="stat-icon"/>
+            <Label fx:id="lblMouvementsJour" text="0" styleClass="stat-value"/>
+            <Label text="Mouvements totaux" styleClass="stat-label"/>
+        </VBox>
+        
+        <padding><Insets top="0" bottom="30" left="40" right="40"/></padding>
+    </HBox>
+
+    <!-- BOUTONS ACTIONS RAPIDES -->
+    <HBox styleClass="actions-container" spacing="15" alignment="CENTER_LEFT">
+        <Button fx:id="btnNouvelleEntree" onAction="#handleNouvelleEntree" styleClass="btn-action">
+            <graphic>
+                <HBox alignment="CENTER" spacing="8">
+                    <Label text="+">
+                        <font><Font size="18" name="System Bold"/></font>
+                    </Label>
+                    <Label text="Nouvelle Entrée">
+                        <font><Font size="13"/></font>
+                    </Label>
+                </HBox>
+            </graphic>
+        </Button>
+        
+        <Button fx:id="btnNouvelleSortie" onAction="#handleNouvelleSortie" styleClass="btn-action">
+            <graphic>
+                <HBox alignment="CENTER" spacing="8">
+                    <Label text="−">
+                        <font><Font size="18" name="System Bold"/></font>
+                    </Label>
+                    <Label text="Nouvelle Sortie">
+                        <font><Font size="13"/></font>
+                    </Label>
+                </HBox>
+            </graphic>
+        </Button>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <Button fx:id="btnRafraichir" text="🔄 Rafraîchir" 
+                onAction="#handleRafraichir" styleClass="btn-secondary"/>
+                
+        <padding><Insets top="0" bottom="20" left="40" right="40"/></padding>
+    </HBox>
+
+    <!-- ONGLETS -->
+    <TabPane VBox.vgrow="ALWAYS" styleClass="main-tabs" tabClosingPolicy="UNAVAILABLE">
+        
+        <!-- ONGLET ALERTES -->
+        <Tab text="🚨 Alertes Stock">
+            <VBox styleClass="content-card">
+                <Label text="Produits nécessitant une attention" styleClass="section-title">
+                    <font><Font size="16" name="System Bold"/></font>
+                    <VBox.margin><Insets bottom="15"/></VBox.margin>
+                </Label>
+                
+                <TableView fx:id="tableAlertes" VBox.vgrow="ALWAYS" styleClass="data-table">
+                    <columns>
+                        <TableColumn fx:id="colAlerteProduit" text="Produit" prefWidth="250"/>
+                        <TableColumn fx:id="colAlerteQte" text="Quantité" prefWidth="120"/>
+                        <TableColumn fx:id="colAlerteSeuil" text="Seuil" prefWidth="120"/>
+                        <TableColumn fx:id="colAlerteNiveau" text="Niveau" prefWidth="150"/>
+                        <TableColumn fx:id="colAlerteActions" text="Actions" prefWidth="150"/>
+                    </columns>
+                </TableView>
+                
+                <padding><Insets top="25" bottom="25" left="30" right="30"/></padding>
+            </VBox>
+        </Tab>
+
+        <!-- ONGLET MOUVEMENTS DU JOUR -->
+        <Tab text="📅 Mouvements du Jour">
+            <VBox styleClass="content-card">
+                <Label text="Tous les mouvements d'aujourd'hui" styleClass="section-title">
+                    <font><Font size="16" name="System Bold"/></font>
+                    <VBox.margin><Insets bottom="15"/></VBox.margin>
+                </Label>
+                
+                <TableView fx:id="tableMouvements" VBox.vgrow="ALWAYS" styleClass="data-table">
+                    <columns>
+                        <TableColumn fx:id="colMouvType" text="Type" prefWidth="120"/>
+                        <TableColumn fx:id="colMouvProduit" text="Produit" prefWidth="200"/>
+                        <TableColumn fx:id="colMouvQte" text="Quantité" prefWidth="100"/>
+                        <TableColumn fx:id="colMouvDate" text="Date/Heure" prefWidth="150"/>
+                        <TableColumn fx:id="colMouvMagasinier" text="Magasinier" prefWidth="180"/>
+                        <TableColumn fx:id="colMouvRef" text="Référence" prefWidth="140"/>
+                    </columns>
+                </TableView>
+                
+                <padding><Insets top="25" bottom="25" left="30" right="30"/></padding>
+            </VBox>
+        </Tab>
+
+        <!-- ONGLET HISTORIQUE -->
+        <Tab text="📜 Historique">
+            <VBox styleClass="content-card">
+                <!-- Filtres -->
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="filter-bar">
+                    <Label text="Filtrer par :">
+                        <font><Font size="14" name="System Bold"/></font>
+                    </Label>
+                    
+                    <ComboBox fx:id="cbFiltreProduit" promptText="Sélectionner produit" 
+                              prefWidth="200" styleClass="filter-combo"/>
+                    
+                    <ComboBox fx:id="cbFiltreType" promptText="Type" 
+                              prefWidth="150" styleClass="filter-combo"/>
+                    
+                    <Button text="Charger Historique" onAction="#chargerHistoriqueProduit" 
+                            styleClass="btn-filter">
+                        <font><Font size="13"/></font>
+                    </Button>
+                    
+                    <Button fx:id="btnFiltrer" text="🔍 Filtrer" 
+                            onAction="#handleFiltrer" styleClass="btn-filter">
+                        <font><Font size="13"/></font>
+                    </Button>
+                    
+                    <Button fx:id="btnResetFiltre" text="🔄 Réinitialiser" 
+                            onAction="#handleResetFiltre" styleClass="btn-reset">
+                        <font><Font size="13"/></font>
+                    </Button>
+                </HBox>
+                
+                <TableView fx:id="tableHistorique" VBox.vgrow="ALWAYS" styleClass="data-table">
+                    <columns>
+                        <TableColumn fx:id="colHistType" text="Type" prefWidth="120"/>
+                        <TableColumn fx:id="colHistProduit" text="Produit" prefWidth="250"/>
+                        <TableColumn fx:id="colHistQte" text="Quantité" prefWidth="120"/>
+                        <TableColumn fx:id="colHistDate" text="Date/Heure" prefWidth="180"/>
+                        <TableColumn fx:id="colHistMagasinier" text="Magasinier" prefWidth="220"/>
+                    </columns>
+                </TableView>
+                
+                <padding><Insets top="25" bottom="25" left="30" right="30"/></padding>
+            </VBox>
+        </Tab>
+        
+        <VBox.margin>
+            <Insets top="0" bottom="40" left="40" right="40"/>
+        </VBox.margin>
+    </TabPane>
+
+</VBox>

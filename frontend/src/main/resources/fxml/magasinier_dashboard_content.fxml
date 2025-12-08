@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="gestiondestock.controller.MagasinierDashboardContentController"
+      spacing="20" style="-fx-padding: 24; -fx-background-color: #EAEEF4;">
+  <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+  
+  <!-- Titre de la page -->
+  <Label text="Aperçu" 
+         style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #111827;" />
+  
+  <!-- Container avec bordure -->
+  <VBox style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+    
+    <!-- Cartes de statistiques -->
+    <GridPane hgap="16" vgap="16">
+      <columnConstraints>
+        <ColumnConstraints percentWidth="33.33"/>
+        <ColumnConstraints percentWidth="33.33"/>
+        <ColumnConstraints percentWidth="33.33"/>
+      </columnConstraints>
+      
+      <!-- Total Produits -->
+      <VBox GridPane.columnIndex="0" spacing="10"
+            style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+        <HBox spacing="10">
+          <Label text="📦" style="-fx-font-size: 24px;" />
+          <VBox spacing="2">
+            <Label text="Total Produits" style="-fx-font-size: 13px; -fx-text-fill: #111827; -fx-font-weight: 600;" />
+            <Label text="Produits gérés" style="-fx-font-size: 11px; -fx-text-fill: #6b7280;" />
+          </VBox>
+        </HBox>
+        <Label fx:id="totalProducts" text="0" 
+               style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #111827;" />
+        <Label text="Nombre total de produits actifs" 
+               style="-fx-font-size: 11px; -fx-text-fill: #6b7280;" />
+      </VBox>
+      
+      <!-- Stock Faible -->
+      <VBox GridPane.columnIndex="1" spacing="10"
+            style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+        <HBox spacing="10">
+          <Label text="⚠️" style="-fx-font-size: 24px;" />
+          <VBox spacing="2">
+            <Label text="Stock Faible" style="-fx-font-size: 13px; -fx-text-fill: #111827; -fx-font-weight: 600;" />
+            <Label text="Réapprovisionnement nécessaire" style="-fx-font-size: 11px; -fx-text-fill: #6b7280;" />
+          </VBox>
+        </HBox>
+        <Label fx:id="lowStockCount" text="0" 
+               style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #111827;" />
+        <Label text="Produits sous le seuil minimum" 
+               style="-fx-font-size: 11px; -fx-text-fill: #6b7280;" />
+      </VBox>
+      
+      <!-- Rupture de Stock -->
+      <VBox GridPane.columnIndex="2" spacing="10"
+            style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+        <HBox spacing="10">
+          <Label text="🔴" style="-fx-font-size: 24px;" />
+          <VBox spacing="2">
+            <Label text="Rupture de Stock" style="-fx-font-size: 13px; -fx-text-fill: #111827; -fx-font-weight: 600;" />
+            <Label text="Action urgente requise" style="-fx-font-size: 11px; -fx-text-fill: #6b7280;" />
+          </VBox>
+        </HBox>
+        <Label fx:id="outOfStockCount" text="0" 
+               style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #111827;" />
+        <Label text="Produits en rupture complète" 
+               style="-fx-font-size: 11px; -fx-text-fill: #6b7280;" />
+      </VBox>
+    </GridPane>
+  </VBox>
+  
+  <!-- Deuxième ligne de cartes -->
+  <HBox spacing="16">
+    <!-- Mouvements du jour -->
+    <VBox spacing="10" HBox.hgrow="ALWAYS"
+          style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+      <HBox spacing="10">
+        <Label text="📊" style="-fx-font-size: 24px;" />
+        <VBox spacing="2">
+          <Label text="Mouvements Aujourd'hui" style="-fx-font-size: 13px; -fx-text-fill: #111827; -fx-font-weight: 600;" />
+          <Label text="Entrées + Sorties" style="-fx-font-size: 11px; -fx-text-fill: #6b7280;" />
+        </VBox>
+      </HBox>
+      <Label fx:id="todayMovements" text="0" 
+             style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #111827;" />
+      <Label text="Mouvements de stock du jour" 
+             style="-fx-font-size: 11px; -fx-text-fill: #6b7280;" />
+    </VBox>
+    
+    <!-- Alertes en attente -->
+    <VBox spacing="10" HBox.hgrow="ALWAYS"
+          style="-fx-background-color: #f8fafc; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;">
+      <HBox spacing="10">
+        <Label text="🔔" style="-fx-font-size: 24px;" />
+        <VBox spacing="2">
+          <Label text="Alertes en Attente" style="-fx-font-size: 13px; -fx-text-fill: #111827; -fx-font-weight: 600;" />
+          <Label text="7 derniers jours" style="-fx-font-size: 11px; -fx-text-fill: #6b7280;" />
+        </VBox>
+      </HBox>
+      <Label fx:id="pendingAlerts" text="0" 
+             style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #111827;" />
+      <Label text="Notifications à traiter" 
+             style="-fx-font-size: 11px; -fx-text-fill: #6b7280;" />
+    </VBox>
+  </HBox>
+  
+</VBox>

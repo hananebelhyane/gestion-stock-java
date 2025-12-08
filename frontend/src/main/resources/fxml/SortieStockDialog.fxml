@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="gestiondestock.controller.SortieStockDialogController"
+      styleClass="dialog-container"
+      stylesheets="@/styles/GestionStockMagasinierStyles.css"
+      spacing="20"
+      prefWidth="500"
+      prefHeight="500">
+
+    <padding><Insets top="30" bottom="30" left="30" right="30"/></padding>
+
+    <!-- TITRE -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="📤" styleClass="dialog-icon">
+            <font><Font size="32"/></font>
+        </Label>
+        <VBox>
+            <Label text="Nouvelle Sortie de Stock" styleClass="dialog-title">
+                <font><Font size="20" name="System Bold"/></font>
+            </Label>
+            <Label text="Enregistrer une expédition de marchandise" styleClass="dialog-subtitle">
+                <font><Font size="13"/></font>
+            </Label>
+        </VBox>
+    </HBox>
+
+    <Separator/>
+
+    <!-- FORMULAIRE -->
+    <VBox spacing="20" VBox.vgrow="ALWAYS">
+        
+        <!-- Produit -->
+        <VBox spacing="8">
+            <Label text="Produit *" styleClass="form-label">
+                <font><Font size="14" name="System Bold"/></font>
+            </Label>
+            <ComboBox fx:id="cbProduit" promptText="Sélectionner un produit" 
+                      styleClass="form-input" maxWidth="Infinity"/>
+            <Label fx:id="lblStockActuel" text="" styleClass="info-label"/>
+        </VBox>
+
+        <!-- Quantité -->
+        <VBox spacing="8">
+            <Label text="Quantité *" styleClass="form-label">
+                <font><Font size="14" name="System Bold"/></font>
+            </Label>
+            <TextField fx:id="txtQuantite" promptText="Entrer la quantité" 
+                       styleClass="form-input"/>
+            <Label fx:id="lblWarning" text="" styleClass="warning-label" visible="false"/>
+            <Label text="Nombre d'unités à sortir du stock" styleClass="hint-label"/>
+        </VBox>
+
+        <!-- Ligne Commande -->
+        <VBox spacing="8">
+            <Label text="Référence Ligne Commande (optionnel)" styleClass="form-label">
+                <font><Font size="14" name="System Bold"/></font>
+            </Label>
+            <TextField fx:id="txtLigneCommande" 
+                       promptText="Ex: LC-2024-001" 
+                       styleClass="form-input"/>
+        </VBox>
+
+        <!-- Notes -->
+        <VBox spacing="8" VBox.vgrow="ALWAYS">
+            <Label text="Notes (optionnel)" styleClass="form-label">
+                <font><Font size="14" name="System Bold"/></font>
+            </Label>
+            <TextArea fx:id="txtNotes" 
+                      promptText="Ajouter des remarques..." 
+                      styleClass="form-textarea"
+                      prefRowCount="3"
+                      wrapText="true"/>
+        </VBox>
+
+    </VBox>
+
+    <Separator/>
+
+    <!-- BOUTONS -->
+    <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button fx:id="btnAnnuler" text="Annuler" 
+                onAction="#handleAnnuler" 
+                styleClass="btn-cancel"
+                prefWidth="120">
+            <font><Font size="14"/></font>
+        </Button>
+        
+        <Button fx:id="btnEnregistrer" text="Enregistrer" 
+                onAction="#handleEnregistrer" 
+                styleClass="btn-save"
+                prefWidth="140">
+            <font><Font size="14" name="System Bold"/></font>
+        </Button>
+    </HBox>
+
+</VBox>
