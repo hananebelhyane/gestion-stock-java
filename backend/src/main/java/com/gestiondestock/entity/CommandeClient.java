@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,7 +30,7 @@ public class CommandeClient {
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonProperty("client")
     @JoinColumn(name = "client_id")
-    @JsonIgnoreProperties({"commandeClients", "motDePasse", "deletedAt", "deletedBy", "deleted_by", "deleted_at"})
+    @JsonIgnoreProperties({ "commandeClients", "motDePasse", "deletedAt", "deletedBy", "deleted_by", "deleted_at" })
     private Client client;
 
     @JsonProperty("dateCommande")
@@ -45,7 +46,20 @@ public class CommandeClient {
     @Column(name = "seuil_max")
     private Integer seuilMax;
 
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({ "commande" })
+    private List<LigneCommande> lignesCommande;
+
     public enum StatutCommande {
         en_attente, confirmee, annulee
+    }
+
+    public Double calculerMontantTotal() {
+        if (lignesCommande == null || lignesCommande.isEmpty()) {
+            return 0.0;
+        }
+        return lignesCommande.stream()
+                .mapToDouble(ligne -> ligne.getMontantTotal() != null ? ligne.getMontantTotal() : 0.0)
+                .sum();
     }
 }

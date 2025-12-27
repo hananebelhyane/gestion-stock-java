@@ -26,10 +26,10 @@ public class AuthController {
     private final JwtService jwtService;
 
     public AuthController(AdminRepository adminRepository,
-                          ClientRepository clientRepository,
-                          MagasinierRepository magasinierRepository,
-                          PasswordEncoder passwordEncoder,
-                          JwtService jwtService) {
+            ClientRepository clientRepository,
+            MagasinierRepository magasinierRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService) {
         this.adminRepository = adminRepository;
         this.clientRepository = clientRepository;
         this.magasinierRepository = magasinierRepository;
@@ -45,7 +45,8 @@ public class AuthController {
             Admin admin = adminOpt.get();
             if (passwordEncoder.matches(request.getPassword(), admin.getMotDePasse())) {
                 String token = jwtService.generateToken(admin.getUsername(), "ADMIN", 24 * 60 * 60);
-                return ResponseEntity.ok(new AuthResponse(token, "ADMIN", admin.getUsername()));
+                return ResponseEntity
+                        .ok(new AuthResponse(token, "ADMIN", admin.getUsername(), admin.getId().toString()));
             }
             return ResponseEntity.status(401).build();
         }
@@ -56,7 +57,8 @@ public class AuthController {
             Client client = clientOpt.get();
             if (passwordEncoder.matches(request.getPassword(), client.getMotDePasse())) {
                 String token = jwtService.generateToken(client.getUsername(), "CLIENT", 24 * 60 * 60);
-                return ResponseEntity.ok(new AuthResponse(token, "CLIENT", client.getUsername()));
+                return ResponseEntity
+                        .ok(new AuthResponse(token, "CLIENT", client.getUsername(), client.getId().toString()));
             }
             return ResponseEntity.status(401).build();
         }
@@ -67,7 +69,8 @@ public class AuthController {
             Magasinier magasinier = magasinierOpt.get();
             if (passwordEncoder.matches(request.getPassword(), magasinier.getMotDePasse())) {
                 String token = jwtService.generateToken(magasinier.getUsername(), "MAGASINIER", 24 * 60 * 60);
-                return ResponseEntity.ok(new AuthResponse(token, "MAGASINIER", magasinier.getUsername()));
+                return ResponseEntity.ok(
+                        new AuthResponse(token, "MAGASINIER", magasinier.getUsername(), magasinier.getId().toString()));
             }
             return ResponseEntity.status(401).build();
         }

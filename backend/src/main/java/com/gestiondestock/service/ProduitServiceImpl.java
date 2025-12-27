@@ -89,6 +89,14 @@ public class ProduitServiceImpl implements ProduitService {
     }
 
     @Override
+    public List<Produit> getProduitsByCategorie(UUID categorieId) {
+        if (categorieId == null) {
+            return getAllProduits();
+        }
+        return produitRepository.findByCategorieId(categorieId);
+    }
+
+    @Override
     @Transactional
     public void deleteProduit(UUID id) {
         deleteProduit(id, false);

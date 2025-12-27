@@ -32,7 +32,10 @@ public class ProduitController {
     }
 
     @GetMapping
-    public List<Produit> getAllProduits() {
+    public List<Produit> getAllProduits(@RequestParam(name = "categorieId", required = false) UUID categorieId) {
+        if (categorieId != null) {
+            return produitService.getProduitsByCategorie(categorieId);
+        }
         return produitService.getAllProduits();
     }
 

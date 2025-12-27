@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="gestiondestock.controller.ClientProfileController" 
+      spacing="0" styleClass="root-container">
+    
+    <!-- En-tête -->
+    <VBox styleClass="page-header">
+        <Label text="Profil Client" styleClass="main-title">
+            <font><Font name="System Bold" size="32"/></font>
+        </Label>
+        <Label text="Gérez vos informations personnelles et la sécurité de votre compte" styleClass="subtitle">
+            <font><Font size="14"/></font>
+        </Label>
+        <VBox.margin>
+            <Insets top="40" bottom="30" left="40" right="40"/>
+        </VBox.margin>
+    </VBox>
+    
+    <!-- Contenu principal -->
+    <HBox spacing="30" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets top="0" right="40" bottom="40" left="40"/>
+        </padding>
+        
+        <!-- Colonne gauche - Carte de profil -->
+        <VBox spacing="20" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);" 
+              HBox.hgrow="NEVER" minWidth="350" maxWidth="350">
+            
+            <!-- Avatar -->
+            <VBox alignment="CENTER" spacing="15">
+                <Label fx:id="lblAvatar" text="C" 
+                       style="-fx-min-width: 100; -fx-min-height: 100; -fx-pref-width: 100; -fx-pref-height: 100; -fx-max-width: 100; -fx-max-height: 100; -fx-alignment: center; -fx-background-color: #3b82f6; -fx-background-radius: 50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 40;"/>
+                
+                <VBox alignment="CENTER" spacing="5">
+                    <Label fx:id="lblUsername" text="client" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;"/>
+                    <Label fx:id="lblRole" text="CLIENT" style="-fx-font-size: 13; -fx-text-fill: #1e40af; -fx-background-color: #dbeafe; -fx-background-radius: 12; -fx-padding: 4 12 4 12;"/>
+                </VBox>
+            </VBox>
+            
+            <Separator/>
+            
+            <!-- Informations -->
+            <VBox spacing="15">
+                <Label text="Informations personnelles" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;"/>
+                
+                <VBox spacing="10">
+                    <HBox spacing="10">
+                        <Label text="👤" style="-fx-font-size: 16;"/>
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="Nom complet" style="-fx-font-size: 11; -fx-text-fill: #6b6b6b;"/>
+                            <HBox spacing="5">
+                                <Label fx:id="lblPrenom" text="Prénom" style="-fx-font-size: 14; -fx-text-fill: #1a1a1a;"/>
+                                <Label fx:id="lblNom" text="Nom" style="-fx-font-size: 14; -fx-text-fill: #1a1a1a;"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+                    
+                    <HBox spacing="10">
+                        <Label text="📱" style="-fx-font-size: 16;"/>
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="Téléphone" style="-fx-font-size: 11; -fx-text-fill: #6b6b6b;"/>
+                            <Label fx:id="lblTelephone" text="+212 XXX-XXXXXX" style="-fx-font-size: 14; -fx-text-fill: #1a1a1a;"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <HBox spacing="10">
+                        <Label text="📍" style="-fx-font-size: 16;"/>
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="Adresse" style="-fx-font-size: 11; -fx-text-fill: #6b6b6b;"/>
+                            <Label fx:id="lblAdresse" text="Adresse non définie" style="-fx-font-size: 14; -fx-text-fill: #1a1a1a;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </VBox>
+        
+        <!-- Colonne droite - Actions rapides -->
+        <VBox spacing="20" HBox.hgrow="ALWAYS">
+            
+            <!-- Carte Actions rapides -->
+            <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+                <Label text="Actions rapides" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;"/>
+                <Label text="Gérez votre compte et vos paramètres de sécurité" style="-fx-font-size: 13; -fx-text-fill: #6b6b6b;"/>
+                
+                <Separator/>
+                
+                <!-- Bouton Modifier le profil -->
+                <Button fx:id="btnEditProfile" onAction="#handleEditProfile" maxWidth="Infinity"
+                        style="-fx-background-color: #000000; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: 600; -fx-background-radius: 8; -fx-padding: 15 20 15 20; -fx-cursor: hand;">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="✏️" style="-fx-font-size: 16;"/>
+                            <VBox alignment="CENTER_LEFT">
+                                <Label text="Modifier le profil" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                                <Label text="Mettre à jour vos informations personnelles" style="-fx-text-fill: #e5e5e5; -fx-font-size: 11;"/>
+                            </VBox>
+                        </HBox>
+                    </graphic>
+                </Button>
+                
+                <!-- Bouton Changer le mot de passe -->
+                <Button fx:id="btnChangePassword" onAction="#handleChangePassword" maxWidth="Infinity"
+                        style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 15 20 15 20; -fx-cursor: hand;">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="🔒" style="-fx-font-size: 16;"/>
+                            <VBox alignment="CENTER_LEFT">
+                                <Label text="Changer le mot de passe" style="-fx-text-fill: #1a1a1a; -fx-font-weight: bold;"/>
+                                <Label text="Modifier votre mot de passe pour plus de sécurité" style="-fx-text-fill: #6b6b6b; -fx-font-size: 11;"/>
+                            </VBox>
+                        </HBox>
+                    </graphic>
+                </Button>
+                
+                <!-- Bouton Retour -->
+                <Button fx:id="btnBack" onAction="#handleBack" maxWidth="Infinity"
+                        style="-fx-background-color: #f3f4f6; -fx-text-fill: #374151; -fx-border-color: #e5e7eb; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 15 20 15 20; -fx-cursor: hand;">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="←" style="-fx-font-size: 16;"/>
+                            <Label text="Retour au catalogue" style="-fx-text-fill: #374151; -fx-font-weight: bold;"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+            </VBox>
+            
+            <!-- Carte Sécurité du compte -->
+            <VBox spacing="15" style="-fx-background-color: #ecfdf5; -fx-background-radius: 12; -fx-padding: 25; -fx-border-color: #10b981; -fx-border-width: 1; -fx-border-radius: 12;">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="🛡️" style="-fx-font-size: 20;"/>
+                    <Label text="Sécurité du compte" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;"/>
+                </HBox>
+                
+                <VBox spacing="8">
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="✓" style="-fx-text-fill: #10b981; -fx-font-weight: bold;"/>
+                        <Label text="Connexion sécurisée activée" style="-fx-font-size: 13; -fx-text-fill: #4b5563;"/>
+                    </HBox>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="✓" style="-fx-text-fill: #10b981; -fx-font-weight: bold;"/>
+                        <Label text="Session JWT active" style="-fx-font-size: 13; -fx-text-fill: #4b5563;"/>
+                    </HBox>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="ℹ" style="-fx-text-fill: #10b981; -fx-font-weight: bold;"/>
+                        <Label text="Rôle: Client" style="-fx-font-size: 13; -fx-text-fill: #4b5563;"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+            
+        </VBox>
+    </HBox>
+    
+</VBox>

@@ -5,6 +5,7 @@ public class Session {
     private String token;
     private String role;
     private String username;
+    private String userId;
 
     private Session() {
     }
@@ -39,7 +40,15 @@ public class Session {
         this.username = username;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public void clear() {
-        token = role = username = null;
+        token = role = username = userId = null;
     }
 }

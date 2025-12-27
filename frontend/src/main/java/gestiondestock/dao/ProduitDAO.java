@@ -23,7 +23,16 @@ public class ProduitDAO {
     private static final Gson GSON = new Gson();
 
     public static List<Produit> getAll() throws IOException, InterruptedException {
-        HttpRequest req = baseRequest(BASE_URL)
+        return getAll(null);
+    }
+
+    public static List<Produit> getAll(String categorieId) throws IOException, InterruptedException {
+        String url = BASE_URL;
+        if (categorieId != null && !categorieId.isBlank()) {
+            url = url + "?categorieId=" + categorieId;
+        }
+
+        HttpRequest req = baseRequest(url)
                 .GET()
                 .build();
 
