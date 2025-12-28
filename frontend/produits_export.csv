@@ -1,8 +1,8 @@
-Nom,Description,Prix,Categorie,Fournisseur
-Paper A4,500 sheets pack,3,50,,
-mohanaaad,hada ahsan produit,80,00,Autre,Autre
-Keyboard,Mechanical RGB,45,00,,
-Laptop Stand,Aluminum,18,00,,
-Wireless Mouse,Ergonomic design,15,00,,
-Ink Cartridge,Black,19,00,,
-USB Cable,Type-C,2,50,,
+﻿ID;Nom;Description;Prix (DH);Catégorie;Fournisseur
+"1f075862-80b2-4ac2-81b6-7373e5e1a66d";"Paper A4";"500 sheets pack";3,50;"";""
+"39770721-26e7-4d9d-846a-0891ae80200b";"mohanaaad";"hada ahsan produit";80,00;"Autre";"Autre"
+"6f0245b5-785b-4fcd-9450-1608074a7a12";"Keyboard";"Mechanical RGB";45,00;"";""
+"7c1759a8-aad1-4b51-bee3-2904318c0b0e";"Laptop Stand";"Aluminum";18,00;"";""
+"83ebf161-07dd-45d9-8b1b-c2b432984860";"Wireless Mouse";"Ergonomic design";15,00;"";""
+"ac686c48-874e-4796-bd19-193859659449";"Ink Cartridge";"Black";19,00;"";""
+"f13c19aa-2d5c-49d5-9730-9e34281978c2";"USB Cable";"Type-C";2,50;"";""
