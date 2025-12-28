@@ -43,23 +43,31 @@ public class CartDAO {
             HttpRequest request = baseRequestBuilder(API_BASE + "/commandes/panier").GET().build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             return response.statusCode() == 200 ? gson.fromJson(response.body(), OrderResponse.class) : null;
-        } catch (Exception e) { return null; }
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static OrderResponse removePanierItem(String produitId) {
         try {
-            HttpRequest request = baseRequestBuilder(API_BASE + "/commandes/panier/items/" + produitId).DELETE().build();
+            HttpRequest request = baseRequestBuilder(API_BASE + "/commandes/panier/items/" + produitId).DELETE()
+                    .build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             return response.statusCode() == 200 ? gson.fromJson(response.body(), OrderResponse.class) : null;
-        } catch (Exception e) { return null; }
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static ConfirmationResponse confirmOrder(String commandeId) {
         try {
-            HttpRequest request = baseRequestBuilder(API_BASE + "/commandes/" + commandeId + "/confirm").POST(HttpRequest.BodyPublishers.ofString("")).build();
+            HttpRequest request = baseRequestBuilder(API_BASE + "/commandes/" + commandeId + "/confirm")
+                    .POST(HttpRequest.BodyPublishers.ofString("")).build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             return response.statusCode() == 200 ? gson.fromJson(response.body(), ConfirmationResponse.class) : null;
-        } catch (Exception e) { return null; }
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private static HttpRequest.Builder baseRequestBuilder(String url) {
@@ -71,12 +79,22 @@ public class CartDAO {
     public static class OrderResponse {
         public String id;
         public List<LigneResponse> lignesCommande;
+
         public static class LigneResponse {
             public String produitId, produitNom;
             public int quantite;
             public double prixUnitaire, montantTotal;
         }
     }
-    public static class ConfirmationResponse { public OrderResponse commande_data; public FactureResponse facture_data; }
-    public static class FactureResponse { public String id; public double montantTotal; public boolean estPayee; }
+
+    public static class ConfirmationResponse {
+        public OrderResponse commande_data;
+        public FactureResponse facture_data;
+    }
+
+    public static class FactureResponse {
+        public String id;
+        public double montantTotal;
+        public boolean estPayee;
+    }
 }

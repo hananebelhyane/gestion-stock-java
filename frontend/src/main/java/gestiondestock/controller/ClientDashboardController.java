@@ -25,27 +25,33 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ClientDashboardController {
-    @FXML private BorderPane root;
-    @FXML private VBox sidebar;
-    @FXML private ImageView logoImage;
-    @FXML private FlowPane productGrid;
-    @FXML private HBox categoryFilterContainer;
-    @FXML private Label cartBadge;
+    @FXML
+    private BorderPane root;
+    @FXML
+    private VBox sidebar;
+    @FXML
+    private ImageView logoImage;
+    @FXML
+    private FlowPane productGrid;
+    @FXML
+    private HBox categoryFilterContainer;
+    @FXML
+    private Label cartBadge;
 
     private final ProduitService produitService = new ProduitService();
     private final CategorieService categorieService = new CategorieService();
     private final ObservableList<CartItem> cartItems = FXCollections.observableArrayList();
-    
-    // Node to save the initial catalogue view for sidebar navigation 
-    private Node catalogueView; 
+
+    // Node to save the initial catalogue view for sidebar navigation
+    private Node catalogueView;
 
     @FXML
     public void initialize() {
         loadLogo();
         loadCategories();
-        loadProducts(null); 
-        updateCartBadge();   
-        
+        loadProducts(null);
+        updateCartBadge();
+
         // FIXED: Saved the initial center node to allow navigation back
         this.catalogueView = root.getCenter();
     }
@@ -58,27 +64,29 @@ public class ClientDashboardController {
         if (catalogueView != null) {
             root.setCenter(catalogueView);
         }
-        loadProducts(null); 
+        loadProducts(null);
     }
 
-    @FXML 
+    @FXML
     private void navigateToProfile() {
         try {
             Parent p = FXMLLoader.load(getClass().getResource("/fxml/client-profile-view.fxml"));
-            root.setCenter(p); 
-        } catch (Exception e) { 
-            showError("Erreur lors de l'ouverture du profil", e); 
+            root.setCenter(p);
+        } catch (Exception e) {
+            showError("Erreur lors de l'ouverture du profil", e);
         }
     }
 
-    @FXML 
+    @FXML
     private void handleLogout() {
         Session.get().clear();
         try {
             Parent login = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
             Stage stage = (Stage) root.getScene().getWindow();
             stage.setScene(new Scene(login));
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // --- CART MANAGEMENT ---
@@ -86,7 +94,10 @@ public class ClientDashboardController {
     @FXML
     private void showCart() {
         Task<CartDAO.OrderResponse> task = new Task<>() {
-            @Override protected CartDAO.OrderResponse call() { return CartDAO.getPanier(); }
+            @Override
+            protected CartDAO.OrderResponse call() {
+                return CartDAO.getPanier();
+            }
         };
         task.setOnSucceeded(e -> {
             updateCartFromOrder(task.getValue());
@@ -110,12 +121,12 @@ public class ClientDashboardController {
             for (CartItem item : cartItems) {
                 HBox row = new HBox(10);
                 row.setAlignment(Pos.CENTER_LEFT);
-                
+
                 Label name = new Label(item.getProduit().getNom());
                 name.setPrefWidth(150);
                 Label qty = new Label("x" + item.getQuantite());
                 Label price = new Label(String.format("%.2f DH", item.getTotal()));
-                
+
                 Button delBtn = new Button("🗑");
                 delBtn.setStyle("-fx-text-fill: red; -fx-background-color: transparent; -fx-cursor: hand;");
                 delBtn.setOnAction(e -> {
@@ -136,7 +147,8 @@ public class ClientDashboardController {
             // UI UPDATE: Validation button is now Black
             Button checkoutBtn = new Button("Confirmer la commande");
             checkoutBtn.setMaxWidth(Double.MAX_VALUE);
-            checkoutBtn.setStyle("-fx-background-color: #000000; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10; -fx-background-radius: 8; -fx-cursor: hand;");
+            checkoutBtn.setStyle(
+                    "-fx-background-color: #000000; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10; -fx-background-radius: 8; -fx-cursor: hand;");
             checkoutBtn.setOnAction(e -> {
                 dialog.close();
                 performCheckout();
@@ -152,7 +164,8 @@ public class ClientDashboardController {
 
     private void performCheckout() {
         Task<CartDAO.ConfirmationResponse> task = new Task<>() {
-            @Override protected CartDAO.ConfirmationResponse call() {
+            @Override
+            protected CartDAO.ConfirmationResponse call() {
                 CartDAO.OrderResponse order = CartDAO.getPanier();
                 return (order == null) ? null : CartDAO.confirmOrder(order.id);
             }
@@ -168,13 +181,14 @@ public class ClientDashboardController {
 
     private void removeFromPanier(CartItem item) {
         Task<CartDAO.OrderResponse> task = new Task<>() {
-            @Override protected CartDAO.OrderResponse call() {
+            @Override
+            protected CartDAO.OrderResponse call() {
                 return CartDAO.removePanierItem(item.getProduit().getId());
             }
         };
         task.setOnSucceeded(e -> {
             updateCartFromOrder(task.getValue());
-            showCart(); 
+            showCart();
         });
         new Thread(task).start();
     }
@@ -195,7 +209,7 @@ public class ClientDashboardController {
         content.setPrefWidth(350);
 
         Label lblPrix = new Label(String.format("Prix unitaire : %.2f DH", produit.getPrixUnitaire()));
-        
+
         HBox qtyBox = new HBox(10);
         qtyBox.setAlignment(Pos.CENTER_LEFT);
         Label lblQtyText = new Label("Quantité :");
@@ -216,14 +230,16 @@ public class ClientDashboardController {
 
         // UI UPDATE: Confirmation button is Black
         Button btnConfirm = (Button) dialog.getDialogPane().lookupButton(confirmButtonType);
-        btnConfirm.setStyle("-fx-background-color: #000000; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;");
+        btnConfirm.setStyle(
+                "-fx-background-color: #000000; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;");
 
         dialog.setResultConverter(btn -> btn == confirmButtonType ? qtySpinner.getValue() : null);
 
         dialog.showAndWait().ifPresent(quantity -> {
             Task<CartDAO.OrderResponse> task = new Task<>() {
-                @Override protected CartDAO.OrderResponse call() { 
-                    return CartDAO.addPanierItem(produit.getId(), quantity); 
+                @Override
+                protected CartDAO.OrderResponse call() {
+                    return CartDAO.addPanierItem(produit.getId(), quantity);
                 }
             };
             task.setOnSucceeded(e -> updateCartBadge());
@@ -240,7 +256,9 @@ public class ClientDashboardController {
         } else {
             List<CartItem> items = order.lignesCommande.stream().map(l -> {
                 Produit p = new Produit();
-                p.setId(l.produitId); p.setNom(l.produitNom); p.setPrixUnitaire(l.prixUnitaire);
+                p.setId(l.produitId);
+                p.setNom(l.produitNom);
+                p.setPrixUnitaire(l.prixUnitaire);
                 return new CartItem(p, l.quantite);
             }).collect(Collectors.toList());
             cartItems.setAll(items);
@@ -250,12 +268,16 @@ public class ClientDashboardController {
 
     private void updateCartBadge() {
         Task<CartDAO.OrderResponse> task = new Task<>() {
-            @Override protected CartDAO.OrderResponse call() { return CartDAO.getPanier(); }
+            @Override
+            protected CartDAO.OrderResponse call() {
+                return CartDAO.getPanier();
+            }
         };
         task.setOnSucceeded(e -> {
             CartDAO.OrderResponse order = task.getValue();
-            int count = (order != null && order.lignesCommande != null) 
-                        ? order.lignesCommande.stream().mapToInt(l -> l.quantite).sum() : 0;
+            int count = (order != null && order.lignesCommande != null)
+                    ? order.lignesCommande.stream().mapToInt(l -> l.quantite).sum()
+                    : 0;
             Platform.runLater(() -> {
                 if (cartBadge != null) {
                     cartBadge.setText(String.valueOf(count));
@@ -268,7 +290,10 @@ public class ClientDashboardController {
 
     private void loadCategories() {
         Task<List<Categorie>> task = new Task<>() {
-            @Override protected List<Categorie> call() throws Exception { return categorieService.getAllCategories(); }
+            @Override
+            protected List<Categorie> call() throws Exception {
+                return categorieService.getAllCategories();
+            }
         };
         task.setOnSucceeded(e -> {
             categoryFilterContainer.getChildren().clear();
@@ -284,14 +309,15 @@ public class ClientDashboardController {
         Button btn = new Button(name);
         // UI UPDATE: Uniform shape for all categories
         String baseStyle = "-fx-background-radius: 20; -fx-padding: 8 20; -fx-cursor: hand; -fx-font-weight: bold; -fx-min-width: 80;";
-        String inactiveStyle = baseStyle + "-fx-background-color: white; -fx-border-color: #E5E7EB; -fx-border-radius: 20; -fx-text-fill: #4B5563;";
+        String inactiveStyle = baseStyle
+                + "-fx-background-color: white; -fx-border-color: #E5E7EB; -fx-border-radius: 20; -fx-text-fill: #4B5563;";
         String activeStyle = baseStyle + "-fx-background-color: #000000; -fx-text-fill: white;";
-        
+
         btn.setStyle(isSelected ? activeStyle : inactiveStyle);
-        
+
         btn.setOnAction(e -> {
             // UI UPDATE: Highlight current selected category in Black
-            categoryFilterContainer.getChildren().forEach(n -> ((Button)n).setStyle(inactiveStyle));
+            categoryFilterContainer.getChildren().forEach(n -> ((Button) n).setStyle(inactiveStyle));
             btn.setStyle(activeStyle);
             loadProducts(id);
         });
@@ -301,39 +327,50 @@ public class ClientDashboardController {
     private void loadProducts(String catId) {
         productGrid.getChildren().clear();
         Task<List<Produit>> task = new Task<>() {
-            @Override protected List<Produit> call() throws Exception { return produitService.getAllProduits(catId); }
+            @Override
+            protected List<Produit> call() throws Exception {
+                return produitService.getAllProduits(catId);
+            }
         };
         task.setOnSucceeded(e -> {
-            for (Produit p : task.getValue()) productGrid.getChildren().add(buildProductCard(p));
+            for (Produit p : task.getValue())
+                productGrid.getChildren().add(buildProductCard(p));
         });
         new Thread(task).start();
     }
 
     private VBox buildProductCard(Produit p) {
         VBox card = new VBox(12);
-        card.setPadding(new Insets(15)); card.setPrefWidth(240);
+        card.setPadding(new Insets(15));
+        card.setPrefWidth(240);
         // Original style with white background and dropshadow
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #E5E7EB; -fx-border-width: 1; -fx-border-radius: 12;");
-        
-        Label name = new Label(p.getNom()); name.setStyle("-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #111827;");
-        Label price = new Label(String.format("%.2f DH", p.getPrixUnitaire())); price.setStyle("-fx-font-weight: 800; -fx-font-size: 16px; -fx-text-fill: #374151;");
-        
+        card.setStyle(
+                "-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #E5E7EB; -fx-border-width: 1; -fx-border-radius: 12;");
+
+        Label name = new Label(p.getNom());
+        name.setStyle("-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #111827;");
+        Label price = new Label(String.format("%.2f DH", p.getPrixUnitaire()));
+        price.setStyle("-fx-font-weight: 800; -fx-font-size: 16px; -fx-text-fill: #374151;");
+
         Button addBtn = new Button("Ajouter au panier");
         addBtn.setMaxWidth(Double.MAX_VALUE);
-        addBtn.setStyle("-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10; -fx-font-weight: bold; -fx-cursor: hand;");
+        addBtn.setStyle(
+                "-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10; -fx-font-weight: bold; -fx-cursor: hand;");
         addBtn.setOnAction(e -> showQuantityDialog(p));
-        
+
         card.getChildren().addAll(name, price, addBtn);
         return card;
     }
 
     private void loadLogo() {
         var url = getClass().getResource("/assets/gs.png");
-        if (url != null) logoImage.setImage(new Image(url.toExternalForm(), true));
+        if (url != null)
+            logoImage.setImage(new Image(url.toExternalForm(), true));
     }
 
     private void showError(String msg, Throwable t) {
-        if (t != null) t.printStackTrace();
+        if (t != null)
+            t.printStackTrace();
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR, msg);
             alert.show();

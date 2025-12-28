@@ -28,46 +28,69 @@
 .crumb-sep { -fx-text-fill: #aaaaaa; }
 .crumb-active { -fx-text-fill: #222; font-weight: bold; -fx-font-weight: bold; }
 
-/* Sidebar similar to the dark panel */
+/* Sidebar unifié pour admin dashboard */
 .sidebar {
-  background-color: #353A56; /* fallback */
-  -fx-background-color: #353A56;
-  border-width: 2; /* fallback */
-  -fx-border-width: 2;
-  border-radius: 20; /* fallback */
-  -fx-border-radius: 20;
-  -fx-background-radius: 20;
-  border-color: #353A56; /* fallback */
-  -fx-border-color: #353A56;
+  background-color: #ffffff; /* fallback */
+  -fx-background-color: #ffffff;
+  border-width: 0 1 0 0; /* fallback */
+  -fx-border-width: 0 1 0 0;
+  border-radius: 0; /* fallback */
+  -fx-border-radius: 0;
+  -fx-background-radius: 0;
+  border-color: #e5e7eb; /* fallback */
+  -fx-border-color: #e5e7eb;
+  -fx-padding: 20 12 20 12;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.03), 8, 0, 2, 0);
 }
 .section {
-  -fx-text-fill: #cfd3e1;
-  font-weight: bold; /* fallback */
-  -fx-font-weight: bold;
+  -fx-text-fill: #6b7280;
+  font-weight: 600; /* fallback */
+  -fx-font-weight: 600;
+  -fx-font-size: 12px;
+  -fx-padding: 8 16 4 16;
 }
-.side-button {
-  background-color: #353A56; /* fallback */
-  -fx-background-color: #353A56;
-  -fx-text-fill: #c6b6b6;
-  -fx-background-radius: 50;
-  border-radius: 50; /* fallback */
-  -fx-border-radius: 50;
-  padding: 8 14 8 14; /* fallback */
-  -fx-padding: 8 14 8 14;
+.side-button,
+.menu-btn {
+  background-color: transparent; /* fallback */
+  -fx-background-color: transparent;
+  -fx-text-fill: #4b5563;
+  -fx-background-radius: 10px;
+  border-radius: 10px; /* fallback */
+  -fx-border-radius: 10px;
+  padding: 12px 16px; /* fallback */
+  -fx-padding: 12px 16px;
+  -fx-font-size: 14px;
+  -fx-font-weight: 500;
+  -fx-alignment: CENTER_LEFT;
+  -fx-cursor: hand;
+  -fx-border-width: 0;
 }
-.side-button.active {
-  background-color: #141313; /* fallback */
-  -fx-background-color: #141313;
+.side-button:hover,
+.menu-btn:hover {
+  background-color: #f3f4f6; /* fallback */
+  -fx-background-color: #f3f4f6;
+  -fx-text-fill: #1f2937;
+}
+.side-button.active,
+.menu-btn.active {
+  background-color: #3b82f6; /* fallback */
+  -fx-background-color: #3b82f6;
   -fx-text-fill: white;
+  -fx-font-weight: 600;
+}
+.side-button.active:hover,
+.menu-btn.active:hover {
+  background-color: #2563eb; /* fallback */
+  -fx-background-color: #2563eb;
 }
 .side-button.ghost {
   background-color: transparent; /* fallback */
   -fx-background-color: transparent;
-  -fx-text-fill: #d0d3df;
+  -fx-text-fill: #4b5563;
 }
-.side-link { -fx-text-fill: #c6b6b6; }
-.profile-name { -fx-text-fill: #f0f2f8; }
-.profile-email { -fx-text-fill: #a9b0c9; }
+.side-link { -fx-text-fill: #6b7280; }
+.profile-name { -fx-text-fill: #111827; -fx-font-weight: 600; }
+.profile-email { -fx-text-fill: #6b7280; }
 
 /* Outline container */
 .outline-container {

@@ -1,9 +1,16 @@
 package gestiondestock.controller;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.net.URL;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.ResourceBundle;
+
 import gestiondestock.dto.ClientTopDTO;
+import gestiondestock.dto.EvolutionVentesDTO;
 import gestiondestock.dto.ProduitVenduDTO;
 import gestiondestock.dto.StatistiquesGeneralesDTO;
-import gestiondestock.dto.EvolutionVentesDTO;
 import gestiondestock.dto.VenteParPeriodeDTO;
 import gestiondestock.service.PdfExportService;
 import gestiondestock.service.StatistiquesServiceClient;
@@ -12,17 +19,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.*;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-
-import java.awt.Desktop;
-import java.io.File;
-import java.net.URL;
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.ResourceBundle;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class StatistiquesController implements Initializable {
 
@@ -212,6 +218,21 @@ public class StatistiquesController implements Initializable {
         try {
             System.out.println("Début de l'export PDF...");
 
+            // Ouvrir une boîte de dialogue "Enregistrer sous"
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Exporter le rapport statistiques");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Fichier PDF", "*.pdf"));
+            fileChooser.setInitialFileName("rapport_statistiques_" + 
+                    new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date()) + ".pdf");
+
+            Stage stage = (Stage) periodComboBox.getScene().getWindow();
+            File targetFile = fileChooser.showSaveDialog(stage);
+
+            if (targetFile == null) {
+                return; // Utilisateur a annulé
+            }
+
             // Récupérer les données
             StatistiquesGeneralesDTO stats = serviceClient.getStatistiquesGenerales();
             List<ProduitVenduDTO> topProduits = serviceClient.getProduitsLesPlusVendus();
@@ -220,19 +241,32 @@ public class StatistiquesController implements Initializable {
 
             System.out.println("Données récupérées");
 
-
             File pdfFile = PdfExportService.exportStatistiquesPdf(stats, topProduits, topClients, periode);
 
             if (pdfFile != null && pdfFile.exists()) {
                 System.out.println("PDF créé : " + pdfFile.getAbsolutePath());
 
+                // Copier le fichier PDF vers l'emplacement choisi par l'utilisateur
+                java.nio.file.Files.copy(pdfFile.toPath(), targetFile.toPath(), 
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                
+                // Supprimer le fichier temporaire
+                pdfFile.delete();
+
                 showAlert(Alert.AlertType.INFORMATION,
                         "Export réussi",
-                        "Le rapport a été exporté avec succès !\n\nEmplacement : " + pdfFile.getAbsolutePath());
+                        "Le rapport a été exporté avec succès !\n\nEmplacement : " + targetFile.getAbsolutePath());
 
-
-                if (Desktop.isDesktopSupported()) {
-                    Desktop.getDesktop().open(pdfFile);
+                // Demander si l'utilisateur veut ouvrir le fichier
+                Alert confirmOpen = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmOpen.setTitle("Ouvrir le fichier");
+                confirmOpen.setHeaderText(null);
+                confirmOpen.setContentText("Voulez-vous ouvrir le fichier PDF ?");
+                
+                if (confirmOpen.showAndWait().get() == ButtonType.OK) {
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(targetFile);
+                    }
                 }
             } else {
                 System.out.println(" Erreur : PDF null ou inexistant");

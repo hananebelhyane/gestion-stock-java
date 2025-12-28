@@ -1,9 +1,15 @@
 package gestiondestock.controller;
 
-import gestiondestock.model.Produit;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import gestiondestock.model.Categorie;
 import gestiondestock.model.Fournisseur;
+import gestiondestock.model.Produit;
 import gestiondestock.service.ProduitService;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -13,16 +19,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class ProduitController implements Initializable {
 
@@ -208,15 +216,33 @@ public class ProduitController implements Initializable {
 
     @FXML
     private void handleExport() {
+        // Ouvrir une boîte de dialogue "Enregistrer sous"
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Exporter les produits");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichier CSV", "*.csv"));
+        fileChooser.setInitialFileName("produits_export.csv");
+
+        Stage stage = (Stage) exportButton.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+
+        if (file == null) {
+            return; // Utilisateur a annulé
+        }
+
         javafx.concurrent.Task<Void> task = new javafx.concurrent.Task<>() {
             @Override
             protected Void call() throws Exception {
-                produitService.exportProduits("produits_export.csv");
+                produitService.exportProduits(file.getAbsolutePath());
                 return null;
             }
         };
-        task.setOnSucceeded(evt -> showAlert("Succès", "Export CSV réussi!", Alert.AlertType.INFORMATION));
-        task.setOnFailed(evt -> showAlert("Erreur", "Erreur export: " + task.getException().getMessage(), Alert.AlertType.ERROR));
+        task.setOnSucceeded(evt -> showAlert("Succès", 
+                "Export CSV réussi !\n\nEmplacement : " + file.getAbsolutePath(), 
+                Alert.AlertType.INFORMATION));
+        task.setOnFailed(evt -> showAlert("Erreur", 
+                "Erreur export: " + task.getException().getMessage(), 
+                Alert.AlertType.ERROR));
         new Thread(task).start();
     }
 

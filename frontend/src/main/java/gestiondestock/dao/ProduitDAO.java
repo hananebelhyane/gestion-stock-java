@@ -1,11 +1,5 @@
 package gestiondestock.dao;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import gestiondestock.model.Produit;
-import gestiondestock.model.ProduitDTO;
-import gestiondestock.model.Session;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -16,6 +10,13 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import gestiondestock.model.Produit;
+import gestiondestock.model.ProduitDTO;
+import gestiondestock.model.Session;
 
 public class ProduitDAO {
     private static final String BASE_URL = "http://localhost:8080/api/produits";
@@ -103,18 +104,36 @@ public class ProduitDAO {
 
     public static void exportToCSV(String filename) throws IOException, InterruptedException {
         List<Produit> produits = getAll();
-        try (FileWriter writer = new FileWriter(filename)) {
-            writer.write("Nom,Description,Prix,Categorie,Fournisseur\n");
+        // Utiliser UTF-8 avec BOM pour Excel
+        try (FileWriter writer = new FileWriter(filename, java.nio.charset.StandardCharsets.UTF_8)) {
+            // Ajouter le BOM UTF-8 pour Excel
+            writer.write('\ufeff');
+            
+            // En-tête avec point-virgule (meilleur pour Excel)
+            writer.write("ID;Nom;Description;Prix (DH);Catégorie;Fournisseur\n");
+            
             for (Produit p : produits) {
-                writer.write(String.format("%s,%s,%.2f,%s,%s%n",
-                        p.getNom(),
-                        p.getDescription(),
-                        p.getPrixUnitaire() != null ? p.getPrixUnitaire() : 0.0,
-                        p.getCategorie() != null ? p.getCategorie().getNom() : "",
-                        p.getFournisseur() != null ? p.getFournisseur().getNom() : ""
-                ));
+                // Échapper les guillemets et entourer chaque champ de guillemets
+                String id = escapeCSV(p.getId() != null ? p.getId().toString() : "");
+                String nom = escapeCSV(p.getNom() != null ? p.getNom() : "");
+                String description = escapeCSV(p.getDescription() != null ? p.getDescription() : "");
+                String prix = String.format("%.2f", p.getPrixUnitaire() != null ? p.getPrixUnitaire() : 0.0);
+                String categorie = escapeCSV(p.getCategorie() != null ? p.getCategorie().getNom() : "");
+                String fournisseur = escapeCSV(p.getFournisseur() != null ? p.getFournisseur().getNom() : "");
+                
+                writer.write(String.format("%s;%s;%s;%s;%s;%s\n",
+                        id, nom, description, prix, categorie, fournisseur));
             }
         }
+    }
+    
+    private static String escapeCSV(String value) {
+        if (value == null) return "\"\"";
+        // Remplacer les guillemets par des guillemets doubles et entourer de guillemets
+        if (value.contains("\"") || value.contains(";") || value.contains("\n") || value.contains(",")) {
+            return "\"" + value.replace("\"", "\"\"") + "\"";
+        }
+        return "\"" + value + "\"";
     }
 
     private static HttpRequest.Builder baseRequest(String url) {

@@ -315,7 +315,6 @@ public class StockController {
     @FXML
     private void handleExporter() {
         try {
-
             // Ouvrir une boîte de dialogue "Enregistrer sous"
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Exporter les stocks");
@@ -329,25 +328,46 @@ public class StockController {
             if (file == null)
                 return; // utilisateur a annulé
 
-            // Construire le contenu CSV
+            // Construire le contenu CSV avec encodage UTF-8 et point-virgule
             StringBuilder sb = new StringBuilder();
-            sb.append("ID,Produit,Quantité,Prix\n");
+            // Ajouter le BOM UTF-8 pour Excel
+            sb.append('\ufeff');
+            
+            // En-tête avec point-virgule (meilleur pour Excel)
+            sb.append("ID;Produit;Quantité;Prix (DH);Seuil Alerte\n");
 
             for (Stock s : tableStock.getItems()) {
-                sb.append(s.getId()).append(",");
-                sb.append(s.getProduit() != null ? s.getProduit().getNom() : "N/A").append(",");
-                sb.append(s.getQuantiteDisponible()).append(",");
-                sb.append(s.getProduit() != null ? s.getProduit().getPrixUnitaire() : 0).append(",");
+                // Échapper et entourer de guillemets
+                String id = escapeCSV(s.getId() != null ? s.getId().toString() : "N/A");
+                String produit = escapeCSV(s.getProduit() != null ? s.getProduit().getNom() : "N/A");
+                String quantite = String.valueOf(s.getQuantiteDisponible() != null ? s.getQuantiteDisponible() : 0);
+                String prix = String.format("%.2f", s.getProduit() != null && s.getProduit().getPrixUnitaire() != null ? s.getProduit().getPrixUnitaire() : 0.0);
+                String seuil = String.valueOf(s.getSeuilAlerte() != null ? s.getSeuilAlerte() : "N/A");
+                
+                sb.append(id).append(";");
+                sb.append(produit).append(";");
+                sb.append(quantite).append(";");
+                sb.append(prix).append(";");
+                sb.append(seuil).append("\n");
             }
 
-            // Écrire dans le fichier
-            Files.writeString(file.toPath(), sb.toString());
+            // Écrire dans le fichier avec UTF-8
+            Files.writeString(file.toPath(), sb.toString(), java.nio.charset.StandardCharsets.UTF_8);
 
             showInfo("Export réussi :\n" + file.getAbsolutePath());
 
         } catch (Exception e) {
             showError("Erreur d'export : " + e.getMessage());
         }
+    }
+    
+    private String escapeCSV(String value) {
+        if (value == null) return "\"\"";
+        // Remplacer les guillemets par des guillemets doubles et entourer de guillemets
+        if (value.contains("\"") || value.contains(";") || value.contains("\n") || value.contains(",")) {
+            return "\"" + value.replace("\"", "\"\"") + "\"";
+        }
+        return "\"" + value + "\"";
     }
 
 }

@@ -3,6 +3,7 @@ package gestiondestock.controller;
 import gestiondestock.model.AuthResponse;
 import gestiondestock.model.AuthService;
 import gestiondestock.model.Session;
+import gestiondestock.ui.FieldToast;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,11 +12,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import gestiondestock.ui.FieldToast;
 
 public class LoginController {
 
@@ -149,7 +149,19 @@ public class LoginController {
 
             stage.setScene(scene);
             stage.setTitle(title);
-            stage.setMaximized(true); // Optionnel: plein écran
+
+            // Ajuster la taille de la fenêtre pour éviter qu'elle dépasse l'écran
+            javafx.stage.Screen screen = javafx.stage.Screen.getPrimary();
+            javafx.geometry.Rectangle2D bounds = screen.getVisualBounds();
+
+            // Définir une taille raisonnable (90% de l'écran maximum)
+            double maxWidth = bounds.getWidth() * 0.9;
+            double maxHeight = bounds.getHeight() * 0.9;
+
+            stage.setWidth(Math.min(1400, maxWidth));
+            stage.setHeight(Math.min(900, maxHeight));
+            stage.centerOnScreen();
+            stage.setMaximized(false); // Ne pas maximiser automatiquement
 
             System.out.println("✅ Redirection réussie vers: " + fxmlPath);
 

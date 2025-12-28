@@ -1,21 +1,20 @@
 package gestiondestock.controller;
 
 import gestiondestock.model.Session;
-import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
-import javafx.scene.Scene;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.BorderPane;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 
 public class ViewController {
     @FXML private Label WelcomeLabel;
@@ -28,6 +27,19 @@ public class ViewController {
     @FXML private Label usernameLabel;
     @FXML private javafx.scene.control.Button profileMenuBtn;
     @FXML private StackPane contentRoot;
+    
+    // Boutons du menu
+    @FXML private Button btnDashboard;
+    @FXML private Button btnProducts;
+    @FXML private Button btnStock;
+    @FXML private Button btnCommands;
+    @FXML private Button btnSuppliers;
+    @FXML private Button btnUsers;
+    @FXML private Button btnStatistics;
+    @FXML private Button btnProfile;
+    
+    // Référence vers le bouton actuellement actif
+    private Button activeButton = null;
 
     @FXML
     public void initialize() {
@@ -86,6 +98,14 @@ public class ViewController {
 
         // Load dashboard by default for admins
         if (isAdmin) {
+            // Définir le bouton Dashboard comme actif dès le début
+            if (btnDashboard != null) {
+                activeButton = btnDashboard;
+                // Appliquer immédiatement la classe active
+                btnDashboard.getStyleClass().add("active");
+                // Forcer aussi le style inline pour garantir l'affichage
+                btnDashboard.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: 600;");
+            }
             loadContent("dashboard");
         }
     }
@@ -96,19 +116,29 @@ public class ViewController {
     try {
         Parent view = FXMLLoader.load(getClass().getResource(path));
         
-        // Nettoyer les CSS précédents
+        // Charger les CSS en ajoutant aux existants au lieu de nettoyer
         Scene scene = contentRoot.getScene();
         if (scene != null) {
+            // Conserver les CSS de base (login.css et dashboard.css)
+            java.util.List<String> baseStyles = new java.util.ArrayList<>();
+            for (String style : scene.getStylesheets()) {
+                if (style.contains("login.css") || style.contains("dashboard.css")) {
+                    baseStyles.add(style);
+                }
+            }
+            
+            // Nettoyer tous les styles
             scene.getStylesheets().clear();
             
-            // Charger le CSS spécifique
+            // Restaurer les styles de base
+            scene.getStylesheets().addAll(baseStyles);
+            
+            // Charger le CSS spécifique supplémentaire
             String cssPath = null;
             if (name.equals("fournisseur-view")) {
                 cssPath = "/styles/fournisseur-style.css";
             } else if (name.equals("admin-profile-view")) {
                 cssPath = "/styles/admin-profile-style.css";
-            } else if (name.equals("dashboard")) {
-                cssPath = "/styles/dashboard.css";
             }
             
             if (cssPath != null) {
@@ -126,22 +156,75 @@ public class ViewController {
     }
 }
 
+    /**
+     * Met à jour l'état actif des boutons de la sidebar
+     */
+    private void setActiveButton(ActionEvent e) {
+        // Retirer la classe active et le style de l'ancien bouton
+        if (activeButton != null) {
+            activeButton.getStyleClass().remove("active");
+            activeButton.setStyle(""); // Retirer le style inline
+        }
+        
+        // Ajouter la classe active et le style au nouveau bouton
+        if (e != null && e.getSource() instanceof Button) {
+            activeButton = (Button) e.getSource();
+            if (!activeButton.getStyleClass().contains("active")) {
+                activeButton.getStyleClass().add("active");
+            }
+            // Appliquer aussi le style inline pour garantir l'affichage
+            activeButton.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: 600;");
+        }
+    }
+
     // Sidebar navigation handlers
-    @FXML public void openDashboard(ActionEvent e) { loadContent("dashboard"); }
-    @FXML public void openProducts(ActionEvent e) { loadContent("produit"); }
+    @FXML public void openDashboard(ActionEvent e) { 
+        setActiveButton(e);
+        loadContent("dashboard"); 
+    }
+    @FXML public void openProducts(ActionEvent e) { 
+        setActiveButton(e);
+        loadContent("produit"); 
+    }
     //had ster dyal mouad 3endakum chi wahed y9isso
-    @FXML public void openOrders(ActionEvent e) { loadContent("GestionDeCommande"); }
-    @FXML public void openGestionDeCommande(ActionEvent e) { loadContent("GestionDeCommande"); }
+    @FXML public void openOrders(ActionEvent e) { 
+        setActiveButton(e);
+        loadContent("GestionDeCommande"); 
+    }
+    @FXML public void openGestionDeCommande(ActionEvent e) { 
+        setActiveButton(e);
+        loadContent("GestionDeCommande"); 
+    }
     //hani kan3lemkum
-    @FXML public void openClients(ActionEvent e) { loadContent("clients"); }
-    @FXML public void openUsersMenu(ActionEvent e) { loadContent("users-menu"); }
-    @FXML public void openStatistics(ActionEvent e) { loadContent("statistiques"); }
+    @FXML public void openClients(ActionEvent e) { 
+        setActiveButton(e);
+        loadContent("clients"); 
+    }
+    @FXML public void openUsersMenu(ActionEvent e) { 
+        setActiveButton(e);
+        loadContent("users-menu"); 
+    }
+    @FXML public void openStatistics(ActionEvent e) { 
+        setActiveButton(e);
+        loadContent("statistiques"); 
+    }
     //gestion des fournisseurs
-    @FXML public void openSuppliers(ActionEvent e) { loadContent("fournisseur-view"); }
-    @FXML public void openStock(ActionEvent e) { loadContent("stock"); }
-    @FXML public void openAlerts(ActionEvent e) { loadContent("alerts"); }
+    @FXML public void openSuppliers(ActionEvent e) { 
+        setActiveButton(e);
+        loadContent("fournisseur-view"); 
+    }
+    @FXML public void openStock(ActionEvent e) { 
+        setActiveButton(e);
+        loadContent("stock"); 
+    }
+    @FXML public void openAlerts(ActionEvent e) { 
+        setActiveButton(e);
+        loadContent("alerts"); 
+    }
     //profile admin
-    @FXML public void openSettings(ActionEvent e) { loadContent("admin-profile-view"); 
+    @FXML public void openSettings(ActionEvent e) { 
+        setActiveButton(e);
+        loadContent("admin-profile-view"); 
     
     }
     @FXML
@@ -191,6 +274,14 @@ public class ViewController {
             javafx.scene.Scene scene = new javafx.scene.Scene(rootNode);
             var css = getClass().getResource("/styles/login.css");
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
+            
+            // Restaurer la fenêtre à une taille normale
+            stage.setMaximized(false);
+            stage.setWidth(1000);
+            stage.setHeight(650);
+            stage.centerOnScreen();
+            stage.setTitle("Login - Gestion de Stock");
+            
             stage.setScene(scene);
         } catch (Exception ex) {
             // ignore navigation errors here

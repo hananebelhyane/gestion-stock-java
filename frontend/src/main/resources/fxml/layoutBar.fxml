@@ -5,11 +5,15 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gestiondestock.controller.ViewController" fx:id="root">
   <left>
-        <VBox spacing="10" styleClass="sidebar" fx:id="sidebar"
-          style="-fx-background-color: #ffffff;">
+        <VBox spacing="10" styleClass="sidebar" fx:id="sidebar" 
+          style="-fx-background-color: #ffffff;" 
+          prefWidth="220" minWidth="220" maxWidth="220"
+          VBox.vgrow="ALWAYS">
       <padding><Insets top="18" right="14" bottom="18" left="14"/></padding>
 
       <!-- Sidebar header with logo only -->
@@ -21,24 +25,31 @@
 
       <!-- Menu -->
       <VBox spacing="6">
-        <Button text="Main Page Dashboard" styleClass="menu-btn" onAction="#openDashboard" />
-        <Button text="Gestion des Produits" styleClass="menu-btn" onAction="#openProducts" />
-        <Button text="Consulter du Stock" styleClass="menu-btn" onAction="#openStock" />
-        <Button text="Gestion Des Commande" styleClass="menu-btn" onAction="#openGestionDeCommande" />
-        <Button text="Gestion des Fournisseurs" styleClass="menu-btn" onAction="#openSuppliers" />
-        <Button text="Gestion des Utilisateurs" styleClass="menu-btn" onAction="#openUsersMenu" />
-        <Button text="Statistiques" styleClass="menu-btn" onAction="#openStatistics" />
-        <Button text="Profil Admin" styleClass="menu-btn" onAction="#openSettings" />
+        <Button fx:id="btnDashboard" text="Main Page Dashboard" styleClass="menu-btn" onAction="#openDashboard" />
+        <Button fx:id="btnProducts" text="Gestion des Produits" styleClass="menu-btn" onAction="#openProducts" />
+        <Button fx:id="btnStock" text="Consulter du Stock" styleClass="menu-btn" onAction="#openStock" />
+        <Button fx:id="btnCommands" text="Gestion Des Commande" styleClass="menu-btn" onAction="#openGestionDeCommande" />
+        <Button fx:id="btnSuppliers" text="Gestion des Fournisseurs" styleClass="menu-btn" onAction="#openSuppliers" />
+        <Button fx:id="btnUsers" text="Gestion des Utilisateurs" styleClass="menu-btn" onAction="#openUsersMenu" />
+        <Button fx:id="btnStatistics" text="Statistiques" styleClass="menu-btn" onAction="#openStatistics" />
+        <Button fx:id="btnProfile" text="Profil Admin" styleClass="menu-btn" onAction="#openSettings" />
       </VBox>
       
-      <Pane VBox.vgrow="ALWAYS" />
+      <!-- Spacer pour pousser le profil en bas -->
+      <Region VBox.vgrow="ALWAYS" />
 
       <!-- Profile card at bottom -->
       <HBox spacing="10" alignment="CENTER_LEFT" styleClass="profile-card">
         <Label fx:id="avatarLabel" text="U" styleClass="avatar" />
         <Label fx:id="usernameLabel" text="Username" styleClass="profile-name" style="-fx-text-fill: black;" />
         <Pane HBox.hgrow="ALWAYS" />
-        <Button fx:id="profileMenuBtn" text="➜]" onAction="#doSignOut" />
+        <Button fx:id="profileMenuBtn" styleClass="menu-btn, logout" onAction="#doSignOut">
+          <graphic>
+            <HBox spacing="5" alignment="CENTER">
+              <Text text="⎋" style="-fx-font-size: 16px;" />
+            </HBox>
+          </graphic>
+        </Button>
       </HBox>
     </VBox>
   </left>
