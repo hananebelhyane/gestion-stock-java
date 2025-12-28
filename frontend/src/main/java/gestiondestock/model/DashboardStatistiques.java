@@ -1,7 +1,6 @@
 package gestiondestock.model;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 
 public class DashboardStatistiques {
 

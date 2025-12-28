@@ -1,125 +1,94 @@
-# 🌐 Full Web Application - Gestion de Stock
+#  Application de Gestion de Stock
 
-## 📘 Description du Projet
-Ce projet a pour objectif de **concevoir et développer une application web complète** pour la **gestion de stock**, en utilisant une architecture **Full Stack moderne**.
+Application desktop de gestion d'inventaire avec **JavaFX** (Frontend) + **Spring Boot** (Backend) + **MySQL** (Base de données).
 
-##  Objectif
-Application pour digitaliser et optimiser la gestion d’inventaire d’une entreprise :
-- Suivi en temps réel des niveaux de stock
-- Gestion des entrées et sorties produits
-- Import automatique des catalogues fournisseurs
-- Génération des documents commerciaux (bons de livraison, bons de sortie)
-- Réduction des erreurs et optimisation des stocks
-
-L’application sera constituée de trois parties principales :
-- **Frontend** : développé avec Javafx (version récente ≥ 10)
-- **Backend** : développé avec Spring Boot.
-- **Base de données** : déployée dans un conteneur séparé  MySQL.
-
-<<<<<<< HEAD
 ---
 
-## ⚙️ Stack Technique
-=======
-1. **Démarrer le Backend** :
-```bash
-cd backend
-mvn spring-boot:run
-mvn clean install
-```
-Le serveur démarre sur `http://localhost:8080`
+##  Prérequis
 
-2. **Démarrer le Frontend** :
-```bash
-cd frontend
-mvn javafx:run
-mvn clean install
-```
->>>>>>> origin/meryem2
+Installez ces logiciels avant de commencer :
+- **Java JDK 17+** 
+- **Maven 3.6+** 
+- **MySQL 8.0+** 
 
-| Composant        | Technologie utilisée         |
-|------------------|------------------------------|
-| Frontend         | Javafx                       |
-| Backend          | Spring Boot                  |
-| Base de Données  | MySQL                        |
-                  
 ---
 
-## 📅 Étapes principales
+##  Installation
 
-1. **Conception du projet**
-   - Diagrammes UML, architecture logicielle
-2. **Développement du Backend**
-   - API REST avec Spring Boot
-3. **Développement du Frontend**
-   - Interface Javafx consommant l’API
-   ---------------------------------------
+### 1️ Configuration de la Base de Données
 
-<<<<<<< HEAD
-## 📄 Licence
-Projet académique – usage pédagogique et expérimental.
-=======
-### Configuration Base de Données
-
-1. Créer la base de données :
+**Ouvrir MySQL Workbench ou ligne de commande MySQL :**
 ```sql
 CREATE DATABASE gestionStock;
-USE gestionStock;
 ```
 
-2. Exécuter le script `DB.sql`
+**Importer le script de création des tables :**
+```powershell
+Get-Content DB.sql | mysql -u root -p gestionStock
+```
+*(Entrez votre mot de passe MySQL quand demandé)*
 
-3. Configurer `backend/src/main/resources/application.properties` :
+### 2️ Configuration du Backend
+
+Ouvrir le fichier : `backend/src/main/resources/application.properties`
+
+Modifier ces lignes :
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/gestionStock
 spring.datasource.username=root
-spring.datasource.password=votre_mot_de_passe
+spring.datasource.password=VOTRE_MOT_DE_PASSE_MYSQL
 ```
 
-## 🛠️ Technologies
+---
 
-**Backend :**
-- Spring Boot 3.5.7
-- MySQL 8.0.44
-- Hibernate 6.6.33
+##  Lancement du Projet
 
-**Frontend :**
-- JavaFX 25.0.1
-- Maven 3.9.11
-- Java Version : 25
-- Scene Builder (pour l'édition FXML)
+### Ouvrir 2 Terminaux PowerShell
 
-## Architecture Globale :
-
-┌─────────────────────┐
-│   FRONTEND          │  ← Interface utilisateur (JavaFX)
-│   JavaFX Desktop    │
-└──────────┬──────────┘
-           │ HTTP REST (JSON)
-           │ Port 8082
-┌──────────▼──────────┐
-│   BACKEND           │  ← Logique métier (Spring Boot)
-│   Spring Boot API   │
-└──────────┬──────────┘
-           │ JDBC
-           │
-┌──────────▼──────────┐
-│   DATABASE          │  ← Persistance (MySQL)
-│   MySQL 8.0.44      │
-└─────────────────────┘
-
-
-
-# Docker
-
-# 1. Récupérer votre branche
-git pull origin votre-branche
-
-# 2. Compiler (chacun génère son propre JAR)
+**Terminal 1 - Backend :**
+```powershell
 cd backend
-mvn clean package -DskipTests
-cd ..
+mvn spring-boot:run
+```
+✅ Attendez le message : **"Started BackendApplication in X seconds"**
 
-# 3. Lancer Docker
-docker-compose up --build
->>>>>>> origin/meryem2
+**Terminal 2 - Frontend :**
+```powershell
+cd frontend
+mvn javafx:run
+```
+✅ L'interface graphique s'ouvre
+
+---
+
+## 🔑 Connexion
+
+| Rôle | Identifiant | Mot de passe |
+|------|-------------|--------------|
+| Admin | admin | admin123 |
+| Magasinier | magasinier | mag123 |
+| Client | client | client123 |
+
+---
+
+## 🐛 Problèmes Courants
+
+**Erreur "Port 8080 déjà utilisé" :**
+```powershell
+netstat -ano | findstr :8080
+taskkill /PID <NUMERO_PID> /F
+```
+
+**Erreur de connexion MySQL :**
+- Vérifiez que MySQL est démarré (Services Windows)
+- Vérifiez le mot de passe dans `application.properties`
+
+**JavaFX ne démarre pas :**
+```powershell
+cd frontend
+mvn clean install
+mvn javafx:run
+```
+
+---
+
+**Technologies** : Spring Boot 3.5.7 | JavaFX 25.0.1 | MySQL 8.0 | Maven 3.9.11
