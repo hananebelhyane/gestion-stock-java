@@ -31,9 +31,9 @@ public class ClientService {
 
     public ClientService() {
         this.gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .registerTypeAdapter(UUID.class, new UUIDAdapter())
-            .create();
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .registerTypeAdapter(UUID.class, new UUIDAdapter())
+                .create();
     }
 
     // ✅ Méthode pour obtenir le token de la session
@@ -56,7 +56,7 @@ public class ClientService {
     // Récupérer tous les clients actifs
     public List<ClientModel> getAllActiveClients() throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
-        
+
         URL url = new URL(BASE_URL);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -75,16 +75,18 @@ public class ClientService {
         }
 
         String response = readResponse(conn);
-        
-        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
+
+        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>() {
+        }.getType());
         String dataJson = gson.toJson(result.get("data"));
-        return gson.fromJson(dataJson, new TypeToken<List<ClientModel>>(){}.getType());
+        return gson.fromJson(dataJson, new TypeToken<List<ClientModel>>() {
+        }.getType());
     }
 
     // Créer un client
     public ClientModel createClient(ClientModel client) throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
-        
+
         URL url = new URL(BASE_URL);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -95,16 +97,15 @@ public class ClientService {
 
         // Créer un objet avec motDePasse au lieu de mot_de_passe
         Map<String, String> requestBody = Map.of(
-            "nom", client.getNom(),
-            "prenom", client.getPrenom(),
-            "username", client.getUsername(),
-            "telephone", client.getTelephone(),
-            "motDePasse", "default123", // Mot de passe par défaut
-            "adresse", client.getAdresse()
-        );
-        
+                "nom", client.getNom(),
+                "prenom", client.getPrenom(),
+                "username", client.getUsername(),
+                "telephone", client.getTelephone(),
+                "motDePasse", "default123", // Mot de passe par défaut
+                "adresse", client.getAdresse());
+
         String jsonInput = gson.toJson(requestBody);
-        try(OutputStream os = conn.getOutputStream()) {
+        try (OutputStream os = conn.getOutputStream()) {
             os.write(jsonInput.getBytes(StandardCharsets.UTF_8));
         }
 
@@ -122,16 +123,21 @@ public class ClientService {
         }
 
         String response = readResponse(conn);
-        
-        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
+
+        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>() {
+        }.getType());
         String dataJson = gson.toJson(result.get("data"));
         return gson.fromJson(dataJson, ClientModel.class);
     }
 
     // Mettre à jour un client
     public ClientModel updateClient(UUID id, ClientModel client) throws Exception {
-        checkAdminRole(); // ✅ Vérification du rôle
-        
+        // Allow both ADMIN and CLIENT to update
+        String role = Session.get().getRole();
+        if (role == null || (!role.equalsIgnoreCase("ADMIN") && !role.equalsIgnoreCase("CLIENT"))) {
+            throw new RuntimeException("Accès refusé. Vous devez être authentifié.");
+        }
+
         URL url = new URL(BASE_URL + "/" + id.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("PUT");
@@ -141,16 +147,15 @@ public class ClientService {
         conn.setDoOutput(true);
 
         Map<String, String> requestBody = Map.of(
-            "nom", client.getNom(),
-            "prenom", client.getPrenom(),
-            "username", client.getUsername(),
-            "telephone", client.getTelephone(),
-            "motDePasse", "default123",
-            "adresse", client.getAdresse()
-        );
+                "nom", client.getNom(),
+                "prenom", client.getPrenom(),
+                "username", client.getUsername(),
+                "telephone", client.getTelephone(),
+                "motDePasse", "default123",
+                "adresse", client.getAdresse());
 
         String jsonInput = gson.toJson(requestBody);
-        try(OutputStream os = conn.getOutputStream()) {
+        try (OutputStream os = conn.getOutputStream()) {
             os.write(jsonInput.getBytes(StandardCharsets.UTF_8));
         }
 
@@ -168,8 +173,9 @@ public class ClientService {
         }
 
         String response = readResponse(conn);
-        
-        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
+
+        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>() {
+        }.getType());
         String dataJson = gson.toJson(result.get("data"));
         return gson.fromJson(dataJson, ClientModel.class);
     }
@@ -177,12 +183,12 @@ public class ClientService {
     // Supprimer un client
     public void deleteClient(UUID id) throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
-        
+
         URL url = new URL(BASE_URL + "/" + id.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("DELETE");
         conn.setRequestProperty("Authorization", "Bearer " + getAuthToken()); // ✅ Ajout du token
-        
+
         int responseCode = conn.getResponseCode();
         if (responseCode == 401) {
             throw new Exception("Session expirée. Veuillez vous reconnecter.");
@@ -200,7 +206,7 @@ public class ClientService {
     // Rechercher des clients
     public List<ClientModel> searchClients(String keyword) throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
-        
+
         URL url = new URL(BASE_URL + "/search?keyword=" + keyword);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -219,16 +225,22 @@ public class ClientService {
         }
 
         String response = readResponse(conn);
-        
-        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
+
+        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>() {
+        }.getType());
         String dataJson = gson.toJson(result.get("data"));
-        return gson.fromJson(dataJson, new TypeToken<List<ClientModel>>(){}.getType());
+        return gson.fromJson(dataJson, new TypeToken<List<ClientModel>>() {
+        }.getType());
     }
 
     // Récupérer un client par ID
     public ClientModel getClientById(UUID id) throws Exception {
-        checkAdminRole(); // ✅ Vérification du rôle
-        
+        // Allow both ADMIN and CLIENT to fetch their own profile
+        String role = Session.get().getRole();
+        if (role == null || (!role.equalsIgnoreCase("ADMIN") && !role.equalsIgnoreCase("CLIENT"))) {
+            throw new RuntimeException("Accès refusé. Vous devez être authentifié.");
+        }
+
         URL url = new URL(BASE_URL + "/" + id.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -247,16 +259,22 @@ public class ClientService {
         }
 
         String response = readResponse(conn);
-        
-        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
+
+        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>() {
+        }.getType());
         String dataJson = gson.toJson(result.get("data"));
         return gson.fromJson(dataJson, ClientModel.class);
     }
-    
+
+    // Overload to accept String ID
+    public ClientModel getClientById(String id) throws Exception {
+        return getClientById(UUID.fromString(id));
+    }
+
     // Récupérer les clients supprimés
     public List<ClientModel> getDeletedClients() throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
-        
+
         URL url = new URL(BASE_URL + "/deleted");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -275,29 +293,31 @@ public class ClientService {
         }
 
         String response = readResponse(conn);
-        
-        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>(){}.getType());
+
+        Map<String, Object> result = gson.fromJson(response, new TypeToken<Map<String, Object>>() {
+        }.getType());
         String dataJson = gson.toJson(result.get("data"));
-        return gson.fromJson(dataJson, new TypeToken<List<ClientModel>>(){}.getType());
+        return gson.fromJson(dataJson, new TypeToken<List<ClientModel>>() {
+        }.getType());
     }
-    
+
     // ✅ RESTAURER UN CLIENT avec authentification
     public void restoreClient(UUID id) throws Exception {
         checkAdminRole(); // ✅ Vérification du rôle
-        
+
         CloseableHttpClient httpClient = HttpClients.createDefault();
         CloseableHttpResponse response = null;
-        
+
         try {
             String urlStr = BASE_URL + "/" + id.toString() + "/restore";
             HttpPatch httpPatch = new HttpPatch(urlStr);
             httpPatch.setHeader("Content-Type", "application/json");
             httpPatch.setHeader("Accept", "application/json");
             httpPatch.setHeader("Authorization", "Bearer " + getAuthToken()); // ✅ Ajout du token
-            
+
             response = httpClient.execute(httpPatch);
             int statusCode = response.getCode();
-            
+
             if (statusCode == 401) {
                 throw new Exception("Session expirée. Veuillez vous reconnecter.");
             }
@@ -313,10 +333,10 @@ public class ClientService {
                 } catch (Exception e) {
                     // Ignorer si impossible de lire le body
                 }
-                throw new Exception("Erreur HTTP: " + statusCode + 
-                    (errorBody.isEmpty() ? "" : " - " + errorBody));
+                throw new Exception("Erreur HTTP: " + statusCode +
+                        (errorBody.isEmpty() ? "" : " - " + errorBody));
             }
-            
+
         } catch (Exception e) {
             throw new Exception("Erreur lors de la restauration: " + e.getMessage());
         } finally {
@@ -351,7 +371,8 @@ public class ClientService {
 
     private String readErrorResponse(HttpURLConnection conn) {
         try {
-            if (conn.getErrorStream() == null) return null;
+            if (conn.getErrorStream() == null)
+                return null;
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
             StringBuilder response = new StringBuilder();
             String line;
@@ -367,8 +388,10 @@ public class ClientService {
 
     private String extractMessage(String json) {
         try {
-            if (json == null || json.isEmpty()) return null;
-            Map<String, Object> obj = gson.fromJson(json, new TypeToken<Map<String, Object>>(){}.getType());
+            if (json == null || json.isEmpty())
+                return null;
+            Map<String, Object> obj = gson.fromJson(json, new TypeToken<Map<String, Object>>() {
+            }.getType());
             Object msg = obj.get("message");
             return msg != null ? msg.toString() : null;
         } catch (Exception e) {

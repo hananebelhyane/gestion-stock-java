@@ -15,6 +15,8 @@ public interface ProduitService {
 
     List<Produit> getAllProduits();
 
+    List<Produit> getProduitsByCategorie(UUID categorieId);
+
     void deleteProduit(UUID id);
     void deleteProduit(UUID id, boolean force);
 }

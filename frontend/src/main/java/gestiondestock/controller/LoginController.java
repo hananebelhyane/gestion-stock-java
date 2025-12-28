@@ -66,12 +66,14 @@ public class LoginController {
                 Session.get().setToken(res.getToken());
                 Session.get().setRole(res.getRole());
                 Session.get().setUsername(res.getUsername());
-                
+                Session.get().setUserId(res.getUserId());
+
                 // DEBUG: Afficher le rôle
                 System.out.println("=== CONNEXION RÉUSSIE ===");
                 System.out.println("Username: " + res.getUsername());
                 System.out.println("Role: " + res.getRole());
-                
+                System.out.println("UserId: " + res.getUserId());
+
                 Platform.runLater(this::switchToView);
             } catch (Exception ex) {
                 Platform.runLater(() -> {
@@ -85,45 +87,45 @@ public class LoginController {
     private void switchToView() {
         try {
             Stage stage = (Stage) loginButton.getScene().getWindow();
-            
+
             // Récupérer le rôle de la session
             String role = Session.get().getRole();
             String fxmlPath;
             String title;
-            
+
             // Normaliser le rôle
             if (role != null) {
                 role = role.toUpperCase().replace("ROLE_", "");
             }
-            
+
             System.out.println("Redirection vers dashboard: " + role);
-            
+
             // Choisir le bon dashboard selon le rôle
             switch (role != null ? role : "") {
                 case "ADMIN":
-                    fxmlPath = "/fxml/layoutBar.fxml";  // Votre layout admin existant
+                    fxmlPath = "/fxml/layoutBar.fxml"; // Votre layout admin existant
                     title = "Dashboard Admin - Gestion de Stock";
                     break;
-                    
+
                 case "MAGASINIER":
                     fxmlPath = "/fxml/magasinier_dashboard.fxml";
                     title = "Dashboard Magasinier - Gestion de Stock";
                     break;
-                    
+
                 case "CLIENT":
                     fxmlPath = "/fxml/client_dashboard.fxml";
                     title = "Dashboard Client - Gestion de Stock";
                     break;
-                    
+
                 default:
                     System.err.println("ERREUR: Rôle inconnu ou non défini: " + role);
                     showAlert(Alert.AlertType.ERROR, "Erreur", "Rôle utilisateur non reconnu");
                     loginButton.setDisable(false);
                     return;
             }
-            
+
             System.out.println("Chargement du fichier FXML: " + fxmlPath);
-            
+
             // Vérifier si le fichier existe
             if (getClass().getResource(fxmlPath) == null) {
                 System.err.println("ERREUR: Fichier FXML introuvable: " + fxmlPath);
@@ -131,26 +133,26 @@ public class LoginController {
                 loginButton.setDisable(false);
                 return;
             }
-            
+
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             Scene scene = new Scene(root);
-            
+
             // Charger les styles CSS
             var css = getClass().getResource("/styles/login.css");
             if (css != null)
                 scene.getStylesheets().add(css.toExternalForm());
-            
+
             // Add dashboard stylesheet
             var dashCss = getClass().getResource("/styles/dashboard.css");
             if (dashCss != null)
                 scene.getStylesheets().add(dashCss.toExternalForm());
-            
+
             stage.setScene(scene);
             stage.setTitle(title);
             stage.setMaximized(true); // Optionnel: plein écran
-            
+
             System.out.println("✅ Redirection réussie vers: " + fxmlPath);
-            
+
         } catch (Exception e) {
             System.err.println("ERREUR lors du chargement du dashboard:");
             e.printStackTrace();

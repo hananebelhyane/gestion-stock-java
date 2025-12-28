@@ -12,6 +12,10 @@ public class ProduitService {
         return ProduitDAO.getAll();
     }
 
+    public List<Produit> getAllProduits(String categorieId) throws IOException, InterruptedException {
+        return ProduitDAO.getAll(categorieId);
+    }
+
     public Produit addProduit(Produit produit) throws IOException, InterruptedException {
         return ProduitDAO.save(produit);
     }

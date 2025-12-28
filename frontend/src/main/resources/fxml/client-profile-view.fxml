@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #F9FAFB;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gestiondestock.controller.ClientProfileController">
+  <VBox alignment="TOP_CENTER" spacing="30" style="-fx-padding: 40;">
+    <Label text="Mon Profil" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #111827;"/>
+    <VBox maxWidth="650" spacing="30" style="-fx-background-color: white; -fx-background-radius: 16; -fx-padding: 40; -fx-border-color: #E5E7EB; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 4);">
+      <VBox alignment="CENTER" spacing="15">
+        <Label fx:id="lblAvatar" text="C" style="-fx-min-width: 100; -fx-min-height: 100; -fx-background-color: #F3F4F6; -fx-background-radius: 50; -fx-alignment: center; -fx-font-size: 40; -fx-font-weight: bold; -fx-border-color: #000; -fx-border-radius: 50; -fx-border-width: 2;"/>
+        <Label fx:id="lblUsername" text="Chargement..." style="-fx-font-weight: bold; -fx-font-size: 22; -fx-text-fill: #111827;"/>
+      </VBox>
+      <Separator/>
+      <GridPane hgap="20" vgap="25">
+        <columnConstraints>
+          <ColumnConstraints minWidth="150" prefWidth="200"/>
+          <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+          <Label text="Nom complet" style="-fx-text-fill: #6B7280; -fx-font-size: 13;"/>
+          <Label fx:id="lblFullName" text="..." style="-fx-font-size: 16; -fx-font-weight: 600;"/>
+        </VBox>
+        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+          <Label text="Téléphone" style="-fx-text-fill: #6B7280; -fx-font-size: 13;"/>
+          <Label fx:id="lblTelephone" text="..." style="-fx-font-size: 16; -fx-font-weight: 600;"/>
+        </VBox>
+        <VBox spacing="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+          <Label text="Adresse" style="-fx-text-fill: #6B7280; -fx-font-size: 13;"/>
+          <Label fx:id="lblAdresse" text="..." style="-fx-font-size: 16; -fx-font-weight: 600;"/>
+        </VBox>
+      </GridPane>
+      <Separator/>
+      <VBox spacing="15">
+        <Button maxWidth="Infinity" onAction="#handleEditProfile" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 14; -fx-font-weight: bold; -fx-cursor: hand;" text="✏️ Modifier les informations"/>
+        <Button maxWidth="Infinity" onAction="#handleChangePassword" style="-fx-background-color: white; -fx-border-color: #D1D5DB; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 14; -fx-font-weight: bold; -fx-text-fill: #374151; -fx-cursor: hand;" text="🔒 Changer le mot de passe"/>
+      </VBox>
+    </VBox>
+  </VBox>
+</ScrollPane>

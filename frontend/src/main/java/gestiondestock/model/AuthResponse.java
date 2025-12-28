@@ -4,6 +4,7 @@ public class AuthResponse {
     private String token;
     private String role;
     private String username;
+    private String userId;
 
     public String getToken() {
         return token;
@@ -15,5 +16,9 @@ public class AuthResponse {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

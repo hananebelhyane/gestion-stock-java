@@ -26,4 +26,7 @@ public class Facture {
 
     private LocalDateTime dateFacture = LocalDateTime.now();
     private Double montantTotal;
+
+    @Column(nullable = false)
+    private boolean estPayee = false;
 }

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/clients")
-@PreAuthorize("hasRole('ADMIN')")
 public class ClientController {
 
     private final ClientService clientService;
@@ -23,6 +22,7 @@ public class ClientController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createClient(@RequestBody Client client) {
         Client saved = clientService.createClient(client);
         java.util.Map<String, Object> body = new java.util.HashMap<>();
@@ -31,6 +31,7 @@ public class ClientController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllActiveClients() {
         try {
             java.util.List<com.gestiondestock.entity.Client> clients = clientService.getAllActiveClients();
@@ -63,8 +64,9 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteClient(@PathVariable java.util.UUID id,
-                                          @RequestParam(required = false) java.util.UUID deleted_by) {
+            @RequestParam(required = false) java.util.UUID deleted_by) {
         java.util.UUID userId = deleted_by != null ? deleted_by : java.util.UUID.randomUUID();
         clientService.deleteClient(id, userId);
         return ResponseEntity.noContent().build();
