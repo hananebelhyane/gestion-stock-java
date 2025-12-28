@@ -1,10 +1,10 @@
-# 🏢 Application de Gestion de Stock
+#  Application de Gestion de Stock
 
 Application desktop de gestion d'inventaire avec **JavaFX** (Frontend) + **Spring Boot** (Backend) + **MySQL** (Base de données).
 
 ---
 
-## 📋 Prérequis
+##  Prérequis
 
 Installez ces logiciels avant de commencer :
 - **Java JDK 17+** 
@@ -13,9 +13,9 @@ Installez ces logiciels avant de commencer :
 
 ---
 
-## ⚙️ Installation
+##  Installation
 
-### 1️⃣ Configuration de la Base de Données
+### 1️ Configuration de la Base de Données
 
 **Ouvrir MySQL Workbench ou ligne de commande MySQL :**
 ```sql
@@ -28,7 +28,7 @@ Get-Content DB.sql | mysql -u root -p gestionStock
 ```
 *(Entrez votre mot de passe MySQL quand demandé)*
 
-### 2️⃣ Configuration du Backend
+### 2️ Configuration du Backend
 
 Ouvrir le fichier : `backend/src/main/resources/application.properties`
 
@@ -40,7 +40,7 @@ spring.datasource.password=VOTRE_MOT_DE_PASSE_MYSQL
 
 ---
 
-## 🚀 Lancement du Projet
+##  Lancement du Projet
 
 ### Ouvrir 2 Terminaux PowerShell
 
