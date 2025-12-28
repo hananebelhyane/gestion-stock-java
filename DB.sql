@@ -1,18 +1,6 @@
-<<<<<<< HEAD
--- =====================================================
--- CRÉATION DE LA BASE DE DONNÉES
--- =====================================================
--- À exécuter en tant que superutilisateur postgres
--- DROP DATABASE IF EXISTS gestionStock;
--- CREATE DATABASE gestionStock;
--- \c gestionStock;
 
--- Activer l'extension UUID
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-=======
 CREATE DATABASE IF NOT EXISTS gestionstock;
 USE gestionstock;
->>>>>>> origin/meryem2
 
 -- =====================================================
 -- TABLE ADMIN (utilise BIGSERIAL pour auto-increment)
