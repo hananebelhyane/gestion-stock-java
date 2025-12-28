@@ -16,8 +16,21 @@ public class Welcome extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
         Scene scene = new Scene(root);
+        
+        // Charger le CSS
+        var css = getClass().getResource("/styles/login.css");
+        if (css != null) {
+            scene.getStylesheets().add(css.toExternalForm());
+        }
+        
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Gestion de Commande");
+        primaryStage.setTitle("Login - Gestion de Stock");
+        
+        // Définir une taille raisonnable et centrer la fenêtre
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(650);
+        primaryStage.centerOnScreen();
+        
         primaryStage.show();
     }
 }

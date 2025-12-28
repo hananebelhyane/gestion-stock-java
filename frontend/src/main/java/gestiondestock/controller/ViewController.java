@@ -98,14 +98,15 @@ public class ViewController {
 
         // Load dashboard by default for admins
         if (isAdmin) {
-            loadContent("dashboard");
-            // Définir le bouton Dashboard comme actif par défaut
+            // Définir le bouton Dashboard comme actif dès le début
             if (btnDashboard != null) {
                 activeButton = btnDashboard;
-                if (!btnDashboard.getStyleClass().contains("active")) {
-                    btnDashboard.getStyleClass().add("active");
-                }
+                // Appliquer immédiatement la classe active
+                btnDashboard.getStyleClass().add("active");
+                // Forcer aussi le style inline pour garantir l'affichage
+                btnDashboard.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: 600;");
             }
+            loadContent("dashboard");
         }
     }
 
@@ -159,17 +160,20 @@ public class ViewController {
      * Met à jour l'état actif des boutons de la sidebar
      */
     private void setActiveButton(ActionEvent e) {
-        // Retirer la classe active de l'ancien bouton
+        // Retirer la classe active et le style de l'ancien bouton
         if (activeButton != null) {
             activeButton.getStyleClass().remove("active");
+            activeButton.setStyle(""); // Retirer le style inline
         }
         
-        // Ajouter la classe active au nouveau bouton
+        // Ajouter la classe active et le style au nouveau bouton
         if (e != null && e.getSource() instanceof Button) {
             activeButton = (Button) e.getSource();
             if (!activeButton.getStyleClass().contains("active")) {
                 activeButton.getStyleClass().add("active");
             }
+            // Appliquer aussi le style inline pour garantir l'affichage
+            activeButton.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: 600;");
         }
     }
 
@@ -270,6 +274,14 @@ public class ViewController {
             javafx.scene.Scene scene = new javafx.scene.Scene(rootNode);
             var css = getClass().getResource("/styles/login.css");
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
+            
+            // Restaurer la fenêtre à une taille normale
+            stage.setMaximized(false);
+            stage.setWidth(1000);
+            stage.setHeight(650);
+            stage.centerOnScreen();
+            stage.setTitle("Login - Gestion de Stock");
+            
             stage.setScene(scene);
         } catch (Exception ex) {
             // ignore navigation errors here
