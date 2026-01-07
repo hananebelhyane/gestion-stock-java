@@ -3,10 +3,13 @@ package com.gestiondestock.service;
 import com.gestiondestock.dto.CommandeClientDTO;
 import com.gestiondestock.dto.CommandeClientRequest;
 import com.gestiondestock.dto.LigneCommandeDTO;
+import com.gestiondestock.dto.PasserCommandeRequest;
+import com.gestiondestock.dto.LigneCommandeRequest;
 import com.gestiondestock.entity.*;
 import com.gestiondestock.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -20,7 +23,10 @@ public class CommandeClientService {
     private final LigneCommandeRepository ligneCommandeRepository;
     private final ClientRepository clientRepository;
     private final ProduitRepository produitRepository;
+    private final StockRepository stockRepository;
+    private final SortieStockRepository sortieStockRepository;
 
+    // ================== PANIER ==================
     public CommandeClientDTO addOrUpdatePanierItem(UUID clientId, UUID produitId, int quantiteDelta) {
         CommandeClientDTO pending = createOrGetPendingCommandeForClient(clientId);
         UUID commandeId = pending.getId();
@@ -76,6 +82,7 @@ public class CommandeClientService {
         return convertToDTO(updated);
     }
 
+    // ================== COMMANDES ==================
     public List<CommandeClient> findAll() {
         return commandeClientRepository.findAll();
     }
@@ -127,7 +134,6 @@ public class CommandeClientService {
             return convertToDTO(existing.get());
         }
 
-        // Create new pending commande
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
 
@@ -140,6 +146,7 @@ public class CommandeClientService {
         return convertToDTO(saved);
     }
 
+    // ================== LIGNES ==================
     public CommandeClientDTO addLigneCommande(UUID commandeId, LigneCommandeDTO ligneDTO) {
         CommandeClient commande = commandeClientRepository.findById(commandeId)
                 .orElseThrow(() -> new RuntimeException("Commande not found"));
@@ -225,7 +232,67 @@ public class CommandeClientService {
         }
     }
 
-    // Helper methods
+    // ================== PASSER COMMANDE ==================
+    @Transactional
+    public void passerCommande(PasserCommandeRequest request) {
+
+        // 🔹 Récupérer client par username (connecté)
+        Client client = clientRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("Client non trouvé"));
+
+        // 🔹 Mettre à jour l'adresse si fournie
+        if (request.getAdresse() != null && !request.getAdresse().isEmpty()) {
+            client.setAdresse(request.getAdresse());
+            clientRepository.save(client);
+        }
+
+        // 🔹 Créer la commande
+        CommandeClient commande = new CommandeClient();
+        commande.setClient(client);
+        commande.setDateCommande(LocalDateTime.now());
+        commande.setStatut(CommandeClient.StatutCommande.confirmee);
+        commande = commandeClientRepository.save(commande);
+
+        // 🔹 Parcourir les lignes de commande
+        for (LigneCommandeRequest ligneReq : request.getLignes()) {
+
+            UUID produitId = parseUUID(ligneReq.getProduitId());
+
+            Stock stock = stockRepository.findByProduitId(produitId);
+            if (stock == null) {
+                throw new RuntimeException("Produit non trouvé");
+            }
+
+            // Vérifier stock
+            if (stock.getQuantiteDisponible() < ligneReq.getQuantite()) {
+                throw new RuntimeException(
+                        "Stock insuffisant pour le produit " + stock.getProduit().getNom());
+            }
+
+            // Créer ligne commande
+            LigneCommande ligne = new LigneCommande();
+            ligne.setCommande(commande);
+            ligne.setProduit(stock.getProduit());
+            ligne.setQuantite(ligneReq.getQuantite());
+            ligne.setPrixUnitaire(stock.getProduit().getPrixUnitaire());
+            ligne.setMontantTotal(ligneReq.getQuantite() * stock.getProduit().getPrixUnitaire());
+            ligneCommandeRepository.save(ligne);
+
+            // Sortie stock
+            SortieStock sortie = new SortieStock();
+            sortie.setProduit(stock.getProduit());
+            sortie.setQuantite(ligneReq.getQuantite());
+            sortie.setDate_sortie(LocalDateTime.now());
+            sortie.setLignecommande(ligne);
+            sortieStockRepository.save(sortie);
+
+            // Mettre à jour stock
+            stock.setQuantiteDisponible(stock.getQuantiteDisponible() - ligneReq.getQuantite());
+            stockRepository.save(stock);
+        }
+    }
+
+    // ================== HELPERS ==================
     private CommandeClientDTO convertToDTO(CommandeClient commande) {
         CommandeClientDTO dto = new CommandeClientDTO();
         dto.setId(commande.getId());
@@ -275,37 +342,15 @@ public class CommandeClientService {
         return commande;
     }
 
-    public CommandeClient createCommandeFromRequest(CommandeClientRequest request) {
-        // Créer et persister le client d'abord
-        Client client = new Client();
-        client.setId(UUID.randomUUID());
-        client.setNom(request.getClient().getNom());
-        client.setPrenom(request.getClient().getPrenom());
-        client.setUsername(
-                request.getClient().getNom().toLowerCase() + "." + request.getClient().getPrenom().toLowerCase());
-        client.setTelephone(""); // valeur par défaut
-        client.setAdresse(""); // valeur par défaut
-        client.setMotDePasse(""); // valeur par défaut
-
-        Client savedClient = clientRepository.save(client);
-
-        // Créer la commande avec le client persisté
-        CommandeClient commande = new CommandeClient();
-        commande.setClient(savedClient);
-        commande.setDateCommande(LocalDateTime.now());
-        commande.setSeuilMax(request.getSeuilMax());
-
-        // Gérer le statut
-        if (request.getStatut() != null && !request.getStatut().isEmpty()) {
-            try {
-                commande.setStatut(CommandeClient.StatutCommande.valueOf(request.getStatut()));
-            } catch (IllegalArgumentException e) {
-                commande.setStatut(CommandeClient.StatutCommande.en_attente);
-            }
+    private static UUID parseUUID(String idStr) {
+        if (idStr == null)
+            throw new IllegalArgumentException("ID null");
+        if (idStr.length() == 32) {
+            long mostSigBits = new java.math.BigInteger(idStr.substring(0, 16), 16).longValue();
+            long leastSigBits = new java.math.BigInteger(idStr.substring(16), 16).longValue();
+            return new UUID(mostSigBits, leastSigBits);
         } else {
-            commande.setStatut(CommandeClient.StatutCommande.en_attente);
+            return UUID.fromString(idStr);
         }
-
-        return commandeClientRepository.save(commande);
     }
 }

@@ -149,15 +149,15 @@ public class LoginController {
 
             stage.setScene(scene);
             stage.setTitle(title);
-            
+
             // Ajuster la taille de la fenêtre pour éviter qu'elle dépasse l'écran
             javafx.stage.Screen screen = javafx.stage.Screen.getPrimary();
             javafx.geometry.Rectangle2D bounds = screen.getVisualBounds();
-            
+
             // Définir une taille raisonnable (90% de l'écran maximum)
             double maxWidth = bounds.getWidth() * 0.9;
             double maxHeight = bounds.getHeight() * 0.9;
-            
+
             stage.setWidth(Math.min(1400, maxWidth));
             stage.setHeight(Math.min(900, maxHeight));
             stage.centerOnScreen();

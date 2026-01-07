@@ -1,23 +1,31 @@
 package com.gestiondestock.controller;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.gestiondestock.dto.CommandeClientDTO;
-import com.gestiondestock.dto.CommandeClientRequest;
 import com.gestiondestock.dto.CommandeClientResponse;
 import com.gestiondestock.dto.FactureDTO;
 import com.gestiondestock.dto.LigneCommandeDTO;
 import com.gestiondestock.dto.PanierItemRequest;
-import com.gestiondestock.entity.CommandeClient;
+import com.gestiondestock.dto.PasserCommandeRequest;
 import com.gestiondestock.entity.Client;
+import com.gestiondestock.entity.CommandeClient;
 import com.gestiondestock.service.CommandeClientService;
 import com.gestiondestock.service.FactureService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/commandes")
@@ -42,13 +50,13 @@ public class CommandeClientController {
 
     @PostMapping("/clients")
     @PreAuthorize("hasAnyRole('ADMIN', 'MAGASINIER')")
-    public ResponseEntity<CommandeClientResponse> createCommandeClient(@RequestBody CommandeClientRequest request) {
+    public ResponseEntity<?> createCommandeClient(@RequestBody PasserCommandeRequest request) {
         try {
-            CommandeClient saved = commandeService.createCommandeFromRequest(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(saved));
+            commandeService.passerCommande(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Commande créée avec succès");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Erreur création commande: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -219,6 +227,16 @@ public class CommandeClientController {
             return ResponseEntity.ok(commandes);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PostMapping("/passer")
+    public ResponseEntity<?> passerCommande(@RequestBody PasserCommandeRequest request) {
+        try {
+            commandeService.passerCommande(request);
+            return ResponseEntity.ok("Commande créée avec succès");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

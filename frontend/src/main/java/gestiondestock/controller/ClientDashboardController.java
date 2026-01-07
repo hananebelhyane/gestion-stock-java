@@ -1,12 +1,8 @@
 package gestiondestock.controller;
 
 import gestiondestock.dao.CartDAO;
-import gestiondestock.model.CartItem;
-import gestiondestock.model.Categorie;
-import gestiondestock.model.Produit;
-import gestiondestock.model.Session;
-import gestiondestock.service.CategorieService;
-import gestiondestock.service.ProduitService;
+import gestiondestock.model.*;
+import gestiondestock.service.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -23,26 +20,21 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ClientDashboardController {
-
     @FXML
     private BorderPane root;
     @FXML
     private VBox sidebar;
     @FXML
-    private Button sidebarToggleBtn;
-    @FXML
     private ImageView logoImage;
     @FXML
     private FlowPane productGrid;
     @FXML
-    private ComboBox<Categorie> categoryFilter;
+    private HBox categoryFilterContainer;
     @FXML
     private Label cartBadge;
 
@@ -50,110 +42,123 @@ public class ClientDashboardController {
     private final CategorieService categorieService = new CategorieService();
     private final ObservableList<CartItem> cartItems = FXCollections.observableArrayList();
 
+    // Node to save the initial catalogue view for sidebar navigation
+    private Node catalogueView;
+
     @FXML
     public void initialize() {
         loadLogo();
-        setupCategoryFilter();
         loadCategories();
         loadProducts(null);
-        refreshCartFromServer(false);
         updateCartBadge();
+
+        // FIXED: Saved the initial center node to allow navigation back
+        this.catalogueView = root.getCenter();
+    }
+
+    // --- NAVIGATION ---
+
+    @FXML
+    public void loadAllProducts() {
+        // Restores the catalogue view to the center of the BorderPane
+        if (catalogueView != null) {
+            root.setCenter(catalogueView);
+        }
+        loadProducts(null);
     }
 
     @FXML
-    private void toggleSidebar() {
-        if (sidebar == null || sidebarToggleBtn == null)
-            return;
-        boolean willShow = !sidebar.isVisible();
-        sidebar.setVisible(willShow);
-        sidebar.setManaged(willShow);
-        sidebarToggleBtn.setText(willShow ? "⟨" : "☰");
+    private void navigateToProfile() {
+        try {
+            Parent p = FXMLLoader.load(getClass().getResource("/fxml/client-profile-view.fxml"));
+            root.setCenter(p);
+        } catch (Exception e) {
+            showError("Erreur lors de l'ouverture du profil", e);
+        }
     }
 
     @FXML
-    private void onCategoryChanged() {
-        Categorie selected = categoryFilter != null ? categoryFilter.getValue() : null;
-        String categoryId = selected != null ? selected.getId() : null;
-        loadProducts(categoryId);
+    private void handleLogout() {
+        Session.get().clear();
+        try {
+            Parent login = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+            Stage stage = (Stage) root.getScene().getWindow();
+            stage.setScene(new Scene(login));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    // --- CART MANAGEMENT ---
 
     @FXML
     private void showCart() {
-        Task<CartDAO.OrderResponse> refreshTask = new Task<>() {
+        Task<CartDAO.OrderResponse> task = new Task<>() {
             @Override
             protected CartDAO.OrderResponse call() {
                 return CartDAO.getPanier();
             }
         };
-
-        refreshTask.setOnSucceeded(e -> {
-            updateCartFromOrder(refreshTask.getValue());
+        task.setOnSucceeded(e -> {
+            updateCartFromOrder(task.getValue());
             Platform.runLater(this::showCartDialog);
         });
-        refreshTask.setOnFailed(e -> {
-            showError("Impossible de charger le panier", refreshTask.getException());
-            Platform.runLater(this::showCartDialog);
-        });
-
-        new Thread(refreshTask, "panier-refresh-before-dialog").start();
+        task.setOnFailed(e -> showError("Erreur chargement panier", task.getException()));
+        new Thread(task).start();
     }
 
     private void showCartDialog() {
         Dialog<Void> dialog = new Dialog<>();
         dialog.initOwner(root.getScene().getWindow());
-        dialog.initModality(Modality.WINDOW_MODAL);
-        dialog.setTitle("Panier");
-
-        DialogPane pane = dialog.getDialogPane();
-        pane.getButtonTypes().add(ButtonType.CLOSE);
-
-        VBox content = new VBox(10);
-        content.setPadding(new Insets(10));
+        dialog.setTitle("Mon Panier");
+        VBox content = new VBox(15);
+        content.setPadding(new Insets(20));
+        content.setPrefWidth(450);
 
         if (cartItems.isEmpty()) {
-            Label empty = new Label("Votre panier est vide.");
-            empty.setStyle("-fx-text-fill: #6b7280;");
-            content.getChildren().add(empty);
+            content.getChildren().add(new Label("Votre panier est vide."));
         } else {
             for (CartItem item : cartItems) {
                 HBox row = new HBox(10);
                 row.setAlignment(Pos.CENTER_LEFT);
 
                 Label name = new Label(item.getProduit().getNom());
-                name.setMaxWidth(Double.MAX_VALUE);
-                HBox.setHgrow(name, Priority.ALWAYS);
-
+                name.setPrefWidth(150);
                 Label qty = new Label("x" + item.getQuantite());
-                Label total = new Label(String.format("%.2f DH", item.getTotal()));
+                Label price = new Label(String.format("%.2f DH", item.getTotal()));
 
-                Button remove = new Button("🗑");
-                remove.setOnAction(e -> {
-                    removeFromPanier(item, dialog);
+                Button delBtn = new Button("🗑");
+                delBtn.setStyle("-fx-text-fill: red; -fx-background-color: transparent; -fx-cursor: hand;");
+                delBtn.setOnAction(e -> {
+                    dialog.close();
+                    removeFromPanier(item);
                 });
 
-                row.getChildren().addAll(name, qty, total, remove);
+                row.getChildren().addAll(name, qty, price, new Region(), delBtn);
+                HBox.setHgrow(row.getChildren().get(3), Priority.ALWAYS);
                 content.getChildren().add(row);
             }
 
-            double totalPrice = cartItems.stream().mapToDouble(CartItem::getTotal).sum();
-            Label totalLabel = new Label(String.format("Total: %.2f DH", totalPrice));
-            totalLabel.setStyle("-fx-font-weight: bold;");
-            content.getChildren().add(totalLabel);
+            Separator sep = new Separator();
+            double totalVal = cartItems.stream().mapToDouble(CartItem::getTotal).sum();
+            Label totalLabel = new Label(String.format("Total: %.2f DH", totalVal));
+            totalLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
 
-            HBox actions = new HBox(10);
-            actions.setAlignment(Pos.CENTER_RIGHT);
-
-            Button validateBtn = new Button("Valider le panier");
-            validateBtn.setOnAction(e -> {
+            // UI UPDATE: Validation button is now Black
+            Button checkoutBtn = new Button("Confirmer la commande");
+            checkoutBtn.setMaxWidth(Double.MAX_VALUE);
+            checkoutBtn.setStyle(
+                    "-fx-background-color: #000000; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10; -fx-background-radius: 8; -fx-cursor: hand;");
+            checkoutBtn.setOnAction(e -> {
                 dialog.close();
                 performCheckout();
             });
 
-            actions.getChildren().add(validateBtn);
-            content.getChildren().add(actions);
+            content.getChildren().addAll(sep, totalLabel, checkoutBtn);
         }
 
-        pane.setContent(content);
+        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         dialog.showAndWait();
     }
 
@@ -162,115 +167,125 @@ public class ClientDashboardController {
             @Override
             protected CartDAO.ConfirmationResponse call() {
                 CartDAO.OrderResponse order = CartDAO.getPanier();
-                if (order == null || order.lignesCommande == null || order.lignesCommande.isEmpty()) {
-                    return null;
-                }
-                return CartDAO.confirmOrder(order.id);
+                return (order == null) ? null : CartDAO.confirmOrder(order.id);
             }
         };
-
-        task.setOnSucceeded(ev -> {
-            CartDAO.ConfirmationResponse cf = task.getValue();
-            if (cf == null || cf.facture_data == null) {
-                showError("Votre panier est vide", null);
-                return;
-            }
-
-            Alert ok = new Alert(Alert.AlertType.INFORMATION);
-            ok.setTitle("Panier");
-            ok.setHeaderText("Panier validé avec succès");
-            ok.setContentText("Votre commande a été confirmée et la facture a été générée.");
-            ok.showAndWait();
-
-            cartItems.clear();
-            updateCartBadge();
-            showFactureDialog(cf.facture_data);
-        });
-        task.setOnFailed(ev -> showError("Échec de la validation du panier", task.getException()));
-        new Thread(task, "panier-validate-task").start();
-    }
-
-    private void showOrderConfirmation(CartDAO.OrderResponse order) {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirmation de commande");
-        confirm.setHeaderText("Confirmer et générer la facture ?");
-        confirm.setContentText(String.format("Commande: %s\nTotal: %.2f DH", order.id, order.montantTotal));
-
-        confirm.showAndWait().ifPresent(resp -> {
-            if (resp == ButtonType.OK) {
-                Task<CartDAO.ConfirmationResponse> task = new Task<>() {
-                    @Override
-                    protected CartDAO.ConfirmationResponse call() {
-                        return CartDAO.confirmOrder(order.id);
-                    }
-                };
-
-                task.setOnSucceeded(e -> {
-                    CartDAO.ConfirmationResponse cf = task.getValue();
-                    if (cf == null || cf.facture_data == null) {
-                        showError("Échec de la confirmation", null);
-                        return;
-                    }
-                    cartItems.clear();
-                    updateCartBadge();
-                    showFactureDialog(cf.facture_data);
-                });
-                task.setOnFailed(e -> showError("Échec de la confirmation", task.getException()));
-                new Thread(task, "confirm-task").start();
+        task.setOnSucceeded(e -> {
+            if (task.getValue() != null) {
+                new Alert(Alert.AlertType.INFORMATION, "Commande confirmée !").show();
+                updateCartFromOrder(null);
             }
         });
+        new Thread(task).start();
     }
 
-    private void showFactureDialog(CartDAO.FactureResponse facture) {
-        Dialog<Void> dialog = new Dialog<>();
-        dialog.setTitle("Facture");
-        DialogPane pane = dialog.getDialogPane();
-        pane.getButtonTypes().add(ButtonType.CLOSE);
-
-        VBox box = new VBox(10);
-        box.setPadding(new Insets(12));
-        box.getChildren().addAll(
-                new Label("Facture: " + facture.id),
-                new Label("Commande: " + facture.commandeId),
-                new Label(String.format("Montant: %.2f DH", facture.montantTotal)),
-                new Label("Payée: " + (facture.estPayee ? "Oui" : "Non")));
-
-        pane.setContent(box);
-        dialog.showAndWait();
+    private void removeFromPanier(CartItem item) {
+        Task<CartDAO.OrderResponse> task = new Task<>() {
+            @Override
+            protected CartDAO.OrderResponse call() {
+                return CartDAO.removePanierItem(item.getProduit().getId());
+            }
+        };
+        task.setOnSucceeded(e -> {
+            updateCartFromOrder(task.getValue());
+            showCart();
+        });
+        new Thread(task).start();
     }
 
-    private void loadLogo() {
-        if (logoImage != null) {
-            String[] candidates = new String[] { "/assets/gs.png" };
-            for (String path : candidates) {
-                var url = getClass().getResource(path);
-                if (url != null) {
-                    logoImage.setImage(new Image(url.toExternalForm(), true));
-                    return;
+    // --- QUANTITY DIALOG ---
+
+    private void showQuantityDialog(Produit produit) {
+        Dialog<Integer> dialog = new Dialog<>();
+        dialog.initOwner(root.getScene().getWindow());
+        dialog.setTitle("Ajouter au panier");
+        dialog.setHeaderText("Produit : " + produit.getNom());
+
+        ButtonType confirmButtonType = new ButtonType("Confirmer", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, ButtonType.CANCEL);
+
+        VBox content = new VBox(15);
+        content.setPadding(new Insets(20));
+        content.setPrefWidth(350);
+
+        Label lblPrix = new Label(String.format("Prix unitaire : %.2f DH", produit.getPrixUnitaire()));
+
+        HBox qtyBox = new HBox(10);
+        qtyBox.setAlignment(Pos.CENTER_LEFT);
+        Label lblQtyText = new Label("Quantité :");
+        Spinner<Integer> qtySpinner = new Spinner<>(1, 100, 1);
+        qtySpinner.setEditable(true);
+        qtyBox.getChildren().addAll(lblQtyText, qtySpinner);
+
+        Label lblTotal = new Label(String.format("Total : %.2f DH", produit.getPrixUnitaire()));
+        lblTotal.setStyle("-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: #000000;");
+
+        qtySpinner.valueProperty().addListener((obs, oldVal, newVal) -> {
+            double total = newVal * produit.getPrixUnitaire();
+            lblTotal.setText(String.format("Total : %.2f DH", total));
+        });
+
+        content.getChildren().addAll(lblPrix, qtyBox, lblTotal);
+        dialog.getDialogPane().setContent(content);
+
+        // UI UPDATE: Confirmation button is Black
+        Button btnConfirm = (Button) dialog.getDialogPane().lookupButton(confirmButtonType);
+        btnConfirm.setStyle(
+                "-fx-background-color: #000000; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;");
+
+        dialog.setResultConverter(btn -> btn == confirmButtonType ? qtySpinner.getValue() : null);
+
+        dialog.showAndWait().ifPresent(quantity -> {
+            Task<CartDAO.OrderResponse> task = new Task<>() {
+                @Override
+                protected CartDAO.OrderResponse call() {
+                    return CartDAO.addPanierItem(produit.getId(), quantity);
                 }
-            }
-            logoImage.setManaged(false);
-            logoImage.setVisible(false);
-        }
+            };
+            task.setOnSucceeded(e -> updateCartBadge());
+            task.setOnFailed(e -> showError("Erreur ajout panier", task.getException()));
+            new Thread(task).start();
+        });
     }
 
-    private void setupCategoryFilter() {
-        if (categoryFilter == null)
-            return;
-        categoryFilter.setCellFactory(list -> new ListCell<>() {
+    // --- UTILS & DATA LOADING ---
+
+    private void updateCartFromOrder(CartDAO.OrderResponse order) {
+        if (order == null || order.lignesCommande == null) {
+            cartItems.clear();
+        } else {
+            List<CartItem> items = order.lignesCommande.stream().map(l -> {
+                Produit p = new Produit();
+                p.setId(l.produitId);
+                p.setNom(l.produitNom);
+                p.setPrixUnitaire(l.prixUnitaire);
+                return new CartItem(p, l.quantite);
+            }).collect(Collectors.toList());
+            cartItems.setAll(items);
+        }
+        updateCartBadge();
+    }
+
+    private void updateCartBadge() {
+        Task<CartDAO.OrderResponse> task = new Task<>() {
             @Override
-            protected void updateItem(Categorie item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? null : item.getNom());
+            protected CartDAO.OrderResponse call() {
+                return CartDAO.getPanier();
             }
+        };
+        task.setOnSucceeded(e -> {
+            CartDAO.OrderResponse order = task.getValue();
+            int count = (order != null && order.lignesCommande != null)
+                    ? order.lignesCommande.stream().mapToInt(l -> l.quantite).sum()
+                    : 0;
+            Platform.runLater(() -> {
+                if (cartBadge != null) {
+                    cartBadge.setText(String.valueOf(count));
+                    cartBadge.setVisible(count > 0);
+                }
+            });
         });
-        categoryFilter.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(Categorie item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? "Toutes les catégories" : item.getNom());
-            }
-        });
+        new Thread(task).start();
     }
 
     private void loadCategories() {
@@ -280,305 +295,85 @@ public class ClientDashboardController {
                 return categorieService.getAllCategories();
             }
         };
-
         task.setOnSucceeded(e -> {
-            List<Categorie> categories = task.getValue();
-            categories.sort(Comparator.comparing(Categorie::getNom, String.CASE_INSENSITIVE_ORDER));
-            categoryFilter.getItems().clear();
-            categoryFilter.getItems().add(null);
-            categoryFilter.getItems().addAll(categories);
-            categoryFilter.setValue(null);
+            categoryFilterContainer.getChildren().clear();
+            categoryFilterContainer.getChildren().add(createCategoryBtn("Tous", null, true));
+            for (Categorie c : task.getValue()) {
+                categoryFilterContainer.getChildren().add(createCategoryBtn(c.getNom(), c.getId(), false));
+            }
         });
-        task.setOnFailed(e -> showError("Impossible de charger les catégories", task.getException()));
-        new Thread(task, "categories-loader").start();
+        new Thread(task).start();
     }
 
-    private void loadProducts(String categoryId) {
+    private Button createCategoryBtn(String name, String id, boolean isSelected) {
+        Button btn = new Button(name);
+        // UI UPDATE: Uniform shape for all categories
+        String baseStyle = "-fx-background-radius: 20; -fx-padding: 8 20; -fx-cursor: hand; -fx-font-weight: bold; -fx-min-width: 80;";
+        String inactiveStyle = baseStyle
+                + "-fx-background-color: white; -fx-border-color: #E5E7EB; -fx-border-radius: 20; -fx-text-fill: #4B5563;";
+        String activeStyle = baseStyle + "-fx-background-color: #000000; -fx-text-fill: white;";
+
+        btn.setStyle(isSelected ? activeStyle : inactiveStyle);
+
+        btn.setOnAction(e -> {
+            // UI UPDATE: Highlight current selected category in Black
+            categoryFilterContainer.getChildren().forEach(n -> ((Button) n).setStyle(inactiveStyle));
+            btn.setStyle(activeStyle);
+            loadProducts(id);
+        });
+        return btn;
+    }
+
+    private void loadProducts(String catId) {
+        productGrid.getChildren().clear();
         Task<List<Produit>> task = new Task<>() {
             @Override
             protected List<Produit> call() throws Exception {
-                return produitService.getAllProduits(categoryId);
+                return produitService.getAllProduits(catId);
             }
         };
-        task.setOnSucceeded(e -> renderProducts(task.getValue()));
-        task.setOnFailed(e -> showError("Impossible de charger les produits", task.getException()));
-        new Thread(task, "products-loader").start();
+        task.setOnSucceeded(e -> {
+            for (Produit p : task.getValue())
+                productGrid.getChildren().add(buildProductCard(p));
+        });
+        new Thread(task).start();
     }
 
-    private void renderProducts(List<Produit> produits) {
-        if (productGrid == null)
-            return;
-        productGrid.getChildren().clear();
-
-        if (produits == null || produits.isEmpty()) {
-            Label empty = new Label("Aucun produit pour cette catégorie.");
-            empty.setStyle("-fx-text-fill: #6b7280;");
-            productGrid.getChildren().add(empty);
-            return;
-        }
-
-        for (Produit produit : produits) {
-            productGrid.getChildren().add(buildCard(produit));
-        }
-    }
-
-    private VBox buildCard(Produit produit) {
-        VBox card = new VBox(8);
-        card.setPrefWidth(220);
-        card.setPadding(new Insets(12));
+    private VBox buildProductCard(Produit p) {
+        VBox card = new VBox(12);
+        card.setPadding(new Insets(15));
+        card.setPrefWidth(240);
+        // Original style with white background and dropshadow
         card.setStyle(
-                "-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);");
+                "-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 4); -fx-border-color: #E5E7EB; -fx-border-width: 1; -fx-border-radius: 12;");
 
-        ImageView imageView = new ImageView();
-        imageView.setFitWidth(196);
-        imageView.setFitHeight(140);
-        imageView.setPreserveRatio(true);
-        if (produit.getUrlImage() != null && !produit.getUrlImage().isBlank()) {
-            try {
-                imageView.setImage(new Image(produit.getUrlImage(), true));
-            } catch (Exception ignored) {
-                var fallback = getClass().getResourceAsStream("/assets/placeholder.png");
-                if (fallback != null) {
-                    imageView.setImage(new Image(fallback));
-                }
-            }
-        } else {
-            var fallback = getClass().getResourceAsStream("/assets/placeholder.png");
-            if (fallback != null) {
-                imageView.setImage(new Image(fallback));
-            }
-        }
+        Label name = new Label(p.getNom());
+        name.setStyle("-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #111827;");
+        Label price = new Label(String.format("%.2f DH", p.getPrixUnitaire()));
+        price.setStyle("-fx-font-weight: 800; -fx-font-size: 16px; -fx-text-fill: #374151;");
 
-        Label name = new Label(produit.getNom());
-        name.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        Button addBtn = new Button("Ajouter au panier");
+        addBtn.setMaxWidth(Double.MAX_VALUE);
+        addBtn.setStyle(
+                "-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10; -fx-font-weight: bold; -fx-cursor: hand;");
+        addBtn.setOnAction(e -> showQuantityDialog(p));
 
-        Label price = new Label(
-                String.format("%.2f DH", produit.getPrixUnitaire() != null ? produit.getPrixUnitaire() : 0.0));
-        price.setStyle("-fx-text-fill: #2563eb; -fx-font-weight: bold;");
-
-        Label categoryLabel = new Label(produit.getCategorie() != null ? produit.getCategorie().getNom() : "");
-        categoryLabel.setStyle("-fx-text-fill: #6b7280; -fx-font-size: 12px;");
-
-        HBox actions = new HBox(8);
-        actions.setAlignment(Pos.CENTER_LEFT);
-
-        Button infoBtn = new Button("ℹ Info");
-        infoBtn.setOnAction(e -> showProductInfo(produit));
-
-        Button addBtn = new Button("+ Ajouter au panier");
-        addBtn.setDefaultButton(true);
-        addBtn.setOnAction(e -> addToCart(produit));
-
-        actions.getChildren().addAll(infoBtn, addBtn);
-        card.getChildren().addAll(imageView, name, price, categoryLabel, actions);
+        card.getChildren().addAll(name, price, addBtn);
         return card;
     }
 
-    private void showProductInfo(Produit produit) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Produit");
-        alert.setHeaderText(produit.getNom());
-        String description = Optional.ofNullable(produit.getDescription()).orElse("Aucune description");
-        String categorie = produit.getCategorie() != null ? produit.getCategorie().getNom() : "N/A";
-        String fournisseur = produit.getFournisseur() != null ? produit.getFournisseur().getNom() : "N/A";
-        alert.setContentText(
-                "Prix: " + String.format("%.2f DH", produit.getPrixUnitaire() != null ? produit.getPrixUnitaire() : 0.0)
-                        + "\nCatégorie: " + categorie
-                        + "\nFournisseur: " + fournisseur
-                        + "\n\n" + description);
-        alert.showAndWait();
+    private void loadLogo() {
+        var url = getClass().getResource("/assets/gs.png");
+        if (url != null)
+            logoImage.setImage(new Image(url.toExternalForm(), true));
     }
 
-    private void addToCart(Produit produit) {
-        if (produit == null || produit.getId() == null) {
-            showError("Produit invalide", null);
-            return;
-        }
-
-        Task<CartDAO.OrderResponse> task = new Task<>() {
-            @Override
-            protected CartDAO.OrderResponse call() {
-                return CartDAO.addPanierItem(produit.getId(), 1);
-            }
-        };
-
-        task.setOnSucceeded(e -> {
-            CartDAO.OrderResponse updated = task.getValue();
-            if (updated == null) {
-                showError("Impossible d'ajouter au panier", null);
-                return;
-            }
-            updateCartFromOrder(updated);
-        });
-        task.setOnFailed(e -> showError("Impossible d'ajouter au panier", task.getException()));
-        new Thread(task, "panier-add-task").start();
-    }
-
-    private void removeFromPanier(CartItem item, Dialog<Void> dialog) {
-        if (item == null || item.getProduit() == null || item.getProduit().getId() == null) {
-            return;
-        }
-
-        Task<CartDAO.OrderResponse> task = new Task<>() {
-            @Override
-            protected CartDAO.OrderResponse call() {
-                return CartDAO.removePanierItem(item.getProduit().getId());
-            }
-        };
-
-        task.setOnSucceeded(e -> {
-            updateCartFromOrder(task.getValue());
-            dialog.close();
-            showCart();
-        });
-        task.setOnFailed(e -> showError("Impossible de supprimer l'article", task.getException()));
-        new Thread(task, "panier-remove-task").start();
-    }
-
-    private void refreshCartFromServer(boolean showErrors) {
-        Task<CartDAO.OrderResponse> task = new Task<>() {
-            @Override
-            protected CartDAO.OrderResponse call() {
-                return CartDAO.getPanier();
-            }
-        };
-
-        task.setOnSucceeded(e -> updateCartFromOrder(task.getValue()));
-        task.setOnFailed(e -> {
-            if (showErrors) {
-                showError("Impossible de charger le panier", task.getException());
-            }
-        });
-        new Thread(task, "panier-refresh-task").start();
-    }
-
-    private void updateCartFromOrder(CartDAO.OrderResponse order) {
+    private void showError(String msg, Throwable t) {
+        if (t != null)
+            t.printStackTrace();
         Platform.runLater(() -> {
-            cartItems.setAll(toCartItems(order));
-            updateCartBadge();
-        });
-    }
-
-    private List<CartItem> toCartItems(CartDAO.OrderResponse order) {
-        if (order == null || order.lignesCommande == null) {
-            return List.of();
-        }
-        return order.lignesCommande.stream()
-                .filter(l -> l != null && l.produitId != null)
-                .map(l -> {
-                    Produit p = new Produit();
-                    p.setId(l.produitId);
-                    p.setNom(l.produitNom);
-                    p.setPrixUnitaire(l.prixUnitaire);
-                    return new CartItem(p, l.quantite);
-                })
-                .filter(ci -> ci.getQuantite() > 0)
-                .collect(Collectors.toList());
-    }
-
-    private void updateCartBadge() {
-        if (cartBadge == null)
-            return;
-        int total = cartItems.stream().mapToInt(CartItem::getQuantite).sum();
-        cartBadge.setText(String.valueOf(total));
-        cartBadge.setVisible(total > 0);
-        cartBadge.setManaged(true);
-    }
-
-    private void showError(String message, Throwable ex) {
-        if (ex != null) {
-            ex.printStackTrace();
-        }
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText(message);
-            alert.setContentText(ex != null ? ex.getMessage() : message);
-            alert.showAndWait();
-        });
-    }
-
-    @FXML
-    private void showLastFacture() {
-        Task<CartDAO.FactureResponse> task = new Task<>() {
-            @Override
-            protected CartDAO.FactureResponse call() {
-                List<CartDAO.OrderResponse> history = CartDAO.getOrderHistory();
-                if (history == null || history.isEmpty()) {
-                    return null;
-                }
-
-                // Try most recent first
-                for (int i = history.size() - 1; i >= 0; i--) {
-                    CartDAO.OrderResponse order = history.get(i);
-                    if (order == null || order.id == null) {
-                        continue;
-                    }
-                    String statut = order.statut != null ? order.statut : "";
-                    if (!statut.equalsIgnoreCase("confirmee") && !statut.equalsIgnoreCase("confirmée")) {
-                        continue;
-                    }
-                    CartDAO.FactureResponse facture = CartDAO.getFacture(order.id);
-                    if (facture != null) {
-                        return facture;
-                    }
-                }
-                return null;
-            }
-        };
-
-        task.setOnSucceeded(e -> {
-            CartDAO.FactureResponse facture = task.getValue();
-            if (facture == null) {
-                showError("Aucune facture trouvée", null);
-                return;
-            }
-            showFactureDialog(facture);
-        });
-        task.setOnFailed(e -> showError("Impossible de charger la facture", task.getException()));
-        new Thread(task, "last-facture-task").start();
-    }
-
-    @FXML
-    private void navigateToProfile() {
-        try {
-            Parent profileRoot = FXMLLoader.load(getClass().getResource("/fxml/client-profile-view.fxml"));
-            Stage stage = (Stage) root.getScene().getWindow();
-            Scene scene = new Scene(profileRoot);
-            var css = getClass().getResource("/styles/client-profile-style.css");
-            if (css != null) {
-                scene.getStylesheets().add(css.toExternalForm());
-            }
-            stage.setScene(scene);
-            stage.setTitle("Profil Client");
-        } catch (Exception e) {
-            showError("Erreur lors de l'ouverture du profil", e);
-        }
-    }
-
-    @FXML
-    private void handleLogout() {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Déconnexion");
-        confirm.setHeaderText("Voulez-vous vous déconnecter ?");
-        confirm.setContentText("Votre session sera fermée.");
-
-        confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                Session.get().clear();
-                try {
-                    Stage stage = (Stage) root.getScene().getWindow();
-                    Parent loginRoot = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
-                    Scene scene = new Scene(loginRoot);
-                    var css = getClass().getResource("/styles/login.css");
-                    if (css != null) {
-                        scene.getStylesheets().add(css.toExternalForm());
-                    }
-                    stage.setScene(scene);
-                } catch (Exception e) {
-                    showError("Erreur lors de la déconnexion", e);
-                }
-            }
+            Alert alert = new Alert(Alert.AlertType.ERROR, msg);
+            alert.show();
         });
     }
 }

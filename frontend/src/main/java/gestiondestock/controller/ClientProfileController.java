@@ -1,221 +1,185 @@
 package gestiondestock.controller;
 
-import gestiondestock.model.ClientModel;
-import gestiondestock.model.Session;
-import gestiondestock.service.ClientService;
+import gestiondestock.model.ClientProfileModel;
+import gestiondestock.service.ClientProfileService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientProfileController {
+
+    private static final Logger LOGGER = Logger.getLogger(ClientProfileController.class.getName());
 
     @FXML
     private Label lblUsername;
     @FXML
-    private Label lblAvatar;
-    @FXML
-    private Label lblRole;
-    @FXML
-    private Label lblNom;
-    @FXML
-    private Label lblPrenom;
+    private Label lblFullName;
     @FXML
     private Label lblTelephone;
     @FXML
     private Label lblAdresse;
     @FXML
-    private Button btnEditProfile;
-    @FXML
-    private Button btnChangePassword;
-    @FXML
-    private Button btnBack;
+    private Label lblAvatar;
 
-    private final ClientService clientService = new ClientService();
-    private ClientModel currentClient;
+    private final ClientProfileService clientProfileService = new ClientProfileService();
+    private ClientProfileModel currentProfile;
 
     @FXML
     public void initialize() {
-        loadClientProfile();
+        loadProfile();
     }
 
-    private void loadClientProfile() {
-        try {
-            String clientId = Session.get().getUserId();
-            if (clientId != null && !clientId.isEmpty()) {
-                currentClient = clientService.getClientById(clientId);
-                updateUI();
+    private void loadProfile() {
+        new Thread(() -> {
+            try {
+                currentProfile = clientProfileService.getMyProfile();
+
+                Platform.runLater(() -> {
+                    if (lblUsername != null)
+                        lblUsername.setText(currentProfile.getUsername());
+
+                    if (lblFullName != null) {
+                        String prenom = currentProfile.getPrenom() != null ? currentProfile.getPrenom() : "";
+                        String nom = currentProfile.getNom() != null ? currentProfile.getNom() : "";
+                        lblFullName.setText((prenom + " " + nom).trim());
+                    }
+
+                    if (lblTelephone != null)
+                        lblTelephone.setText(currentProfile.getTelephone() != null ? currentProfile.getTelephone()
+                                : "Non disponible");
+
+                    if (lblAdresse != null)
+                        lblAdresse.setText(
+                                currentProfile.getAdresse() != null ? currentProfile.getAdresse() : "Non définie");
+
+                    if (lblAvatar != null && currentProfile.getUsername() != null
+                            && !currentProfile.getUsername().isEmpty()) {
+                        lblAvatar.setText(currentProfile.getUsername().substring(0, 1).toUpperCase());
+                    }
+                });
+            } catch (Exception ex) {
+                LOGGER.log(Level.SEVERE, "Erreur chargement profil", ex);
+                Platform.runLater(
+                        () -> showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les données."));
             }
-        } catch (Exception e) {
-            showError("Erreur", "Impossible de charger le profil: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    private void updateUI() {
-        if (currentClient == null)
-            return;
-
-        String username = currentClient.getUsername();
-        lblUsername.setText(username != null ? username : "Client");
-        lblAvatar.setText(String.valueOf((username != null ? username.charAt(0) : 'C')).toUpperCase());
-        lblRole.setText("CLIENT");
-        lblNom.setText(currentClient.getNom() != null ? currentClient.getNom() : "N/A");
-        lblPrenom.setText(currentClient.getPrenom() != null ? currentClient.getPrenom() : "N/A");
-        lblTelephone.setText(currentClient.getTelephone() != null ? currentClient.getTelephone() : "N/A");
-        lblAdresse.setText(currentClient.getAdresse() != null ? currentClient.getAdresse() : "Adresse non définie");
+        }).start();
     }
 
     @FXML
-    private void handleEditProfile() {
-        if (currentClient == null) {
-            showError("Erreur", "Aucun profil à modifier");
-            return;
+    public void handleEditProfile() {
+        Dialog<ClientProfileModel> dialog = createEditProfileDialog();
+        Button btnSave = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        if (btnSave != null) {
+            btnSave.setText("Enregistrer les Modifications");
+            btnSave.setStyle(
+                    "-fx-background-color: #000000; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;");
         }
 
-        Dialog<ClientModel> dialog = new Dialog<>();
-        dialog.setTitle("Modifier le profil");
-        dialog.setHeaderText("Mettez à jour vos informations");
+        Optional<ClientProfileModel> result = dialog.showAndWait();
+        result.ifPresent(profile -> {
+            try {
+                clientProfileService.updateProfile(profile);
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Profil mis à jour.");
+                loadProfile();
+            } catch (Exception ex) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la mise à jour.");
+            }
+        });
+    }
 
-        DialogPane pane = dialog.getDialogPane();
-        pane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+    private Dialog<ClientProfileModel> createEditProfileDialog() {
+        Dialog<ClientProfileModel> dialog = new Dialog<>();
+        dialog.setTitle("Modification du Profil");
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new javafx.geometry.Insets(10));
+        grid.setHgap(15);
+        grid.setVgap(15);
+        grid.setPadding(new Insets(20));
 
-        TextField txtNom = new TextField(currentClient.getNom());
-        txtNom.setPromptText("Nom");
-        TextField txtPrenom = new TextField(currentClient.getPrenom());
-        txtPrenom.setPromptText("Prénom");
-        TextField txtTelephone = new TextField(currentClient.getTelephone());
-        txtTelephone.setPromptText("Téléphone");
-        TextField txtAdresse = new TextField(currentClient.getAdresse());
-        txtAdresse.setPromptText("Adresse");
+        TextField txtNom = new TextField(currentProfile.getNom());
+        TextField txtPrenom = new TextField(currentProfile.getPrenom());
+        TextField txtTel = new TextField(currentProfile.getTelephone());
+        TextField txtAdr = new TextField(currentProfile.getAdresse());
 
         grid.add(new Label("Nom:"), 0, 0);
         grid.add(txtNom, 1, 0);
         grid.add(new Label("Prénom:"), 0, 1);
         grid.add(txtPrenom, 1, 1);
         grid.add(new Label("Téléphone:"), 0, 2);
-        grid.add(txtTelephone, 1, 2);
+        grid.add(txtTel, 1, 2);
         grid.add(new Label("Adresse:"), 0, 3);
-        grid.add(txtAdresse, 1, 3);
+        grid.add(txtAdr, 1, 3);
 
-        pane.setContent(grid);
-
-        dialog.setResultConverter(buttonType -> {
-            if (buttonType == ButtonType.OK) {
-                ClientModel updated = new ClientModel();
-                updated.setId(currentClient.getId());
-                updated.setNom(txtNom.getText());
-                updated.setPrenom(txtPrenom.getText());
-                updated.setTelephone(txtTelephone.getText());
-                updated.setAdresse(txtAdresse.getText());
-                updated.setUsername(currentClient.getUsername());
-                return updated;
+        dialog.getDialogPane().setContent(grid);
+        dialog.setResultConverter(btn -> {
+            if (btn == ButtonType.OK) {
+                currentProfile.setNom(txtNom.getText());
+                currentProfile.setPrenom(txtPrenom.getText());
+                currentProfile.setTelephone(txtTel.getText());
+                currentProfile.setAdresse(txtAdr.getText());
+                return currentProfile;
             }
             return null;
         });
-
-        Optional<ClientModel> result = dialog.showAndWait();
-        result.ifPresent(updated -> {
-            try {
-                clientService.updateClient(currentClient.getId(), updated);
-                currentClient = updated;
-                updateUI();
-                showInfo("Succès", "Profil mis à jour avec succès");
-            } catch (Exception e) {
-                showError("Erreur", "Impossible de mettre à jour le profil: " + e.getMessage());
-            }
-        });
+        return dialog;
     }
 
     @FXML
-    private void handleChangePassword() {
-        Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Changer le mot de passe");
-        dialog.setHeaderText("Entrez votre nouveau mot de passe");
-
-        DialogPane pane = dialog.getDialogPane();
-        pane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        VBox content = new VBox(10);
-        content.setPadding(new javafx.geometry.Insets(10));
-
-        PasswordField oldPassword = new PasswordField();
-        oldPassword.setPromptText("Ancien mot de passe");
-        PasswordField newPassword = new PasswordField();
-        newPassword.setPromptText("Nouveau mot de passe");
-        PasswordField confirmPassword = new PasswordField();
-        confirmPassword.setPromptText("Confirmer le mot de passe");
-
-        content.getChildren().addAll(
-                new Label("Ancien mot de passe:"), oldPassword,
-                new Label("Nouveau mot de passe:"), newPassword,
-                new Label("Confirmer le mot de passe:"), confirmPassword);
-
-        pane.setContent(content);
-
-        dialog.setResultConverter(buttonType -> {
-            if (buttonType == ButtonType.OK) {
-                if (!newPassword.getText().equals(confirmPassword.getText())) {
-                    showError("Erreur", "Les mots de passe ne correspondent pas");
-                    return null;
-                }
-                return newPassword.getText();
-            }
-            return null;
-        });
-
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(newPwd -> {
-            try {
-                // Call backend API to change password
-                showInfo("Succès", "Mot de passe changé avec succès");
-            } catch (Exception e) {
-                showError("Erreur", "Impossible de changer le mot de passe: " + e.getMessage());
-            }
-        });
-    }
-
-    @FXML
-    private void handleBack() {
-        try {
-            Parent dashboardRoot = FXMLLoader.load(getClass().getResource("/fxml/client_dashboard.fxml"));
-            Stage stage = (Stage) btnBack.getScene().getWindow();
-            Scene scene = new Scene(dashboardRoot);
-            var css = getClass().getResource("/styles/dashboard.css");
-            if (css != null) {
-                scene.getStylesheets().add(css.toExternalForm());
-            }
-            stage.setScene(scene);
-            stage.setTitle("Dashboard Client");
-        } catch (Exception e) {
-            showError("Erreur", "Impossible de retourner au catalogue: " + e.getMessage());
+    public void handleChangePassword() {
+        Dialog<String[]> dialog = createChangePasswordDialog();
+        Button btnConfirm = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        if (btnConfirm != null) {
+            btnConfirm.setText("Modifier le Mot de Passe");
+            btnConfirm.setStyle(
+                    "-fx-background-color: #000000; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;");
         }
+
+        Optional<String[]> result = dialog.showAndWait();
+        result.ifPresent(pass -> {
+            try {
+                clientProfileService.changePassword(pass[0], pass[1]);
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Mot de passe modifié.");
+            } catch (Exception ex) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", ex.getMessage());
+            }
+        });
     }
 
-    private void showInfo(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    private Dialog<String[]> createChangePasswordDialog() {
+        Dialog<String[]> dialog = new Dialog<>();
+        dialog.setTitle("Sécurité");
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        VBox box = new VBox(10);
+        box.setPadding(new Insets(20));
+        PasswordField oldP = new PasswordField();
+        PasswordField newP = new PasswordField();
+        PasswordField confP = new PasswordField();
+
+        box.getChildren().addAll(new Label("Ancien"), oldP, new Label("Nouveau"), newP, new Label("Confirmer"), confP);
+
+        dialog.getDialogPane().setContent(box);
+        dialog.setResultConverter(btn -> {
+            if (btn == ButtonType.OK)
+                return new String[] { oldP.getText(), newP.getText() };
+            return null;
+        });
+        return dialog;
     }
 
-    private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    private void showAlert(Alert.AlertType type, String title, String msg) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(content);
+        alert.setContentText(msg);
         alert.showAndWait();
     }
 }
