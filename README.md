@@ -1,4 +1,11 @@
 #  Application de Gestion de Stock
+##DEMO ( Interface Utilisateur ) :
+
+
+
+https://github.com/user-attachments/assets/dd9f5c3e-4942-4e56-8ef3-f9b117cc1f70
+
+
 
 Application desktop de gestion d'inventaire avec **JavaFX** (Frontend) + **Spring Boot** (Backend) + **MySQL** (Base de données).
 
