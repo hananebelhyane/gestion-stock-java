@@ -2,6 +2,33 @@
 
 Application desktop de gestion d'inventaire avec **JavaFX** (Frontend) + **Spring Boot** (Backend) + **MySQL** (Base de données).
 
+##  Demo for Admin
+
+
+
+https://github.com/user-attachments/assets/6092087a-4d0b-4862-b41b-7f388fc45b27
+
+
+
+
+##  Demo for Client
+
+
+
+
+https://github.com/user-attachments/assets/047373a9-5b7b-4ee5-8e2b-2b91ef47714c
+
+
+
+
+##  Demo for Magasinier
+
+
+
+https://github.com/user-attachments/assets/a504b2a9-78f7-4c86-8ac5-ccfebfdc51f1
+
+
+
 ---
 
 ##  Prérequis
